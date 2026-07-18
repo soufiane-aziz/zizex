@@ -1,7 +1,7 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'Pinga - Streaming Platform',
+  title: 'zShow - Streaming Platform',
   description: 'Watch your favorite movies and TV shows',
 }
 

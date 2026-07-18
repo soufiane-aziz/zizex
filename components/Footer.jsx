@@ -38,10 +38,9 @@ export default function Footer() {
         </div>
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
-                <i className="fa-solid fa-play text-crimson-600 drop-shadow-[0_0_8px_rgba(225,29,72,0.6)]"></i>
-                <span className="font-bold text-xl tracking-tight text-white">Ping<span className="text-crimson-600">a</span></span>
+                <span className="font-bold text-xl tracking-tight text-crimson-600">z<span className="text-white">Shows</span></span>
             </div>
-            <p className="text-sm text-gray-500">© 2026 Pinga. All rights reserved.</p>
+            <p className="text-sm text-gray-500">© 2026 zShows. All rights reserved.</p>
         </div>
       </div>
     </footer>

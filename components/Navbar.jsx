@@ -123,13 +123,13 @@ export default function Navbar({ contentType, setContentType, filterType, setFil
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 bg-gradient-to-b from-black/90 to-transparent backdrop-blur-sm">
       
-      {/* PINGA Logo */}
+      {/* zShow Logo */}
       <button 
         onClick={() => handleNavigation('all', 'default')} 
         className="text-3xl md:text-4xl font-black tracking-wide cursor-pointer focus:outline-none"
       >
-        <span className="text-white">PING</span>
-        <span className="text-red-600">A</span>
+        <span className="text-red-600">z</span>
+        <span className="text-white">Show</span>
       </button>
 
       {/* Navigation Links */}
