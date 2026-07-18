@@ -75,7 +75,7 @@ function CategoryRow({ title, movies }) {
           className="flex overflow-x-auto gap-4 md:gap-5 pb-8 pt-4 hide-scroll-bar snap-x snap-mandatory"
         >
           {movies.map((movie) => (
-            <div key={movie.id} className="min-w-[160px] md:min-w-[220px] lg:min-w-[240px] snap-center">
+            <div key={`${movie.media_type || 'item'}-${movie.id}`} className="min-w-[160px] md:min-w-[220px] lg:min-w-[240px] snap-center">
               <Link href={`/watch/${movie.id}`}>
                 <div className="relative rounded-lg overflow-hidden aspect-[2/3] transform transition-all duration-300 ease-out hover:-translate-y-2.5 hover:shadow-[0_15px_30px_rgba(245,158,11,0.25)] group/card cursor-pointer border border-transparent hover:border-amber-500/60">
                   
@@ -104,9 +104,8 @@ function CategoryRow({ title, movies }) {
                         <i className="fa-solid fa-star"></i> 
                         {movie.vote_average?.toFixed(1)}
                       </span>
-                      {/* --- CHANGEMENT ICI : Affichage de "Series" ou "Movie" à la place de l'année --- */}
                       <span className="uppercase tracking-wide">
-                        {movie.first_air_date || movie.name ? 'Series' : 'Movie'}
+                        {movie.first_air_date || movie.name || movie.media_type === 'tv' ? 'Series' : 'Movie'}
                       </span>
                     </div>
                   </div>
@@ -128,50 +127,59 @@ function CategoryRow({ title, movies }) {
   );
 }
 
-// --- 3. ISOLATED AD COMPONENT ---
+// --- 3. PRODUCTION BALANCED AD COMPONENT FOR NEXT.JS/VERCEL ---
 const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
-  const srcDoc = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { 
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            background: transparent; 
-            overflow: hidden; 
-          }
-        </style>
-      </head>
-      <body>
-        <script type="text/javascript">
-          atOptions = {
-            'key' : '${adKey}',
-            'format' : 'iframe',
-            'height' : ${height},
-            'width' : ${width},
-            'params' : {}
-          };
-        </script>
-        <script type="text/javascript" src="https://environmenttalentrabble.com/${adKey}/invoke.js"></script>
-      </body>
-    </html>
-  `;
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !containerRef.current) return;
+
+    containerRef.current.innerHTML = '';
+
+    const iframe = document.createElement('iframe');
+    iframe.width = `${width}`;
+    iframe.height = `${height}`;
+    iframe.style.border = 'none';
+    iframe.style.overflow = 'hidden';
+    iframe.style.background = 'transparent';
+    iframe.scrolling = 'no';
+
+    containerRef.current.appendChild(iframe);
+
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+    if (iframeDoc) {
+      iframeDoc.open();
+      iframeDoc.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; background: transparent; }</style>
+          </head>
+          <body>
+            <script type="text/javascript">
+              atOptions = {
+                'key' : '${adKey}',
+                'format' : 'iframe',
+                'height' : ${height},
+                'width' : ${width},
+                'params' : {}
+              };
+            </script>
+            <script type="text/javascript" src="https://environmenttalentrabble.com/${adKey}/invoke.js"></script>
+          </body>
+        </html>
+      `);
+      iframeDoc.close();
+    }
+  }, [adKey, width, height]);
 
   return (
-    <div className={`w-full flex justify-center items-center overflow-hidden ${wrapperClassName}`} style={{ minHeight: `${height}px` }}>
-      <iframe
-        srcDoc={srcDoc}
-        width={width}
-        height={height}
-        frameBorder="0"
-        scrolling="no"
-        style={{ display: 'block', maxWidth: '100%', border: 'none', background: 'transparent' }}
-      ></iframe>
+    <div className={`w-full flex justify-center items-center ${wrapperClassName}`}>
+      <div 
+        ref={containerRef} 
+        style={{ width: `${width}px`, minHeight: `${height}px` }} 
+        className="clear-both overflow-hidden flex justify-center items-center" 
+      />
     </div>
   );
 };
@@ -183,7 +191,6 @@ function HomeContent() {
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Filter Configurations State
   const [contentType, setContentType] = useState('all'); 
   const [filterType, setFilterType] = useState('default'); 
 
@@ -219,37 +226,9 @@ function HomeContent() {
         const heroSelection = primaryData.results?.slice(0, 5) || [];
         const primaryRowData = primaryData.results?.slice(5) || [];
 
-        const targetGenreType = contentType === 'tv' ? 'tv' : 'movie';
-        const genreListRes = await fetch(`${BASE_URL}/genre/${targetGenreType}/list?api_key=${API_KEY}`);
-        const genreListData = await genreListRes.json();
-        
-        if (!isCurrent) return;
-
-        const dynamicGenresResult = await Promise.all(
-          (genreListData.genres || []).map(async (genre) => {
-            try {
-              let discoverUrl = `${BASE_URL}/discover/${targetGenreType}?api_key=${API_KEY}&with_genres=${genre.id}`;
-              
-              if (filterType === 'top_rated') {
-                discoverUrl += `&sort_by=vote_average.desc&vote_count.gte=350`;
-              }
-
-              const res = await fetch(discoverUrl);
-              const data = await res.json();
-              return {
-                id: genre.id,
-                name: genre.name,
-                movies: data.results || []
-              };
-            } catch (err) {
-              return { id: genre.id, name: genre.name, movies: [] };
-            }
-          })
-        );
-
-        if (!isCurrent) return;
-
         const masterRows = [];
+
+        // 1. Setup trending row (which mixes everything automatically if content type is 'all')
         if (primaryRowData.length > 0) {
           let rowTitle = "Trending Now";
           if (filterType === 'top_rated') {
@@ -262,15 +241,119 @@ function HomeContent() {
           });
         }
 
-        dynamicGenresResult.forEach((genreRow) => {
-          if (genreRow.movies.length > 0) {
-            masterRows.push({
-              id: genreRow.id,
-              name: filterType === 'top_rated' ? `Top Rated ${genreRow.name}` : genreRow.name,
-              movies: genreRow.movies
-            });
-          }
-        });
+        // 2. MIX LOGIC FOR GENRE LISTS
+        if (contentType === 'all') {
+          // Fetch movie genres and TV genres parallelly
+          const [movieGenresRes, tvGenresRes] = await Promise.all([
+            fetch(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}`),
+            fetch(`${BASE_URL}/genre/tv/list?api_key=${API_KEY}`)
+          ]);
+          const movieGenresData = await movieGenresRes.json();
+          const tvGenresData = await tvGenresRes.json();
+
+          if (!isCurrent) return;
+
+          // Map through a unified set of common genres or use all available ones
+          const genreMap = {};
+
+          // Process movie genres mapping
+          movieGenresData.genres?.forEach(g => {
+            genreMap[g.name] = { name: g.name, movieId: g.id, tvId: null };
+          });
+
+          // Match up or inject TV genres mapping
+          tvGenresData.genres?.forEach(g => {
+            if (genreMap[g.name]) {
+              genreMap[g.name].tvId = g.id;
+            } else {
+              genreMap[g.name] = { name: g.name, movieId: null, tvId: g.id };
+            }
+          });
+
+          // Fetch items for combined rows asynchronously
+          const blendedGenresResult = await Promise.all(
+            Object.values(genreMap).map(async (genre) => {
+              try {
+                let movieItems = [];
+                let tvItems = [];
+
+                if (genre.movieId) {
+                  let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genre.movieId}`;
+                  if (filterType === 'top_rated') url += `&sort_by=vote_average.desc&vote_count.gte=200`;
+                  const res = await fetch(url);
+                  const data = await res.json();
+                  movieItems = data.results?.map(item => ({ ...item, media_type: 'movie' })) || [];
+                }
+
+                if (genre.tvId) {
+                  let url = `${BASE_URL}/discover/tv?api_key=${API_KEY}&with_genres=${genre.tvId}`;
+                  if (filterType === 'top_rated') url += `&sort_by=vote_average.desc&vote_count.gte=200`;
+                  const res = await fetch(url);
+                  const data = await res.json();
+                  tvItems = data.results?.map(item => ({ ...item, media_type: 'tv' })) || [];
+                }
+
+                // Perfectly alternate/mix movies and series together into the same array
+                const blendedList = [];
+                const maxLen = Math.max(movieItems.length, tvItems.length);
+                for (let i = 0; i < maxLen; i++) {
+                  if (movieItems[i]) blendedList.push(movieItems[i]);
+                  if (tvItems[i]) blendedList.push(tvItems[i]);
+                }
+
+                return {
+                  id: `blended-${genre.name.toLowerCase().replace(/\s+/g, '-')}`,
+                  name: filterType === 'top_rated' ? `Top Rated ${genre.name}` : genre.name,
+                  movies: blendedList
+                };
+              } catch (err) {
+                return { id: `blended-${genre.name}`, name: genre.name, movies: [] };
+              }
+            })
+          );
+
+          blendedGenresResult.forEach((genreRow) => {
+            if (genreRow.movies.length > 0) {
+              masterRows.push(genreRow);
+            }
+          });
+
+        } else {
+          // If explicitly viewing only movies or only series from navbar
+          const genreListRes = await fetch(`${BASE_URL}/genre/${contentType}/list?api_key=${API_KEY}`);
+          const genreListData = await genreListRes.json();
+          
+          if (!isCurrent) return;
+
+          const dynamicGenresResult = await Promise.all(
+            (genreListData.genres || []).map(async (genre) => {
+              try {
+                let discoverUrl = `${BASE_URL}/discover/${contentType}?api_key=${API_KEY}&with_genres=${genre.id}`;
+                if (filterType === 'top_rated') discoverUrl += `&sort_by=vote_average.desc&vote_count.gte=350`;
+
+                const res = await fetch(discoverUrl);
+                const data = await res.json();
+                return {
+                  id: `${contentType}-${genre.id}`,
+                  name: genre.name,
+                  movies: data.results?.map(item => ({ ...item, media_type: contentType })) || []
+                };
+              } catch (err) {
+                return { id: `${contentType}-${genre.id}`, name: genre.name, movies: [] };
+              }
+            })
+          );
+
+          dynamicGenresResult.forEach((genreRow) => {
+            if (genreRow.movies.length > 0) {
+              masterRows.push({
+                id: genreRow.id,
+                name: filterType === 'top_rated' ? `Top Rated ${genreRow.name}` : genreRow.name,
+                movies: genreRow.movies
+              });
+            }
+          });
+        }
 
         setHeroMovies(heroSelection);
         setAllCategories(masterRows);
@@ -356,7 +439,6 @@ function HomeContent() {
                   {heroMovies[activeHeroIndex].vote_average?.toFixed(1)} Rating
                 </span>
                 
-                {/* --- CHANGEMENT ICI : Suppression de l'année et du point gris --- */}
                 <span className="w-1 h-1 rounded-full bg-gray-500"></span>
                 
                 <span className="uppercase border border-gray-600 px-2 py-0.5 rounded text-xs font-bold tracking-wider text-white bg-white/[0.02]">
@@ -403,7 +485,7 @@ function HomeContent() {
         </section>
       )}
 
-      {/* --- ADDED AD COMPONENT 1 (Under Hero) --- */}
+      {/* --- AD COMPONENT 1 --- */}
       <AdComponent 
         adKey="505a6081e767b51fdf7cd7a743de887b" 
         width={728} 
@@ -415,7 +497,6 @@ function HomeContent() {
       <main className="w-full max-w-[1600px] mx-auto px-4 md:px-12 lg:px-16 py-8 flex flex-col gap-4 relative z-20">
         {allCategories.map((category, index) => (
           <Fragment key={category.id}>
-            {/* The Row */}
             <RevealOnScroll delay={Math.min(index * 50, 300)}>
               <CategoryRow 
                 title={category.name} 
@@ -423,7 +504,7 @@ function HomeContent() {
               />
             </RevealOnScroll>
             
-            {/* --- ADDED AD COMPONENT 2 (After 3rd List / Index 2) --- */}
+            {/* --- AD COMPONENT 2 --- */}
             {index === 2 && (
               <RevealOnScroll delay={Math.min((index + 1) * 50, 300)}>
                 <AdComponent 
@@ -435,7 +516,7 @@ function HomeContent() {
               </RevealOnScroll>
             )}
 
-            {/* --- ADDED AD COMPONENT 3 (After 6th List / Index 5) --- */}
+            {/* --- AD COMPONENT 3 --- */}
             {index === 5 && (
               <RevealOnScroll delay={Math.min((index + 1) * 50, 300)}>
                 <AdComponent 
@@ -450,7 +531,7 @@ function HomeContent() {
         ))}
       </main>
 
-      {/* --- ADDED AD COMPONENT 4 (Before Footer) --- */}
+      {/* --- AD COMPONENT 4 --- */}
       <RevealOnScroll delay={300}>
         <AdComponent 
           adKey="d31895d04994bfe43ad4113bd0488409" 
@@ -484,7 +565,6 @@ function HomeContent() {
   );
 }
 
-// --- 5. Main Export with Safe Next.js Suspense Context ---
 export default function Home() {
   return (
     <Suspense fallback={

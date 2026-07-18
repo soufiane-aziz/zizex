@@ -256,8 +256,6 @@ export default function WatchTV() {
                   Season {currentSeason}, Episode {currentEpisode}
                 </span>
                 <span>•</span>
-                <span className="text-gray-300">{showDetails.first_air_date?.substring(0, 4)}</span>
-                <span>•</span>
                 <div className="flex items-center gap-1.5">
                   {showDetails.genres?.slice(0, 3).map(g => (
                     <span key={g.id} className="bg-zinc-800 text-gray-300 px-2 py-0.5 rounded text-[11px] border border-white/5">
