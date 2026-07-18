@@ -66,10 +66,7 @@ export default function WatchMovie() {
   const [isLoading, setIsLoading] = useState(true);
   const [activeServerId, setActiveServerId] = useState('server1');
   const [showAllServers, setShowAllServers] = useState(false); 
-  
   const [hasClickedPlayer, setHasClickedPlayer] = useState(false);
-  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   const servers = [
     { id: 'server1', name: 'MultiEmbed', url: `https://multiembed.mov/?video_id=${id}&tmdb=1` },
@@ -79,9 +76,6 @@ export default function WatchMovie() {
     { id: 'server5', name: 'AutoEmbed', url: `https://player.autoembed.co/movie/${id}` },
     { id: 'server6', name: 'VidSrc Pro', url: `https://vidsrc.pro/embed/movie/${id}` },
   ];
-
-  const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
-  const currentStreamUrl = activeServer.url;
 
   useEffect(() => {
     if (!id) return;
@@ -141,7 +135,6 @@ export default function WatchMovie() {
         }
         
         const remainingOffset = Math.max(0, paddingNeeded);
-        // LIMITED TO EXACTLY 39 ITEMS
         const finalBottomItems = uniqueSuggestions.slice(remainingOffset, remainingOffset + 32);
 
         setSidebarMovies(finalSidebarItems);
@@ -161,12 +154,6 @@ export default function WatchMovie() {
     setHasClickedPlayer(false);
   }, [activeServerId, id]);
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(currentStreamUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   const handlePlayerClick = () => {
     window.open('https://environmenttalentrabble.com/niwvwhsdrt?key=6ae3e88a79f88c62bed220b8faec0bf0', '_blank');
     setHasClickedPlayer(true);
@@ -183,12 +170,7 @@ export default function WatchMovie() {
     );
   }
 
-  const formatRuntime = (minutes) => {
-    if (!minutes) return 'N/A';
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return hours > 0 ? `${hours}h ${mins.toString().padStart(2, '0')}m` : `${mins} min`;
-  };
+  const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white font-sans overflow-x-hidden pb-16">
@@ -265,36 +247,28 @@ export default function WatchMovie() {
             </div>
 
             <div className="p-1">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-3">
-                <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-white select-text">
+              
+              <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 mb-4 w-full">
+                <h1 className="text-xl sm:text-2xl md:text-4xl font-extrabold tracking-tight text-white select-text break-words">
                   {movieDetails.title}
                 </h1>
                 
-                <button 
-                  onClick={() => setIsDownloadModalOpen(true)} 
-                  className="inline-flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 text-white text-xs md:text-sm font-bold px-3 py-1.5 md:px-4 md:py-2 rounded-lg transition-all shadow-md shadow-red-600/10 flex-shrink-0 cursor-pointer"
-                >
-                  <i className="fa-solid fa-download text-[10px] md:text-xs"></i>
-                  <span>Download</span>
-                </button>
-              </div>
-              
-              <div className="flex flex-wrap items-center gap-4 text-xs md:text-sm text-gray-400 mb-4">
-                <span className="text-amber-400 flex items-center gap-1 font-bold bg-amber-500/10 px-2 py-0.5 rounded">
-                  <i className="fa-solid fa-star text-[11px]"></i>
-                  {movieDetails.vote_average?.toFixed(1)}
-                </span>
-                <span>•</span>
-                <span className="font-medium text-gray-200">{formatRuntime(movieDetails.runtime)}</span>
-                <span>•</span>
-                <span className="text-gray-300">{movieDetails.release_date?.substring(0, 4)}</span>
-                <span>•</span>
-                <div className="flex items-center gap-1.5">
-                  {movieDetails.genres?.slice(0, 3).map(g => (
-                    <span key={g.id} className="bg-zinc-800 text-gray-300 px-2 py-0.5 rounded text-[11px] border border-white/5">
-                      {g.name}
-                    </span>
-                  ))}
+                {/* ADDED ml-auto FOR COMPACT AUTOMATIC RIGHT-ALIGNMENT REGARDLESS OF WRAPPING */}
+                <div className="flex flex-wrap items-center gap-2 text-xs md:text-sm flex-shrink-0 ml-auto">
+                  {/* Rating */}
+                  <span className="text-amber-400 flex items-center gap-1 font-bold bg-amber-500/10 px-2.5 py-1.5 rounded-lg border border-amber-500/20 backdrop-blur-sm">
+                    <i className="fa-solid fa-star text-[11px] sm:text-xs"></i>
+                    {movieDetails.vote_average?.toFixed(1)}
+                  </span>
+                  
+                  {/* Genres */}
+                  <div className="flex items-center gap-1.5">
+                    {movieDetails.genres?.slice(0, 2).map(g => (
+                      <span key={g.id} className="bg-zinc-800 text-gray-300 px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs border border-white/5 whitespace-nowrap font-medium">
+                        {g.name}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -349,8 +323,6 @@ export default function WatchMovie() {
                         </h4>
                         <div className="flex items-center gap-2 text-[10px] text-gray-400 mt-1">
                           <span className="text-amber-400 font-bold">★ {movie.vote_average?.toFixed(1)}</span>
-                          <span>•</span>
-                          <span>{movie.release_date?.substring(0, 4)}</span>
                         </div>
                         <p className="text-[11px] text-gray-500 line-clamp-2 mt-1.5 leading-normal">
                           {movie.overview || "No summary listed."}
@@ -376,7 +348,7 @@ export default function WatchMovie() {
           wrapperClassName="lg:hidden mb-4 rounded-lg shadow-lg" 
         />
 
-        {/* SECTION MORE MOVIES - UP TO 39 CLEAN METADATA ITEMS */}
+        {/* SECTION MORE MOVIES */}
         <div className="w-full">
           <h3 className="text-lg md:text-xl font-black tracking-wide uppercase mb-6 flex items-center gap-2">
             <span className="w-1.5 h-5 bg-red-600 rounded-sm"></span> More Movies Like This
@@ -426,93 +398,6 @@ export default function WatchMovie() {
         </div>
 
       </main>
-
-      {/* MODAL DE TÉLÉCHARGEMENT */}
-      {isDownloadModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div 
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-            onClick={() => setIsDownloadModalOpen(false)}
-          />
-          
-          <div className="relative bg-zinc-900 border border-white/10 w-full max-w-lg rounded-2xl p-6 shadow-2xl text-white flex flex-col gap-5 animate-in fade-in zoom-in-95 duration-200">
-            
-            <div className="flex items-center justify-between border-b border-white/5 pb-3">
-              <div className="flex items-center gap-2.5">
-                <i className="fa-solid fa-cloud-arrow-down text-red-500 text-xl"></i>
-                <div>
-                  <h3 className="font-extrabold text-base">Download Dashboard</h3>
-                  <p className="text-[11px] text-gray-400 font-medium">{movieDetails.title}</p>
-                </div>
-              </div>
-              <button 
-                onClick={() => setIsDownloadModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-zinc-800 hover:bg-zinc-700 transition-colors flex items-center justify-center cursor-pointer text-gray-400 hover:text-white"
-              >
-                <i className="fa-solid fa-xmark text-sm"></i>
-              </button>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-wide">
-                Option 1: Open Video Hub (Click Download Inside Player)
-              </span>
-              <div className="grid grid-cols-2 gap-2">
-                <a 
-                  href={`https://multiembed.mov/?video_id=${id}&tmdb=1`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-zinc-800 hover:bg-zinc-700/80 border border-white/5 p-3 rounded-xl text-center font-bold text-xs flex flex-col items-center gap-1.5 transition-all text-gray-200 hover:text-white"
-                >
-                  <span className="text-red-400 font-black">MultiEmbed Server</span>
-                  <span className="text-[10px] text-gray-400 font-normal">Has internal DL Cloud</span>
-                </a>
-                <a 
-                  href={`https://embed.su/embed/movie/${id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-zinc-800 hover:bg-zinc-700/80 border border-white/5 p-3 rounded-xl text-center font-bold text-xs flex flex-col items-center gap-1.5 transition-all text-gray-200 hover:text-white"
-                >
-                  <span className="text-amber-400 font-black">SuperEmbed Server</span>
-                  <span className="text-[10px] text-gray-400 font-normal">Fast segment fetching</span>
-                </a>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-wide">
-                Option 2: Copy Stream Gateway (For VLC / 1DM / IDM)
-              </span>
-              <div className="flex items-center gap-2 bg-zinc-950 p-2.5 rounded-xl border border-white/5">
-                <input 
-                  type="text" 
-                  readOnly 
-                  value={currentStreamUrl}
-                  className="bg-transparent text-xs text-gray-400 flex-1 outline-none select-all truncate font-mono px-1"
-                />
-                <button
-                  onClick={handleCopyLink}
-                  className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                    copied ? 'bg-emerald-600 text-white' : 'bg-red-600 hover:bg-red-700 text-white cursor-pointer'
-                  }`}
-                >
-                  <i className={`fa-solid ${copied ? 'fa-check' : 'fa-copy'}`}></i>
-                  <span>{copied ? 'Copied!' : 'Copy'}</span>
-                </button>
-              </div>
-            </div>
-
-            <div className="bg-red-950/20 border border-red-500/20 p-3 rounded-xl text-xs flex gap-3 text-gray-300">
-              <i className="fa-solid fa-circle-info text-red-400 text-sm mt-0.5 flex-shrink-0"></i>
-              <div className="leading-relaxed">
-                <span className="font-bold text-white block mb-0.5">How to save the .MP4 immediately:</span>
-                Since these are segmented HLS streams, install a free extension like <span className="text-red-400 font-bold">FetchV</span> or <span className="text-red-400 font-bold">Video DownloadHelper</span>. Launch the player on your site, click the extension icon, and it will capture and assemble the true HD file in 1-click!
-              </div>
-            </div>
-
-          </div>
-        </div>
-      )}
 
       <AdComponent 
         adKey="2d00d5f1f381c5bf760e84da1f51d68c" 

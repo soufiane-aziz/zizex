@@ -28,46 +28,24 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="border-t border-zinc-900 bg-zinc-950 pt-16 pb-8 mt-20 relative">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+    <footer className="border-t border-zinc-900 bg-zinc-950 pt-12 pb-8 md:pt-16 mt-20 relative">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
         
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-16">
+        {/* Main Responsive Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-x-6 gap-y-10 mb-12 md:mb-16">
           
-          {/* Brand & Socials */}
-          <div className="lg:col-span-2 flex flex-col gap-6">
+          {/* Brand & Description */}
+          <div className="col-span-2 flex flex-col gap-4">
             <Link href="/" className="font-black text-3xl tracking-wide text-white focus:outline-none w-max">
               <span className="text-red-600">z</span>Show
             </Link>
             <p className="text-sm text-zinc-500 max-w-sm leading-relaxed">
               Your premium companion for tracking and discovering movies and TV shows. Built by cinephiles, for cinephiles.
             </p>
-            
-            {/* Social Icons */}
-            <div className="flex gap-4 mt-2">
-              <a 
-                href="https://www.facebook.com/share/1cDn655BgX/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:bg-red-600 hover:border-red-600 hover:text-white transition-all duration-300 shadow-sm"
-                aria-label="Facebook"
-              >
-                <i className="fa-brands fa-facebook-f text-sm"></i>
-              </a>
-              <a 
-                href="#" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:bg-red-600 hover:border-red-600 hover:text-white transition-all duration-300 shadow-sm"
-                aria-label="Instagram"
-              >
-                <i className="fa-brands fa-instagram text-sm"></i>
-              </a>
-            </div>
           </div>
 
-          {/* Explore Links */}
-          <div className="flex flex-col gap-5">
+          {/* Explore Links - HIDDEN ON MOBILE, SHOWS ON TABLET/DESKTOP */}
+          <div className="hidden md:flex flex-col gap-4 col-span-1">
             <h4 className="text-xs font-semibold uppercase tracking-widest text-zinc-300">Explore</h4>
             <ul className="space-y-3 text-sm text-zinc-500">
               <li><Link href="/" className="hover:text-red-500 transition-colors duration-200">Home</Link></li>
@@ -78,13 +56,13 @@ export default function Footer() {
           </div>
 
           {/* Company Links */}
-          <div className="flex flex-col gap-5">
+          <div className="col-span-1 flex flex-col gap-4">
             <h4 className="text-xs font-semibold uppercase tracking-widest text-zinc-300">Company</h4>
             <ul className="space-y-3 text-sm text-zinc-500">
               <li>
                 <button 
                   onClick={() => setActiveModal('about')} 
-                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none"
+                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none cursor-pointer"
                 >
                   About Us
                 </button>
@@ -92,7 +70,7 @@ export default function Footer() {
               <li>
                 <button 
                   onClick={() => setActiveModal('faq')} 
-                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none"
+                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none cursor-pointer"
                 >
                   FAQ
                 </button>
@@ -102,13 +80,13 @@ export default function Footer() {
           </div>
 
           {/* Legal Links */}
-          <div className="flex flex-col gap-5">
+          <div className="col-span-1 flex flex-col gap-4">
             <h4 className="text-xs font-semibold uppercase tracking-widest text-zinc-300">Legal</h4>
             <ul className="space-y-3 text-sm text-zinc-500 flex flex-col items-start">
               <li>
                 <button 
                   onClick={() => setActiveModal('terms')} 
-                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none"
+                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none cursor-pointer"
                 >
                   Terms of Service
                 </button>
@@ -116,7 +94,7 @@ export default function Footer() {
               <li>
                 <button 
                   onClick={() => setActiveModal('privacy')} 
-                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none"
+                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none cursor-pointer"
                 >
                   Privacy Policy
                 </button>
@@ -124,7 +102,7 @@ export default function Footer() {
               <li>
                 <button 
                   onClick={() => setActiveModal('dmca')} 
-                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none"
+                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none cursor-pointer"
                 >
                   DMCA
                 </button>
@@ -134,15 +112,15 @@ export default function Footer() {
 
         </div>
 
-        {/* Pro Bottom Bar */}
-        <div className="border-t border-zinc-800/60 pt-8 flex flex-col lg:flex-row justify-between items-center gap-6">
-          <div className="flex items-center text-xs text-zinc-500">
+        {/* Bottom Bar */}
+        <div className="border-t border-zinc-800/60 pt-8 flex flex-col lg:flex-row justify-between items-center gap-4 md:gap-6">
+          <div className="text-xs text-zinc-500 text-center lg:text-left">
             <p className="font-medium text-zinc-400">
               &copy; {new Date().getFullYear()} zShow. All rights reserved.
             </p>
           </div>
           
-          <div className="text-xs text-zinc-500 text-center lg:text-right flex items-center gap-2">
+          <div className="text-xs text-zinc-500 text-center lg:text-right max-w-md leading-relaxed">
             <p>
               This product uses the{' '}
               <a 
@@ -168,12 +146,12 @@ export default function Footer() {
         >
           <div 
             onClick={(e) => e.stopPropagation()} 
-            className="relative w-full max-w-2xl rounded-2xl border border-zinc-800 bg-zinc-950/95 p-6 md:p-10 shadow-2xl overflow-y-auto max-h-[85vh]"
+            className="relative w-full max-w-2xl rounded-2xl border border-zinc-800 bg-zinc-950/95 p-6 sm:p-10 shadow-2xl overflow-y-auto max-h-[85vh]"
           >
             {/* Close Button */}
             <button 
               onClick={closeModal}
-              className="absolute top-5 right-5 w-8 h-8 rounded-full border border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-white hover:border-zinc-700 transition-all focus:outline-none"
+              className="absolute top-5 right-5 w-8 h-8 rounded-full border border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-white hover:border-zinc-700 transition-all focus:outline-none cursor-pointer"
               aria-label="Close"
             >
               <i className="fa-solid fa-xmark text-sm"></i>
@@ -182,7 +160,7 @@ export default function Footer() {
             {/* CONTENT: ABOUT US */}
             {activeModal === 'about' && (
               <>
-                <div className="mb-6">
+                <div className="mb-6 pr-8">
                   <h3 className="text-2xl font-bold text-white tracking-tight">
                     About <span className="text-red-600">z</span>Show
                   </h3>
@@ -205,7 +183,7 @@ export default function Footer() {
             {/* CONTENT: FAQ */}
             {activeModal === 'faq' && (
               <>
-                <div className="mb-8">
+                <div className="mb-8 pr-8">
                   <h3 className="text-2xl font-bold text-white tracking-tight">
                     Frequently Asked Questions
                   </h3>
@@ -218,8 +196,8 @@ export default function Footer() {
                       className="group border border-zinc-900 rounded-xl bg-zinc-900/20 overflow-hidden [&_summary::-webkit-details-marker]:hidden"
                     >
                       <summary className="flex items-center justify-between p-4 cursor-pointer select-none text-sm font-medium text-zinc-200 hover:bg-zinc-900/50 hover:text-white transition-all list-none">
-                        <span>{item.q}</span>
-                        <i className="fa-solid fa-chevron-down text-xs text-zinc-500 group-open:rotate-180 transition-transform duration-300"></i>
+                        <span className="pr-4">{item.q}</span>
+                        <i className="fa-solid fa-chevron-down text-xs text-zinc-500 group-open:rotate-180 transition-transform duration-300 flex-shrink-0"></i>
                       </summary>
                       <div className="px-4 pb-4 pt-1 text-xs text-zinc-400 leading-relaxed bg-zinc-950/40 border-t border-zinc-900/40">
                         <p>{item.a}</p>
@@ -233,7 +211,7 @@ export default function Footer() {
             {/* CONTENT: TERMS OF SERVICE */}
             {activeModal === 'terms' && (
               <>
-                <div className="mb-6">
+                <div className="mb-6 pr-8">
                   <h3 className="text-2xl font-bold text-white tracking-tight">
                     Terms of Service
                   </h3>
@@ -259,7 +237,7 @@ export default function Footer() {
             {/* CONTENT: PRIVACY POLICY */}
             {activeModal === 'privacy' && (
               <>
-                <div className="mb-6">
+                <div className="mb-6 pr-8">
                   <h3 className="text-2xl font-bold text-white tracking-tight">
                     Privacy Policy
                   </h3>
@@ -284,7 +262,7 @@ export default function Footer() {
             {/* CONTENT: DMCA */}
             {activeModal === 'dmca' && (
               <>
-                <div className="mb-6">
+                <div className="mb-6 pr-8">
                   <h3 className="text-2xl font-bold text-white tracking-tight">
                     DMCA & Copyright Compliance
                   </h3>
@@ -310,7 +288,7 @@ export default function Footer() {
             <div className="mt-8 pt-4 border-t border-zinc-900 flex justify-end">
               <button
                 onClick={closeModal}
-                className="px-5 py-2 text-xs font-semibold rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white transition-all focus:outline-none"
+                className="px-5 py-2 text-xs font-semibold rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white transition-all focus:outline-none cursor-pointer"
               >
                 Close View
               </button>
