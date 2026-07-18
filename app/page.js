@@ -74,46 +74,52 @@ function CategoryRow({ title, movies }) {
           ref={rowRef} 
           className="flex overflow-x-auto gap-4 md:gap-5 pb-8 pt-4 hide-scroll-bar snap-x snap-mandatory"
         >
-          {movies.map((movie) => (
-            <div key={`${movie.media_type || 'item'}-${movie.id}`} className="min-w-[160px] md:min-w-[220px] lg:min-w-[240px] snap-center">
-              <Link href={`/watch/${movie.id}`}>
-                <div className="relative rounded-lg overflow-hidden aspect-[2/3] transform transition-all duration-300 ease-out hover:-translate-y-2.5 hover:shadow-[0_15px_30px_rgba(245,158,11,0.25)] group/card cursor-pointer border border-transparent hover:border-amber-500/60">
-                  
-                  <img 
-                    src={movie.poster_path ? `${IMAGE_BASE_URL}/w500${movie.poster_path}` : "https://placehold.co/400x600/000000/ffffff?text=No+Image"} 
-                    alt={movie.title || movie.name} 
-                    className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover/card:scale-105"
-                    loading="lazy"
-                  />
-                  
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 pointer-events-none"></div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-amber-600/20 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                  
-                  <div className="absolute inset-0 p-5 flex flex-col justify-start pointer-events-none">
-                    <div className="w-10 h-10 bg-amber-500 backdrop-blur-md rounded-full flex items-center justify-center mb-auto self-end opacity-0 group-hover/card:opacity-100 transform scale-75 group-hover/card:scale-100 transition-all duration-300 shadow-xl">
-                       <i className="fa-solid fa-play text-black ml-0.5 text-xs"></i>
-                    </div>
-                  </div>
+          {movies.map((movie) => {
+            const isTv = movie.media_type === 'tv' || movie.first_air_date || movie.name;
+            const mediaRoute = isTv ? 'tv' : 'movie';
 
-                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 flex flex-col justify-end z-20">
-                    <h4 className="font-bold text-white text-sm md:text-base line-clamp-1 drop-shadow-md leading-tight mb-2">
-                      {movie.title || movie.name}
-                    </h4>
-                    <div className="flex justify-between items-center text-[11px] md:text-xs font-semibold text-gray-300">
-                      <span className="flex items-center gap-1 text-amber-400 drop-shadow">
-                        <i className="fa-solid fa-star"></i> 
-                        {movie.vote_average?.toFixed(1)}
-                      </span>
-                      <span className="uppercase tracking-wide">
-                        {movie.first_air_date || movie.name || movie.media_type === 'tv' ? 'Series' : 'Movie'}
-                      </span>
+            return (
+              <div key={`${movie.media_type || 'item'}-${movie.id}`} className="min-w-[160px] md:min-w-[220px] lg:min-w-[240px] snap-center">
+                <Link href={`/watch/${mediaRoute}/${movie.id}`}>
+                  <div className="relative rounded-lg overflow-hidden aspect-[2/3] transform transition-all duration-300 ease-out hover:-translate-y-2.5 hover:shadow-[0_15px_30px_rgba(245,158,11,0.25)] group/card cursor-pointer border border-transparent hover:border-amber-500/60">
+                    
+                    <img 
+                      src={movie.poster_path ? `${IMAGE_BASE_URL}/w500${movie.poster_path}` : "https://placehold.co/400x600/000000/ffffff?text=No+Image"} 
+                      alt={movie.title || movie.name} 
+                      className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover/card:scale-105"
+                      loading="lazy"
+                    />
+                    
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 pointer-events-none"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-amber-600/20 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                    
+                    <div className="absolute inset-0 p-5 flex flex-col justify-start pointer-events-none">
+                      <div className="w-10 h-10 bg-amber-500 backdrop-blur-md rounded-full flex items-center justify-center mb-auto self-end opacity-0 group-hover/card:opacity-100 transform scale-75 group-hover/card:scale-100 transition-all duration-300 shadow-xl">
+                         <i className="fa-solid fa-play text-black ml-0.5 text-xs"></i>
+                      </div>
                     </div>
-                  </div>
 
-                </div>
-              </Link>
-            </div>
-          ))}
+                    <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 flex flex-col justify-end z-20">
+                      <h4 className="font-bold text-white text-sm md:text-base line-clamp-1 drop-shadow-md leading-tight mb-2">
+                        {movie.title || movie.name}
+                      </h4>
+                      <div className="flex justify-between items-center text-[11px] md:text-xs font-semibold text-gray-300">
+                        <span className="flex items-center gap-1 text-amber-400 drop-shadow">
+                          <i className="fa-solid fa-star"></i> 
+                          {movie.vote_average?.toFixed(1)}
+                        </span>
+                        {/* MODIFICATION ICI : 'Series' devient 'TV' */}
+                        <span className="uppercase tracking-wide">
+                          {isTv ? 'TV' : 'Movie'}
+                        </span>
+                      </div>
+                    </div>
+
+                  </div>
+                </Link>
+              </div>
+            );
+          })}
         </div>
 
         <button 
@@ -228,11 +234,11 @@ function HomeContent() {
 
         const masterRows = [];
 
-        // 1. Setup trending row (which mixes everything automatically if content type is 'all')
         if (primaryRowData.length > 0) {
           let rowTitle = "Trending Now";
           if (filterType === 'top_rated') {
-            rowTitle = contentType === 'all' ? "Top Rated Hits" : contentType === 'movie' ? "Top Rated Movies" : "Top Rated Series";
+            {/* MODIFICATION ICI : "Top Rated Series" devient "Top Rated TV" */}
+            rowTitle = contentType === 'all' ? "Top Rated Hits" : contentType === 'movie' ? "Top Rated Movies" : "Top Rated TV";
           }
           masterRows.push({
             id: 'primary-dynamic-row',
@@ -241,9 +247,7 @@ function HomeContent() {
           });
         }
 
-        // 2. MIX LOGIC FOR GENRE LISTS
         if (contentType === 'all') {
-          // Fetch movie genres and TV genres parallelly
           const [movieGenresRes, tvGenresRes] = await Promise.all([
             fetch(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}`),
             fetch(`${BASE_URL}/genre/tv/list?api_key=${API_KEY}`)
@@ -253,15 +257,12 @@ function HomeContent() {
 
           if (!isCurrent) return;
 
-          // Map through a unified set of common genres or use all available ones
           const genreMap = {};
 
-          // Process movie genres mapping
           movieGenresData.genres?.forEach(g => {
             genreMap[g.name] = { name: g.name, movieId: g.id, tvId: null };
           });
 
-          // Match up or inject TV genres mapping
           tvGenresData.genres?.forEach(g => {
             if (genreMap[g.name]) {
               genreMap[g.name].tvId = g.id;
@@ -270,7 +271,6 @@ function HomeContent() {
             }
           });
 
-          // Fetch items for combined rows asynchronously
           const blendedGenresResult = await Promise.all(
             Object.values(genreMap).map(async (genre) => {
               try {
@@ -293,7 +293,6 @@ function HomeContent() {
                   tvItems = data.results?.map(item => ({ ...item, media_type: 'tv' })) || [];
                 }
 
-                // Perfectly alternate/mix movies and series together into the same array
                 const blendedList = [];
                 const maxLen = Math.max(movieItems.length, tvItems.length);
                 for (let i = 0; i < maxLen; i++) {
@@ -319,7 +318,6 @@ function HomeContent() {
           });
 
         } else {
-          // If explicitly viewing only movies or only series from navbar
           const genreListRes = await fetch(`${BASE_URL}/genre/${contentType}/list?api_key=${API_KEY}`);
           const genreListData = await genreListRes.json();
           
@@ -392,6 +390,10 @@ function HomeContent() {
     );
   }
 
+  const activeHero = heroMovies[activeHeroIndex];
+  const isHeroTv = activeHero?.media_type === 'tv' || activeHero?.first_air_date;
+  const heroMediaRoute = isHeroTv ? 'tv' : 'movie';
+
   return (
     <div className="bg-[#050505] min-h-screen text-white overflow-x-hidden font-sans selection:bg-red-700 selection:text-white">
       <Navbar 
@@ -427,7 +429,7 @@ function HomeContent() {
                 key={`title-${activeHeroIndex}`}
                 className="text-4xl sm:text-6xl md:text-7xl font-black mb-6 text-white drop-shadow-xl leading-tight opacity-0 animate-[fadeInUp_0.5s_ease-out_0.2s_forwards]"
               >
-                {heroMovies[activeHeroIndex].title || heroMovies[activeHeroIndex].name}
+                {activeHero.title || activeHero.name}
               </h1>
 
               <div 
@@ -436,19 +438,20 @@ function HomeContent() {
               >
                 <span className="flex items-center gap-1.5 text-amber-400 drop-shadow-md">
                   <i className="fa-solid fa-star"></i>
-                  {heroMovies[activeHeroIndex].vote_average?.toFixed(1)} Rating
+                  {activeHero.vote_average?.toFixed(1)} Rating
                 </span>
                 
                 <span className="w-1 h-1 rounded-full bg-gray-500"></span>
                 
+                {/* MODIFICATION ICI : 'Series' devient 'TV' */}
                 <span className="uppercase border border-gray-600 px-2 py-0.5 rounded text-xs font-bold tracking-wider text-white bg-white/[0.02]">
-                  {heroMovies[activeHeroIndex].media_type === 'tv' || heroMovies[activeHeroIndex].first_air_date ? 'Series' : 'Movie'}
+                  {isHeroTv ? 'TV' : 'Movie'}
                 </span>
               </div>
 
               <div className="opacity-0 animate-[fadeInUp_0.5s_ease-out_0.6s_forwards]">
                 <Link 
-                  href={`/watch/${heroMovies[activeHeroIndex].id}`} 
+                  href={`/watch/${heroMediaRoute}/${activeHero.id}`} 
                   className="group relative inline-flex items-center gap-4 px-10 py-4 bg-red-600 rounded-sm font-bold text-lg overflow-hidden transition-all hover:scale-105 active:scale-95 animate-pulse-glow text-white cursor-pointer"
                 >
                   <div className="absolute inset-0 w-1/3 h-full bg-gradient-to-r from-transparent via-white/40 to-transparent animate-laser-sheen"></div>

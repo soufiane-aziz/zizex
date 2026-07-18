@@ -1,18 +1,17 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Navbar from '../../../components/Navbar'; 
-import Footer from '../../../components/Footer';
+import Navbar from '../../../../components/Navbar'; 
+import Footer from '../../../../components/Footer';
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
-// COMPOSANT PUBLICITAIRE ISOLÉ (FIX)
-// Ce composant utilise un iframe avec srcDoc pour contourner les problèmes 
-// d'injection de scripts tiers dans React (document.write, etc.)
+// COMPOSANT PUBLICITAIRE ISOLÉ
+// Utilisation d'un iframe avec srcDoc pour contourner l'injection de scripts tiers dans React
 const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
   const srcDoc = `
     <!DOCTYPE html>
@@ -90,6 +89,7 @@ export default function WatchTV() {
   const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
   const currentStreamUrl = activeServer.url;
 
+  // Chargement des données structurelles de la série
   useEffect(() => {
     if (!id) return;
 
@@ -123,6 +123,7 @@ export default function WatchTV() {
     setCurrentEpisode(1);
   }, [id]);
 
+  // Chargement des épisodes d'une saison spécifique
   useEffect(() => {
     if (!id || !currentSeason) return;
 
@@ -139,6 +140,7 @@ export default function WatchTV() {
     fetchEpisodes();
   }, [id, currentSeason]);
 
+  // Réinitialiser l'overlay invisible lors des changements de flux
   useEffect(() => {
     setHasClickedPlayer(false);
   }, [currentEpisode, currentSeason, activeServerId]);
@@ -171,6 +173,7 @@ export default function WatchTV() {
   return (
     <div className="min-h-screen bg-zinc-950 text-white font-sans overflow-x-hidden pb-16">
       
+      {/* Intégration de la Navbar avec l'état synchrone 'tv' */}
       <Navbar contentType="tv" setContentType={() => {}} filterType="default" setFilterType={() => {}} />
 
       <main className="pt-28 px-4 md:px-8 max-w-[1600px] mx-auto flex flex-col gap-10 mb-2">
@@ -186,13 +189,13 @@ export default function WatchTV() {
         {/* LECTEUR + INFOS & ÉPISODES GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
           
-          {/* COLONNE GAUCHE */}
+          {/* COLONNE GAUCHE : Lecteur & Infos */}
           <div className="lg:col-span-2 flex flex-col gap-6">
             
-            {/* LECTEUR VIDÉO AVEC SMARTLINK INTÉGRÉ (Bouton Rouge Masqué) */}
+            {/* LECTEUR VIDÉO AVEC SMARTLINK INTÉGRÉ */}
             <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group">
               
-              {/* Overlay 100% Invisible pour le Smartlink */}
+              {/* Overlay Invisible pour déclencher le Smartlink au premier clic */}
               {!hasClickedPlayer && (
                 <div 
                   className="absolute inset-0 z-10 cursor-pointer"
@@ -210,7 +213,7 @@ export default function WatchTV() {
               />
             </div>
 
-            {/* Serveurs */}
+            {/* Sélections de serveurs */}
             <div className="bg-zinc-900/40 border border-white/5 backdrop-blur-md p-4 rounded-xl flex flex-wrap items-center gap-3">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mr-2">
                 <i className="fa-solid fa-server text-red-500 mr-1.5"></i> Select Server:
@@ -281,7 +284,7 @@ export default function WatchTV() {
             </div>
           </div>
 
-          {/* COLONNE DROITE */}
+          {/* COLONNE DROITE : Index Saisons & Épisodes */}
           <div className="lg:col-span-1 relative min-h-[480px] lg:min-h-0">
             <div className="lg:absolute lg:inset-0 bg-zinc-900/30 border border-white/5 backdrop-blur-md rounded-xl p-5 flex flex-col">
               
@@ -357,7 +360,7 @@ export default function WatchTV() {
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-zinc-900 text-[10px] text-zinc-600">No Preview</div>
                         )}
-                        <div className="absolute top-1 left-1 bg-black/70 backdrop-blur-sm text-[9px] font-black tracking-tighter px-1.5 py-0.2 rounded text-gray-200">
+                        <div className="absolute top-1 left-1 bg-black/70 backdrop-blur-sm text-[9px] font-black tracking-tighter px-1.5 py-0.5 rounded text-gray-200">
                           EP {ep.episode_number}
                         </div>
                       </div>
@@ -422,7 +425,7 @@ export default function WatchTV() {
 
       </main>
 
-      {/* MODAL / CENTRE DE TÉLÉCHARGEMENT */}
+      {/* MODAL / GATEWAY DE TÉLÉCHARGEMENT */}
       {isDownloadModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div 
