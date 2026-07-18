@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense, Fragment } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -104,8 +104,9 @@ function CategoryRow({ title, movies }) {
                         <i className="fa-solid fa-star"></i> 
                         {movie.vote_average?.toFixed(1)}
                       </span>
-                      <span>
-                        {(movie.release_date || movie.first_air_date)?.substring(0,4)}
+                      {/* --- CHANGEMENT ICI : Affichage de "Series" ou "Movie" à la place de l'année --- */}
+                      <span className="uppercase tracking-wide">
+                        {movie.first_air_date || movie.name ? 'Series' : 'Movie'}
                       </span>
                     </div>
                   </div>
@@ -127,7 +128,55 @@ function CategoryRow({ title, movies }) {
   );
 }
 
-// --- 3. Main Master Content Component ---
+// --- 3. ISOLATED AD COMPONENT ---
+const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
+  const srcDoc = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background: transparent; 
+            overflow: hidden; 
+          }
+        </style>
+      </head>
+      <body>
+        <script type="text/javascript">
+          atOptions = {
+            'key' : '${adKey}',
+            'format' : 'iframe',
+            'height' : ${height},
+            'width' : ${width},
+            'params' : {}
+          };
+        </script>
+        <script type="text/javascript" src="https://environmenttalentrabble.com/${adKey}/invoke.js"></script>
+      </body>
+    </html>
+  `;
+
+  return (
+    <div className={`w-full flex justify-center items-center overflow-hidden ${wrapperClassName}`} style={{ minHeight: `${height}px` }}>
+      <iframe
+        srcDoc={srcDoc}
+        width={width}
+        height={height}
+        frameBorder="0"
+        scrolling="no"
+        style={{ display: 'block', maxWidth: '100%', border: 'none', background: 'transparent' }}
+      ></iframe>
+    </div>
+  );
+};
+
+// --- 4. Main Master Content Component ---
 function HomeContent() {
   const [heroMovies, setHeroMovies] = useState([]);
   const [allCategories, setAllCategories] = useState([]);
@@ -138,20 +187,17 @@ function HomeContent() {
   const [contentType, setContentType] = useState('all'); 
   const [filterType, setFilterType] = useState('default'); 
 
-  // Récupération des paramètres d'URL (?type=...&filter=...)
   const searchParams = useSearchParams();
   const typeParam = searchParams.get('type');
   const filterParam = searchParams.get('filter');
 
-  // Effet 1 : Synchronise instantanément l'URL avec l'état local
   useEffect(() => {
     setContentType(typeParam || 'all');
     setFilterType(filterParam || 'default');
   }, [typeParam, filterParam]);
 
-  // Effet 2 : Chargement des données TMDB avec système anti-concurrence (isCurrent)
   useEffect(() => {
-    let isCurrent = true; // Verrou local pour tuer les requêtes obsolètes
+    let isCurrent = true; 
 
     const fetchEverythingDynamic = async () => {
       setIsLoading(true);
@@ -168,7 +214,6 @@ function HomeContent() {
         const primaryRes = await fetch(primaryUrl);
         const primaryData = await primaryRes.json();
         
-        // Si l'état a changé pendant le chargement réseau, on stoppe tout ici
         if (!isCurrent) return;
 
         const heroSelection = primaryData.results?.slice(0, 5) || [];
@@ -197,7 +242,6 @@ function HomeContent() {
                 movies: data.results || []
               };
             } catch (err) {
-              console.error(`Dynamic row failure for genre ${genre.name}:`, err);
               return { id: genre.id, name: genre.name, movies: [] };
             }
           })
@@ -228,7 +272,6 @@ function HomeContent() {
           }
         });
 
-        // Application sécurisée des états finaux
         setHeroMovies(heroSelection);
         setAllCategories(masterRows);
       } catch (error) {
@@ -240,7 +283,6 @@ function HomeContent() {
 
     fetchEverythingDynamic();
 
-    // Fonction de nettoyage exécutée automatiquement au changement d'état ou de page
     return () => {
       isCurrent = false; 
     };
@@ -313,8 +355,8 @@ function HomeContent() {
                   <i className="fa-solid fa-star"></i>
                   {heroMovies[activeHeroIndex].vote_average?.toFixed(1)} Rating
                 </span>
-                <span className="w-1 h-1 rounded-full bg-gray-500"></span>
-                <span>{(heroMovies[activeHeroIndex].release_date || heroMovies[activeHeroIndex].first_air_date)?.substring(0,4)}</span>
+                
+                {/* --- CHANGEMENT ICI : Suppression de l'année et du point gris --- */}
                 <span className="w-1 h-1 rounded-full bg-gray-500"></span>
                 
                 <span className="uppercase border border-gray-600 px-2 py-0.5 rounded text-xs font-bold tracking-wider text-white bg-white/[0.02]">
@@ -361,17 +403,62 @@ function HomeContent() {
         </section>
       )}
 
+      {/* --- ADDED AD COMPONENT 1 (Under Hero) --- */}
+      <AdComponent 
+        adKey="505a6081e767b51fdf7cd7a743de887b" 
+        width={728} 
+        height={90} 
+        wrapperClassName="mt-12 mb-2 px-4" 
+      />
+
       {/* --- ALL GENERATED CATEGORIES LIST --- */}
-      <main className="w-full max-w-[1600px] mx-auto px-4 md:px-12 lg:px-16 py-16 flex flex-col gap-4 relative z-20">
+      <main className="w-full max-w-[1600px] mx-auto px-4 md:px-12 lg:px-16 py-8 flex flex-col gap-4 relative z-20">
         {allCategories.map((category, index) => (
-          <RevealOnScroll key={category.id} delay={Math.min(index * 50, 300)}>
-            <CategoryRow 
-              title={category.name} 
-              movies={category.movies} 
+          <Fragment key={category.id}>
+            {/* The Row */}
+            <RevealOnScroll delay={Math.min(index * 50, 300)}>
+              <CategoryRow 
+                title={category.name} 
+                movies={category.movies} 
               />
-          </RevealOnScroll>
+            </RevealOnScroll>
+            
+            {/* --- ADDED AD COMPONENT 2 (After 3rd List / Index 2) --- */}
+            {index === 2 && (
+              <RevealOnScroll delay={Math.min((index + 1) * 50, 300)}>
+                <AdComponent 
+                  adKey="2d00d5f1f381c5bf760e84da1f51d68c" 
+                  width={468} 
+                  height={60} 
+                  wrapperClassName="mb-14 px-4 bg-black/20 rounded-lg py-4 border border-white/5 shadow-2xl" 
+                />
+              </RevealOnScroll>
+            )}
+
+            {/* --- ADDED AD COMPONENT 3 (After 6th List / Index 5) --- */}
+            {index === 5 && (
+              <RevealOnScroll delay={Math.min((index + 1) * 50, 300)}>
+                <AdComponent 
+                  adKey="0219cd05b1d4804869fc178ab5c3dce2" 
+                  width={320} 
+                  height={50} 
+                  wrapperClassName="mb-14 px-4 bg-black/20 rounded-lg py-4 border border-white/5 shadow-2xl" 
+                />
+              </RevealOnScroll>
+            )}
+          </Fragment>
         ))}
       </main>
+
+      {/* --- ADDED AD COMPONENT 4 (Before Footer) --- */}
+      <RevealOnScroll delay={300}>
+        <AdComponent 
+          adKey="d31895d04994bfe43ad4113bd0488409" 
+          width={300} 
+          height={250} 
+          wrapperClassName="mb-12 px-4 flex justify-center" 
+        />
+      </RevealOnScroll>
 
       <Footer />
       
@@ -397,7 +484,7 @@ function HomeContent() {
   );
 }
 
-// --- 4. Main Export with Safe Next.js Suspense Context ---
+// --- 5. Main Export with Safe Next.js Suspense Context ---
 export default function Home() {
   return (
     <Suspense fallback={

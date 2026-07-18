@@ -10,98 +10,52 @@ const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
-// 1. Première Bannière (728x90) sous la Navbar
-const BannerAd = () => {
-  const bannerRef = useRef(null);
-
-  useEffect(() => {
-    if (bannerRef.current && !bannerRef.current.firstChild) {
-      const conf = document.createElement('script');
-      conf.type = 'text/javascript';
-      conf.innerHTML = `atOptions = {
-        'key' : '505a6081e767b51fdf7cd7a743de887b',
-        'format' : 'iframe',
-        'height' : 90,
-        'width' : 728,
-        'params' : {}
-      };`;
-      
-      const script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.src = 'https://environmenttalentrabble.com/505a6081e767b51fdf7cd7a743de887b/invoke.js';
-      
-      bannerRef.current.append(conf);
-      bannerRef.current.append(script);
-    }
-  }, []);
-
-  return (
-    <div className="w-full flex justify-center items-center mb-6 overflow-hidden min-h-[90px]">
-      <div ref={bannerRef}></div>
-    </div>
-  );
-};
-
-// 2. Deuxième Bannière (320x50) pour la description - Centrée
-const DescriptionAd = () => {
-  const adRef = useRef(null);
-
-  useEffect(() => {
-    if (adRef.current && !adRef.current.firstChild) {
-      const conf = document.createElement('script');
-      conf.type = 'text/javascript';
-      conf.innerHTML = `atOptions = {
-        'key' : '0219cd05b1d4804869fc178ab5c3dce2',
-        'format' : 'iframe',
-        'height' : 50,
-        'width' : 320,
-        'params' : {}
-      };`;
-      
-      const script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.src = 'https://environmenttalentrabble.com/0219cd05b1d4804869fc178ab5c3dce2/invoke.js';
-      
-      adRef.current.append(conf);
-      adRef.current.append(script);
-    }
-  }, []);
+// COMPOSANT PUBLICITAIRE ISOLÉ (FIX)
+// Ce composant utilise un iframe avec srcDoc pour contourner les problèmes 
+// d'injection de scripts tiers dans React (document.write, etc.)
+const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
+  const srcDoc = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background: transparent; 
+            overflow: hidden; 
+          }
+        </style>
+      </head>
+      <body>
+        <script type="text/javascript">
+          atOptions = {
+            'key' : '${adKey}',
+            'format' : 'iframe',
+            'height' : ${height},
+            'width' : ${width},
+            'params' : {}
+          };
+        </script>
+        <script type="text/javascript" src="https://environmenttalentrabble.com/${adKey}/invoke.js"></script>
+      </body>
+    </html>
+  `;
 
   return (
-    <div className="w-full flex justify-center items-center mt-5 overflow-hidden min-h-[50px]">
-      <div ref={adRef} className="rounded-lg overflow-hidden shadow-lg border border-white/5"></div>
-    </div>
-  );
-};
-
-// 3. Bannière (468x60) avant le Footer
-const PreFooterAd = () => {
-  const adRef = useRef(null);
-
-  useEffect(() => {
-    if (adRef.current && !adRef.current.firstChild) {
-      const conf = document.createElement('script');
-      conf.type = 'text/javascript';
-      conf.innerHTML = `atOptions = {
-        'key' : '2d00d5f1f381c5bf760e84da1f51d68c',
-        'format' : 'iframe',
-        'height' : 60,
-        'width' : 468,
-        'params' : {}
-      };`;
-      
-      const script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.src = 'https://environmenttalentrabble.com/2d00d5f1f381c5bf760e84da1f51d68c/invoke.js';
-      
-      adRef.current.append(conf);
-      adRef.current.append(script);
-    }
-  }, []);
-
-  return (
-    <div className="w-full flex justify-center items-center my-8 overflow-hidden min-h-[60px]">
-      <div ref={adRef} className="rounded-lg overflow-hidden shadow-lg border border-white/5"></div>
+    <div className={`w-full flex justify-center items-center overflow-hidden ${wrapperClassName}`} style={{ minHeight: `${height}px` }}>
+      <iframe
+        srcDoc={srcDoc}
+        width={width}
+        height={height}
+        frameBorder="0"
+        scrolling="no"
+        style={{ display: 'block', maxWidth: '100%', border: 'none', background: 'transparent' }}
+      ></iframe>
     </div>
   );
 };
@@ -120,9 +74,7 @@ export default function WatchTV() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeServerId, setActiveServerId] = useState('server1');
   
-  // NOUVEAU : État pour gérer le clic du Smartlink sur le lecteur
   const [hasClickedPlayer, setHasClickedPlayer] = useState(false);
-  
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -187,7 +139,6 @@ export default function WatchTV() {
     fetchEpisodes();
   }, [id, currentSeason]);
 
-  // Réinitialiser le clic du smartlink quand l'épisode ou la saison change
   useEffect(() => {
     setHasClickedPlayer(false);
   }, [currentEpisode, currentSeason, activeServerId]);
@@ -199,9 +150,7 @@ export default function WatchTV() {
   };
 
   const handlePlayerClick = () => {
-    // Ouvre le smartlink dans un nouvel onglet
     window.open('https://environmenttalentrabble.com/niwvwhsdrt?key=6ae3e88a79f88c62bed220b8faec0bf0', '_blank');
-    // Désactive l'overlay pour laisser l'utilisateur interagir avec le vrai lecteur vidéo
     setHasClickedPlayer(true);
   };
 
@@ -226,8 +175,13 @@ export default function WatchTV() {
 
       <main className="pt-28 px-4 md:px-8 max-w-[1600px] mx-auto flex flex-col gap-10 mb-2">
         
-        {/* Pub Principale */}
-        <BannerAd />
+        {/* 1. PUB PRINCIPALE (728x90) */}
+        <AdComponent 
+          adKey="505a6081e767b51fdf7cd7a743de887b" 
+          width={728} 
+          height={90} 
+          wrapperClassName="mb-6" 
+        />
 
         {/* LECTEUR + INFOS & ÉPISODES GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
@@ -235,21 +189,16 @@ export default function WatchTV() {
           {/* COLONNE GAUCHE */}
           <div className="lg:col-span-2 flex flex-col gap-6">
             
-            {/* LECTEUR VIDÉO AVEC SMARTLINK INTÉGRÉ */}
+            {/* LECTEUR VIDÉO AVEC SMARTLINK INTÉGRÉ (Bouton Rouge Masqué) */}
             <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group">
               
-              {/* Overlay Invisible pour le Smartlink */}
+              {/* Overlay 100% Invisible pour le Smartlink */}
               {!hasClickedPlayer && (
                 <div 
-                  className="absolute inset-0 z-10 cursor-pointer flex items-center justify-center"
+                  className="absolute inset-0 z-10 cursor-pointer"
                   onClick={handlePlayerClick}
                   title="Click to Play"
-                >
-                  {/* Optionnel : Une icône de lecture visuelle pour inciter au clic */}
-                  <div className="w-16 h-16 bg-red-600/80 rounded-full flex items-center justify-center text-white shadow-lg backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                    <i className="fa-solid fa-play text-2xl ml-1"></i>
-                  </div>
-                </div>
+                />
               )}
 
               <iframe
@@ -323,8 +272,13 @@ export default function WatchTV() {
                 {showDetails.overview || "No serialization record summaries found inside our system databanks."}
               </p>
 
-              {/* Pub sous la description */}
-              <DescriptionAd />
+              {/* 2. PUB SOUS LA DESCRIPTION (320x50) */}
+              <AdComponent 
+                adKey="0219cd05b1d4804869fc178ab5c3dce2" 
+                width={320} 
+                height={50} 
+                wrapperClassName="mt-5 rounded-lg shadow-lg" 
+              />
 
             </div>
           </div>
@@ -557,8 +511,13 @@ export default function WatchTV() {
         </div>
       )}
 
-      {/* Pub avant le Footer */}
-      <PreFooterAd />
+      {/* 3. PUB AVANT LE FOOTER (468x60) */}
+      <AdComponent 
+        adKey="2d00d5f1f381c5bf760e84da1f51d68c" 
+        width={468} 
+        height={60} 
+        wrapperClassName="my-8 rounded-lg shadow-lg" 
+      />
 
       <Footer />
 
