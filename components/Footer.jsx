@@ -38,7 +38,7 @@ export default function Footer() {
         </div>
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
-                <span className="font-bold text-xl tracking-tight text-crimson-600">z<span className="text-white">Shows</span></span>
+                <span className="font-bold text-xl tracking-tight text-red-600">z<span className="text-white">Shows</span></span>
             </div>
             <p className="text-sm text-gray-500">© 2026 zShows. All rights reserved.</p>
         </div>

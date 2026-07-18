@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '../../../components/Navbar'; 
@@ -9,6 +9,102 @@ import Footer from '../../../components/Footer';
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
+
+// 1. Première Bannière (728x90) sous la Navbar
+const BannerAd = () => {
+  const bannerRef = useRef(null);
+
+  useEffect(() => {
+    if (bannerRef.current && !bannerRef.current.firstChild) {
+      const conf = document.createElement('script');
+      conf.type = 'text/javascript';
+      conf.innerHTML = `atOptions = {
+        'key' : '505a6081e767b51fdf7cd7a743de887b',
+        'format' : 'iframe',
+        'height' : 90,
+        'width' : 728,
+        'params' : {}
+      };`;
+      
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://environmenttalentrabble.com/505a6081e767b51fdf7cd7a743de887b/invoke.js';
+      
+      bannerRef.current.append(conf);
+      bannerRef.current.append(script);
+    }
+  }, []);
+
+  return (
+    <div className="w-full flex justify-center items-center mb-6 overflow-hidden min-h-[90px]">
+      <div ref={bannerRef}></div>
+    </div>
+  );
+};
+
+// 2. Deuxième Bannière (320x50) pour la description - Centrée
+const DescriptionAd = () => {
+  const adRef = useRef(null);
+
+  useEffect(() => {
+    if (adRef.current && !adRef.current.firstChild) {
+      const conf = document.createElement('script');
+      conf.type = 'text/javascript';
+      conf.innerHTML = `atOptions = {
+        'key' : '0219cd05b1d4804869fc178ab5c3dce2',
+        'format' : 'iframe',
+        'height' : 50,
+        'width' : 320,
+        'params' : {}
+      };`;
+      
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://environmenttalentrabble.com/0219cd05b1d4804869fc178ab5c3dce2/invoke.js';
+      
+      adRef.current.append(conf);
+      adRef.current.append(script);
+    }
+  }, []);
+
+  return (
+    <div className="w-full flex justify-center items-center mt-5 overflow-hidden min-h-[50px]">
+      <div ref={adRef} className="rounded-lg overflow-hidden shadow-lg border border-white/5"></div>
+    </div>
+  );
+};
+
+// 3. Bannière (468x60) avant le Footer
+const PreFooterAd = () => {
+  const adRef = useRef(null);
+
+  useEffect(() => {
+    if (adRef.current && !adRef.current.firstChild) {
+      const conf = document.createElement('script');
+      conf.type = 'text/javascript';
+      conf.innerHTML = `atOptions = {
+        'key' : '2d00d5f1f381c5bf760e84da1f51d68c',
+        'format' : 'iframe',
+        'height' : 60,
+        'width' : 468,
+        'params' : {}
+      };`;
+      
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://environmenttalentrabble.com/2d00d5f1f381c5bf760e84da1f51d68c/invoke.js';
+      
+      adRef.current.append(conf);
+      adRef.current.append(script);
+    }
+  }, []);
+
+  return (
+    <div className="w-full flex justify-center items-center my-8 overflow-hidden min-h-[60px]">
+      <div ref={adRef} className="rounded-lg overflow-hidden shadow-lg border border-white/5"></div>
+    </div>
+  );
+};
 
 export default function WatchTV() {
   const params = useParams();
@@ -24,7 +120,9 @@ export default function WatchTV() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeServerId, setActiveServerId] = useState('server1');
   
-  // États pour la fenêtre de téléchargement
+  // NOUVEAU : État pour gérer le clic du Smartlink sur le lecteur
+  const [hasClickedPlayer, setHasClickedPlayer] = useState(false);
+  
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -38,8 +136,6 @@ export default function WatchTV() {
   ];
 
   const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
-
-  // Lien direct du flux actuel à copier
   const currentStreamUrl = activeServer.url;
 
   useEffect(() => {
@@ -91,10 +187,22 @@ export default function WatchTV() {
     fetchEpisodes();
   }, [id, currentSeason]);
 
+  // Réinitialiser le clic du smartlink quand l'épisode ou la saison change
+  useEffect(() => {
+    setHasClickedPlayer(false);
+  }, [currentEpisode, currentSeason, activeServerId]);
+
   const handleCopyLink = () => {
     navigator.clipboard.writeText(currentStreamUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handlePlayerClick = () => {
+    // Ouvre le smartlink dans un nouvel onglet
+    window.open('https://environmenttalentrabble.com/niwvwhsdrt?key=6ae3e88a79f88c62bed220b8faec0bf0', '_blank');
+    // Désactive l'overlay pour laisser l'utilisateur interagir avec le vrai lecteur vidéo
+    setHasClickedPlayer(true);
   };
 
   if (isLoading || !showDetails) {
@@ -116,16 +224,34 @@ export default function WatchTV() {
       
       <Navbar contentType="tv" setContentType={() => {}} filterType="default" setFilterType={() => {}} />
 
-      <main className="pt-28 px-4 md:px-8 max-w-[1600px] mx-auto flex flex-col gap-10 mb-12">
+      <main className="pt-28 px-4 md:px-8 max-w-[1600px] mx-auto flex flex-col gap-10 mb-2">
         
+        {/* Pub Principale */}
+        <BannerAd />
+
         {/* LECTEUR + INFOS & ÉPISODES GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
           
           {/* COLONNE GAUCHE */}
           <div className="lg:col-span-2 flex flex-col gap-6">
             
-            {/* Lecteur Vidéo */}
-            <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl">
+            {/* LECTEUR VIDÉO AVEC SMARTLINK INTÉGRÉ */}
+            <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group">
+              
+              {/* Overlay Invisible pour le Smartlink */}
+              {!hasClickedPlayer && (
+                <div 
+                  className="absolute inset-0 z-10 cursor-pointer flex items-center justify-center"
+                  onClick={handlePlayerClick}
+                  title="Click to Play"
+                >
+                  {/* Optionnel : Une icône de lecture visuelle pour inciter au clic */}
+                  <div className="w-16 h-16 bg-red-600/80 rounded-full flex items-center justify-center text-white shadow-lg backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                    <i className="fa-solid fa-play text-2xl ml-1"></i>
+                  </div>
+                </div>
+              )}
+
               <iframe
                 src={activeServer.url}
                 className="w-full h-full absolute inset-0"
@@ -162,7 +288,6 @@ export default function WatchTV() {
                   {showDetails.name}
                 </h1>
                 
-                {/* Le bouton déclenche maintenant l'ouverture de la boîte de téléchargement */}
                 <button 
                   onClick={() => setIsDownloadModalOpen(true)}
                   className="inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-all shadow-lg shadow-red-600/20 flex-shrink-0 cursor-pointer"
@@ -193,9 +318,14 @@ export default function WatchTV() {
                 </div>
               </div>
 
+              {/* Description */}
               <p className="text-sm md:text-base text-gray-400 leading-relaxed">
                 {showDetails.overview || "No serialization record summaries found inside our system databanks."}
               </p>
+
+              {/* Pub sous la description */}
+              <DescriptionAd />
+
             </div>
           </div>
 
@@ -343,13 +473,11 @@ export default function WatchTV() {
       {/* MODAL / CENTRE DE TÉLÉCHARGEMENT */}
       {isDownloadModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Arrière-plan flouté */}
           <div 
             className="absolute inset-0 bg-black/80 backdrop-blur-sm"
             onClick={() => setIsDownloadModalOpen(false)}
           />
           
-          {/* Contenu de la boîte */}
           <div className="relative bg-zinc-900 border border-white/10 w-full max-w-lg rounded-2xl p-6 shadow-2xl text-white flex flex-col gap-5 animate-in fade-in zoom-in-95 duration-200">
             
             <div className="flex items-center justify-between border-b border-white/5 pb-3">
@@ -368,7 +496,6 @@ export default function WatchTV() {
               </button>
             </div>
 
-            {/* Option 1: Serveurs Externes Directs */}
             <div className="flex flex-col gap-2">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-wide">
                 Option 1: Open Video Hub (Click Download Inside Player)
@@ -395,7 +522,6 @@ export default function WatchTV() {
               </div>
             </div>
 
-            {/* Option 2: Copier l'adresse de flux pour les gestionnaires externes */}
             <div className="flex flex-col gap-2">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-wide">
                 Option 2: Copy Stream Gateway (For VLC / 1DM / IDM)
@@ -419,7 +545,6 @@ export default function WatchTV() {
               </div>
             </div>
 
-            {/* Option 3: Guide/Astuce Express */}
             <div className="bg-red-950/20 border border-red-500/20 p-3 rounded-xl text-xs flex gap-3 text-gray-300">
               <i className="fa-solid fa-circle-info text-red-400 text-sm mt-0.5 flex-shrink-0"></i>
               <div className="leading-relaxed">
@@ -431,6 +556,9 @@ export default function WatchTV() {
           </div>
         </div>
       )}
+
+      {/* Pub avant le Footer */}
+      <PreFooterAd />
 
       <Footer />
 
