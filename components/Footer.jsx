@@ -1,48 +1,324 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+
 export default function Footer() {
+  const [activeModal, setActiveModal] = useState(null); // 'about' | 'faq' | 'terms' | 'privacy' | 'dmca' | null
+
+  const closeModal = () => setActiveModal(null);
+
+  const faqItems = [
+    {
+      q: "What exactly is zShow?",
+      a: "zShow is an advanced, high-performance media discovery platform engineered to help cinephiles browse, track, and locate content across global streaming architectures. We synthesize metadata to deliver a fluid browsing experience."
+    },
+    {
+      q: "Can I stream or watch movies directly on zShow?",
+      a: "No. zShow is strictly a metadata aggregator, discovery engine, and cataloging tool. We do not host, stream, or redistribute any copyrighted digital media files. Instead, we direct you to official legal streaming platforms."
+    },
+    {
+      q: "Where does the movie and TV data come from?",
+      a: "Our entire structural ecosystem is driven dynamically by the public TMDB API. This ensures real-time updates for trending global charts, dynamic synopsis architectures, cast directories, and high-resolution cover artwork."
+    },
+    {
+      q: "Is zShow free to use?",
+      a: "Yes. zShow is a non-commercial, open web application built for optimization, personal portfolio demonstration, and community media discovery."
+    }
+  ];
+
   return (
-    <footer className="border-t border-gray-800 bg-[#060608] mt-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-            <div>
-                <h4 className="text-white font-semibold mb-4">Company</h4>
-                <ul className="space-y-2 text-sm text-gray-400">
-                    <li><a href="#" className="hover:text-crimson-500 transition-colors">About Us</a></li>
-                    <li><a href="#" className="hover:text-crimson-500 transition-colors">Careers</a></li>
-                    <li><a href="#" className="hover:text-crimson-500 transition-colors">Contact</a></li>
-                </ul>
+    <footer className="border-t border-zinc-900 bg-zinc-950 pt-16 pb-8 mt-20 relative">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-16">
+          
+          {/* Brand & Socials */}
+          <div className="lg:col-span-2 flex flex-col gap-6">
+            <Link href="/" className="font-black text-3xl tracking-wide text-white focus:outline-none w-max">
+              <span className="text-red-600">z</span>Show
+            </Link>
+            <p className="text-sm text-zinc-500 max-w-sm leading-relaxed">
+              Your premium companion for tracking and discovering movies and TV shows. Built by cinephiles, for cinephiles.
+            </p>
+            
+            {/* Social Icons */}
+            <div className="flex gap-4 mt-2">
+              <a 
+                href="https://www.facebook.com/share/1cDn655BgX/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:bg-red-600 hover:border-red-600 hover:text-white transition-all duration-300 shadow-sm"
+                aria-label="Facebook"
+              >
+                <i className="fa-brands fa-facebook-f text-sm"></i>
+              </a>
+              <a 
+                href="#" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:bg-red-600 hover:border-red-600 hover:text-white transition-all duration-300 shadow-sm"
+                aria-label="Instagram"
+              >
+                <i className="fa-brands fa-instagram text-sm"></i>
+              </a>
             </div>
-            <div>
-                <h4 className="text-white font-semibold mb-4">Support</h4>
-                <ul className="space-y-2 text-sm text-gray-400">
-                    <li><a href="#" className="hover:text-crimson-500 transition-colors">FAQ</a></li>
-                    <li><a href="#" className="hover:text-crimson-500 transition-colors">Help Center</a></li>
-                    <li><a href="#" className="hover:text-crimson-500 transition-colors">Supported Devices</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 className="text-white font-semibold mb-4">Legal</h4>
-                <ul className="space-y-2 text-sm text-gray-400">
-                    <li><a href="#" className="hover:text-crimson-500 transition-colors">Terms of Use</a></li>
-                    <li><a href="#" className="hover:text-crimson-500 transition-colors">Privacy Policy</a></li>
-                    <li><a href="#" className="hover:text-crimson-500 transition-colors">Cookie Preferences</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 className="text-white font-semibold mb-4">Follow Us</h4>
-                <div className="flex gap-4">
-                    <a href="#" className="w-10 h-10 rounded-full bg-dark-card border border-gray-800 flex items-center justify-center text-gray-400 hover:bg-crimson-600 hover:border-crimson-600 hover:text-white transition-all transform hover:scale-110 shadow-lg"><i className="fa-brands fa-twitter"></i></a>
-                    <a href="#" className="w-10 h-10 rounded-full bg-dark-card border border-gray-800 flex items-center justify-center text-gray-400 hover:bg-crimson-600 hover:border-crimson-600 hover:text-white transition-all transform hover:scale-110 shadow-lg"><i className="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" className="w-10 h-10 rounded-full bg-dark-card border border-gray-800 flex items-center justify-center text-gray-400 hover:bg-crimson-600 hover:border-crimson-600 hover:text-white transition-all transform hover:scale-110 shadow-lg"><i className="fa-brands fa-instagram"></i></a>
-                </div>
-            </div>
+          </div>
+
+          {/* Explore Links */}
+          <div className="flex flex-col gap-5">
+            <h4 className="text-xs font-semibold uppercase tracking-widest text-zinc-300">Explore</h4>
+            <ul className="space-y-3 text-sm text-zinc-500">
+              <li><Link href="/" className="hover:text-red-500 transition-colors duration-200">Home</Link></li>
+              <li><Link href="/?type=movie" className="hover:text-red-500 transition-colors duration-200">Movies</Link></li>
+              <li><Link href="/?type=tv" className="hover:text-red-500 transition-colors duration-200">TV Shows</Link></li>
+              <li><Link href="/?filter=top_rated" className="hover:text-red-500 transition-colors duration-200">Top Rated</Link></li>
+            </ul>
+          </div>
+
+          {/* Company Links */}
+          <div className="flex flex-col gap-5">
+            <h4 className="text-xs font-semibold uppercase tracking-widest text-zinc-300">Company</h4>
+            <ul className="space-y-3 text-sm text-zinc-500">
+              <li>
+                <button 
+                  onClick={() => setActiveModal('about')} 
+                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none"
+                >
+                  About Us
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => setActiveModal('faq')} 
+                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none"
+                >
+                  FAQ
+                </button>
+              </li>
+              <li><Link href="/contact" className="hover:text-red-500 transition-colors duration-200">Contact Support</Link></li>
+            </ul>
+          </div>
+
+          {/* Legal Links */}
+          <div className="flex flex-col gap-5">
+            <h4 className="text-xs font-semibold uppercase tracking-widest text-zinc-300">Legal</h4>
+            <ul className="space-y-3 text-sm text-zinc-500 flex flex-col items-start">
+              <li>
+                <button 
+                  onClick={() => setActiveModal('terms')} 
+                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none"
+                >
+                  Terms of Service
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => setActiveModal('privacy')} 
+                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none"
+                >
+                  Privacy Policy
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => setActiveModal('dmca')} 
+                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none"
+                >
+                  DMCA
+                </button>
+              </li>
+            </ul>
+          </div>
+
         </div>
-        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-                <span className="font-bold text-xl tracking-tight text-red-600">z<span className="text-white">Shows</span></span>
-            </div>
-            <p className="text-sm text-gray-500">© 2026 zShows. All rights reserved.</p>
+
+        {/* Pro Bottom Bar */}
+        <div className="border-t border-zinc-800/60 pt-8 flex flex-col lg:flex-row justify-between items-center gap-6">
+          <div className="flex items-center text-xs text-zinc-500">
+            <p className="font-medium text-zinc-400">
+              &copy; {new Date().getFullYear()} zShow. All rights reserved.
+            </p>
+          </div>
+          
+          <div className="text-xs text-zinc-500 text-center lg:text-right flex items-center gap-2">
+            <p>
+              This product uses the{' '}
+              <a 
+                href="https://www.themoviedb.org" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-zinc-300 font-semibold hover:text-red-500 transition-colors"
+              >
+                TMDB API
+              </a>{' '}
+              but is not endorsed or certified by TMDB.
+            </p>
+          </div>
         </div>
+
       </div>
+
+      {/* Embedded Modal Manager */}
+      {activeModal && (
+        <div 
+          onClick={closeModal}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity duration-300"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()} 
+            className="relative w-full max-w-2xl rounded-2xl border border-zinc-800 bg-zinc-950/95 p-6 md:p-10 shadow-2xl overflow-y-auto max-h-[85vh]"
+          >
+            {/* Close Button */}
+            <button 
+              onClick={closeModal}
+              className="absolute top-5 right-5 w-8 h-8 rounded-full border border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-white hover:border-zinc-700 transition-all focus:outline-none"
+              aria-label="Close"
+            >
+              <i className="fa-solid fa-xmark text-sm"></i>
+            </button>
+
+            {/* CONTENT: ABOUT US */}
+            {activeModal === 'about' && (
+              <>
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-white tracking-tight">
+                    About <span className="text-red-600">z</span>Show
+                  </h3>
+                  <div className="h-[2px] w-12 bg-red-600 mt-2.5 rounded"></div>
+                </div>
+                <div className="space-y-5 text-sm text-zinc-400 leading-relaxed">
+                  <p>
+                    Welcome to <strong className="text-zinc-100">zShow</strong>, an advanced data-driven media tracking index and exploration architecture built explicitly for digital cinema enthusiasts.
+                  </p>
+                  <p>
+                    Our mission is to eliminate the systematic friction of discovering content across highly fragmented digital networks. By parsing scalable public data infrastructure arrays, zShow provides responsive filtering, comprehensive cast mapping, real-time community media discovery, and historical television tracking matrices inside a unified, high-end dashboard.
+                  </p>
+                  <p className="text-xs text-zinc-500 pt-2 border-t border-zinc-900 italic">
+                    Disclaimer: This deployment operates entirely on client-side routing and external dynamic pipelines. No copyrighted stream components or storage paradigms exist within our internal cluster schemas.
+                  </p>
+                </div>
+              </>
+            )}
+
+            {/* CONTENT: FAQ */}
+            {activeModal === 'faq' && (
+              <>
+                <div className="mb-8">
+                  <h3 className="text-2xl font-bold text-white tracking-tight">
+                    Frequently Asked Questions
+                  </h3>
+                  <div className="h-[2px] w-12 bg-red-600 mt-2.5 rounded"></div>
+                </div>
+                <div className="space-y-4">
+                  {faqItems.map((item, index) => (
+                    <details 
+                      key={index} 
+                      className="group border border-zinc-900 rounded-xl bg-zinc-900/20 overflow-hidden [&_summary::-webkit-details-marker]:hidden"
+                    >
+                      <summary className="flex items-center justify-between p-4 cursor-pointer select-none text-sm font-medium text-zinc-200 hover:bg-zinc-900/50 hover:text-white transition-all list-none">
+                        <span>{item.q}</span>
+                        <i className="fa-solid fa-chevron-down text-xs text-zinc-500 group-open:rotate-180 transition-transform duration-300"></i>
+                      </summary>
+                      <div className="px-4 pb-4 pt-1 text-xs text-zinc-400 leading-relaxed bg-zinc-950/40 border-t border-zinc-900/40">
+                        <p>{item.a}</p>
+                      </div>
+                    </details>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {/* CONTENT: TERMS OF SERVICE */}
+            {activeModal === 'terms' && (
+              <>
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-white tracking-tight">
+                    Terms of Service
+                  </h3>
+                  <div className="h-[2px] w-12 bg-red-600 mt-2.5 rounded"></div>
+                </div>
+                <div className="space-y-4 text-sm text-zinc-400 leading-relaxed">
+                  <p className="text-xs text-zinc-500">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+                  <p>
+                    By accessing and using <strong className="text-zinc-100">zShow</strong>, you automatically agree to abide by these Terms of Service. This platform functions purely as an open search directory and dynamic user interface layout.
+                  </p>
+                  <h4 className="text-white font-medium text-base pt-2">1. Use of Service</h4>
+                  <p>
+                    You agree to use this application only for legal, personal, and informational purposes. Automated data extraction, scraping, or heavy denial-of-service tasks targeted at our client interfaces or our underlying third-party API providers are strictly prohibited.
+                  </p>
+                  <h4 className="text-white font-medium text-base pt-2">2. Limitation of Liability</h4>
+                  <p>
+                    zShow aggregates external metadata and imagery dynamically. We do not warrant or guarantee the complete absolute accuracy, timestamp completeness, or persistent online availability of data fields fetched via public communication wrappers.
+                  </p>
+                </div>
+              </>
+            )}
+
+            {/* CONTENT: PRIVACY POLICY */}
+            {activeModal === 'privacy' && (
+              <>
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-white tracking-tight">
+                    Privacy Policy
+                  </h3>
+                  <div className="h-[2px] w-12 bg-red-600 mt-2.5 rounded"></div>
+                </div>
+                <div className="space-y-4 text-sm text-zinc-400 leading-relaxed">
+                  <p className="text-xs text-zinc-500">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+                  <p>
+                    At <strong className="text-zinc-100">zShow</strong>, we respect user privacy. This privacy policy highlights our commitment to data transparency.
+                  </p>
+                  <h4 className="text-white font-medium text-base pt-2">Data Collection & Cookies</h4>
+                  <p>
+                    zShow does not require profile configurations, billing information, or backend record-keeping. We do not collect, track, store, or trade any personal user analytics. 
+                  </p>
+                  <p>
+                    We may utilize minimal client-side browser storage (such as LocalStorage or basic session tokens) simply to retain interface configurations and user visual settings. Third-party data services (like TMDB) handle network queries under their own distinct analytical policies.
+                  </p>
+                </div>
+              </>
+            )}
+
+            {/* CONTENT: DMCA */}
+            {activeModal === 'dmca' && (
+              <>
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-white tracking-tight">
+                    DMCA & Copyright Compliance
+                  </h3>
+                  <div className="h-[2px] w-12 bg-red-600 mt-2.5 rounded"></div>
+                </div>
+                <div className="space-y-4 text-sm text-zinc-400 leading-relaxed">
+                  <p>
+                    <strong className="text-zinc-100">zShow</strong> takes copyright security and DMCA guidelines very seriously. 
+                  </p>
+                  <h4 className="text-white font-medium text-base pt-2">No Hosting Statement</h4>
+                  <p>
+                    This application operates strictly as an interactive visual interface. We do not host, store, stream, upload, or possess any video files, media files, or multimedia records on our servers or cloud storage objects.
+                  </p>
+                  <h4 className="text-white font-medium text-base pt-2">Data Inquiries</h4>
+                  <p>
+                    All localized titles, descriptions, synthetic data logs, and graphic assets displayed here are rendered directly via the public TMDB API architecture. If you wish to request a content takedown, please address structural asset modifications directly to the source provider at <a href="https://www.themoviedb.org" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:underline">themoviedb.org</a>.
+                  </p>
+                </div>
+              </>
+            )}
+
+            {/* Modal Closer Trigger Button */}
+            <div className="mt-8 pt-4 border-t border-zinc-900 flex justify-end">
+              <button
+                onClick={closeModal}
+                className="px-5 py-2 text-xs font-semibold rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white transition-all focus:outline-none"
+              >
+                Close View
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
     </footer>
   );
 }
