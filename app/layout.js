@@ -1,5 +1,6 @@
 import './globals.css';
 import Script from 'next/script';
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata = {
   title: 'zShow - Streaming Platform',
