@@ -16,6 +16,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         {children}
+        <Analytics />
         
         {/* Script publicitaire Adsterra (Popunder / Social Bar) */}
         <Script 
