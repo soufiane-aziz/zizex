@@ -159,13 +159,102 @@ export default function WatchMovie() {
     setHasClickedPlayer(true);
   };
 
+  // --- SKELETON LOADING TEMPLATE SHOWN WHILE FETCHING ---
   if (isLoading || !movieDetails) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center text-white">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-t-red-600 border-zinc-800 rounded-full animate-spin"></div>
-          <span className="text-sm font-bold tracking-widest uppercase text-gray-400">Loading Movie Stream...</span>
-        </div>
+      <div className="min-h-screen bg-zinc-950 text-white font-sans overflow-x-hidden pb-16">
+        <Navbar contentType="movie" setContentType={() => {}} filterType="default" setFilterType={() => {}} />
+
+        <main className="pt-28 px-4 md:px-8 max-w-[1600px] mx-auto flex flex-col gap-10 mb-2">
+          {/* Top Banner Ad Skeleton */}
+          <div className="w-full flex justify-center items-center mb-6">
+            <div className="w-[728px] h-[90px] bg-zinc-900/50 border border-white/5 rounded-lg animate-pulse" />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+            {/* Left Content Column */}
+            <div className="lg:col-span-2 flex flex-col gap-6">
+              {/* Player Skeleton */}
+              <div className="w-full aspect-video bg-zinc-900/40 border border-white/5 rounded-xl animate-pulse" />
+
+              {/* Server Control Bar Skeleton */}
+              <div className="bg-zinc-900/40 border border-white/5 backdrop-blur-md p-3 sm:p-4 rounded-xl flex items-center justify-between sm:justify-start gap-4">
+                <div className="h-4 w-24 bg-zinc-800 rounded animate-pulse" />
+                <div className="flex gap-2.5 flex-wrap">
+                  <div className="h-8 w-24 bg-zinc-800 rounded-lg animate-pulse" />
+                  <div className="h-8 w-24 bg-zinc-800 rounded-lg animate-pulse" />
+                  <div className="h-8 w-24 bg-zinc-800 rounded-lg animate-pulse" />
+                </div>
+              </div>
+
+              {/* Text Meta Info Skeleton */}
+              <div className="p-1">
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 mb-5 w-full">
+                  <div className="h-8 w-2/3 max-w-[400px] bg-zinc-800 rounded-lg animate-pulse" />
+                  <div className="flex items-center gap-2 ml-auto">
+                    <div className="h-7 w-12 bg-zinc-800 rounded-lg animate-pulse" />
+                    <div className="h-7 w-16 bg-zinc-800 rounded-lg animate-pulse" />
+                    <div className="h-7 w-16 bg-zinc-800 rounded-lg animate-pulse" />
+                  </div>
+                </div>
+
+                <div className="space-y-2.5">
+                  <div className="h-4 w-full bg-zinc-800/70 rounded animate-pulse" />
+                  <div className="h-4 w-full bg-zinc-800/70 rounded animate-pulse" />
+                  <div className="h-4 w-4/5 bg-zinc-800/70 rounded animate-pulse" />
+                </div>
+
+                {/* Bottom Player Ad Skeleton */}
+                <div className="mt-6 w-[320px] h-[50px] bg-zinc-900/50 border border-white/5 rounded-lg animate-pulse" />
+              </div>
+            </div>
+
+            {/* Right Sidebar Column */}
+            <div className="lg:col-span-1 relative min-h-[450px] lg:min-h-0">
+              <div className="lg:absolute lg:inset-0 bg-zinc-900/30 border border-white/5 backdrop-blur-md rounded-xl p-5 flex flex-col gap-3">
+                <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-1">
+                  <div className="h-4 w-36 bg-zinc-800 rounded animate-pulse" />
+                  <div className="h-5 w-10 bg-zinc-800 rounded animate-pulse" />
+                </div>
+                
+                {/* 5 Stacked Side Mini Cards */}
+                {[...Array(5)].map((_, idx) => (
+                  <div key={idx} className="w-full flex items-start gap-3 p-2 rounded-lg bg-zinc-900/20 border border-transparent">
+                    <div className="w-16 aspect-[2/3] bg-zinc-800 rounded flex-shrink-0 animate-pulse" />
+                    <div className="min-w-0 flex-1 space-y-2 pt-1">
+                      <div className="h-3 w-3/4 bg-zinc-800 rounded animate-pulse" />
+                      <div className="h-2.5 w-1/4 bg-zinc-800/60 rounded animate-pulse" />
+                      <div className="h-2 w-full bg-zinc-800/40 rounded animate-pulse" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <hr className="border-white/5 my-2" />
+
+          {/* Lower Grid (More Movies Like This) Skeleton */}
+          <div className="w-full">
+            <div className="h-5 w-52 bg-zinc-800 rounded-md mb-6 animate-pulse" />
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4">
+              {[...Array(8)].map((_, idx) => (
+                <div key={idx} className="flex flex-col bg-zinc-900/20 border border-white/5 rounded-lg overflow-hidden">
+                  <div className="aspect-[2/3] w-full bg-zinc-900/60 animate-pulse" />
+                  <div className="p-2 sm:p-3 space-y-2">
+                    <div className="h-3 w-4/5 bg-zinc-800 rounded animate-pulse" />
+                    <div className="flex justify-between items-center pt-1">
+                      <div className="h-2.5 w-8 bg-zinc-800 rounded animate-pulse" />
+                      <div className="h-3.5 w-10 bg-zinc-800 rounded animate-pulse" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </main>
+
+        <Footer />
       </div>
     );
   }
@@ -253,7 +342,6 @@ export default function WatchMovie() {
                   {movieDetails.title}
                 </h1>
                 
-                {/* ADDED ml-auto FOR COMPACT AUTOMATIC RIGHT-ALIGNMENT REGARDLESS OF WRAPPING */}
                 <div className="flex flex-wrap items-center gap-2 text-xs md:text-sm flex-shrink-0 ml-auto">
                   {/* Rating */}
                   <span className="text-amber-400 flex items-center gap-1 font-bold bg-amber-500/10 px-2.5 py-1.5 rounded-lg border border-amber-500/20 backdrop-blur-sm">

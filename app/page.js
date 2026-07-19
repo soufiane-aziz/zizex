@@ -9,6 +9,67 @@ const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
+// --- SKELETON LOADERS FOR PREMIUM STREAMING EXPERIENCE ---
+function CardSkeleton() {
+  return (
+    <div className="relative rounded-lg overflow-hidden aspect-[2/3] bg-neutral-900 border border-neutral-800/60 animate-pulse flex flex-col justify-end p-3 sm:p-4">
+      <div className="w-5/6 h-3.5 sm:h-4 bg-neutral-800 rounded mb-2"></div>
+      <div className="flex justify-between items-center w-full">
+        <div className="w-1/4 h-2.5 sm:h-3 bg-neutral-800 rounded"></div>
+        <div className="w-1/5 h-3.5 sm:h-4 bg-neutral-800 rounded"></div>
+      </div>
+    </div>
+  );
+}
+
+function RowSkeleton() {
+  return (
+    <div className="w-full mb-10 sm:mb-14 px-2 sm:px-0">
+      <div className="flex justify-between items-center mb-4 sm:mb-6">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="w-1 sm:w-1.5 h-4 sm:h-6 bg-neutral-800 rounded-sm"></div>
+          <div className="w-32 sm:w-48 h-5 sm:h-6 bg-neutral-800 rounded animate-pulse"></div>
+        </div>
+        <div className="w-14 sm:w-16 h-4 bg-neutral-800 rounded animate-pulse"></div>
+      </div>
+      <div className="flex overflow-x-hidden gap-2.5 sm:gap-3.5 md:gap-5 pb-2">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="min-w-[115px] sm:min-w-[145px] md:min-w-[210px] lg:min-w-[240px] flex-shrink-0">
+            <CardSkeleton />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HeroSkeleton() {
+  return (
+    <section className="relative w-full h-[95vh] bg-neutral-950 flex flex-col justify-end pb-14 sm:pb-16 pt-24 border-b border-neutral-900/40">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-24 flex flex-col justify-end h-full">
+        <div className="w-3/4 sm:w-1/2 h-10 sm:h-16 bg-neutral-900 rounded-md animate-pulse mb-4"></div>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-20 sm:w-24 h-7 sm:h-8 bg-neutral-900 rounded animate-pulse"></div>
+          <div className="w-14 sm:w-16 h-7 sm:h-8 bg-neutral-900 rounded animate-pulse"></div>
+        </div>
+        <div className="w-36 sm:w-40 h-12 bg-neutral-900 rounded-sm animate-pulse"></div>
+      </div>
+    </section>
+  );
+}
+
+function HomeSkeleton() {
+  return (
+    <div className="bg-[#050505] min-h-screen text-white overflow-x-hidden font-sans">
+      <HeroSkeleton />
+      <main className="w-full max-w-[1600px] mx-auto px-2 sm:px-4 md:px-12 lg:px-16 py-4 sm:py-8 flex flex-col gap-2 sm:gap-4">
+        <RowSkeleton />
+        <RowSkeleton />
+      </main>
+    </div>
+  );
+}
+
 // --- 1. Reusable Scroll Animation Component ---
 function RevealOnScroll({ children, delay = 0, disable = false }) {
   const [isVisible, setIsVisible] = useState(false);
@@ -234,9 +295,10 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle }) {
               </div>
             ))}
             
+            {/* INLINE ROW LOADING SKELETON */}
             {isFetching && (
-              <div className="min-w-[115px] sm:min-w-[145px] md:min-w-[210px] lg:min-w-[240px] flex items-center justify-center aspect-[2/3]">
-                <div className="w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+              <div className="min-w-[115px] sm:min-w-[145px] md:min-w-[210px] lg:min-w-[240px] flex-shrink-0">
+                <CardSkeleton />
               </div>
             )}
           </div>
@@ -254,13 +316,20 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle }) {
             {localMovies.map((movie, index) => renderMovieCard(movie, index))}
           </div>
 
-          <div ref={expandedSentinelRef} className="w-full h-40 flex items-center justify-center mt-12">
+          {/* VIEW ALL GRID PAGINATION LOADING SKELETONS */}
+          <div ref={expandedSentinelRef} className="w-full mt-12">
             {hasMore ? (
-              <div className="w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 sm:gap-4 md:gap-5 px-2 sm:px-4">
+                {[...Array(8)].map((_, i) => (
+                  <CardSkeleton key={`expanded-loading-${i}`} />
+                ))}
+              </div>
             ) : (
-              <p className="text-xs sm:text-sm font-bold tracking-widest text-gray-500 uppercase bg-white/5 px-6 py-2.5 rounded-full border border-white/5 shadow-inner">
-                You've reached the end of the collection
-              </p>
+              <div className="w-full h-40 flex items-center justify-center">
+                <p className="text-xs sm:text-sm font-bold tracking-widest text-gray-500 uppercase bg-white/5 px-6 py-2.5 rounded-full border border-white/5 shadow-inner">
+                  You've reached the end of the collection
+                </p>
+              </div>
             )}
           </div>
         </div>
@@ -350,7 +419,6 @@ function HomeContent() {
   useEffect(() => {
     let isCurrent = true; 
 
-    // UNIFIED GENRE MAP: Now split into separate rows!
     const UNIFIED_GENRES = [
       { name: "Action", movieIds: "28", tvId: "10759" },
       { name: "Adventure", movieIds: "12", tvId: "10759" },
@@ -371,7 +439,6 @@ function HomeContent() {
         let primaryDataResults = [];
         let primaryLoadMore = null;
 
-        // --- 1. ENFORCE 50/50 SPLIT FOR THE MAIN/HERO ROW ---
         if (contentType === 'all') {
           const [movieRes, tvRes] = await Promise.all([
             fetch(filterType === 'top_rated' ? `${BASE_URL}/movie/top_rated?api_key=${API_KEY}` : `${BASE_URL}/trending/movie/week?api_key=${API_KEY}`),
@@ -410,7 +477,6 @@ function HomeContent() {
             return blendedPage;
           };
         } else {
-          // Movie or TV only filter
           const url = filterType === 'top_rated' 
             ? `${BASE_URL}/${contentType}/top_rated?api_key=${API_KEY}` 
             : `${BASE_URL}/trending/${contentType}/week?api_key=${API_KEY}`;
@@ -449,30 +515,25 @@ function HomeContent() {
           });
         }
 
-        // --- 2. ENFORCE 50/50 SPLIT FOR ALL GENRE ROWS ---
         if (contentType === 'all') {
-          // Use the mapped UNIFIED_GENRES to ensure movies and TV match perfectly in every row
           const blendedGenresResult = await Promise.all(
             UNIFIED_GENRES.map(async (genre) => {
               try {
                 let movieItems = [];
                 let tvItems = [];
 
-                // Fetch Movie half
                 let mUrl = `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genre.movieIds}`;
                 if (filterType === 'top_rated') mUrl += `&sort_by=vote_average.desc&vote_count.gte=200`;
                 const mRes = await fetch(mUrl);
                 const mData = await mRes.json();
                 movieItems = mData.results?.map(item => ({ ...item, media_type: 'movie' })) || [];
 
-                // Fetch TV half
                 let tUrl = `${BASE_URL}/discover/tv?api_key=${API_KEY}&with_genres=${genre.tvId}`;
                 if (filterType === 'top_rated') tUrl += `&sort_by=vote_average.desc&vote_count.gte=200`;
                 const tRes = await fetch(tUrl);
                 const tData = await tRes.json();
                 tvItems = tData.results?.map(item => ({ ...item, media_type: 'tv' })) || [];
 
-                // Interleave exactly 1 for 1
                 const blendedList = [];
                 const maxLen = Math.max(movieItems.length, tvItems.length);
                 for (let i = 0; i < maxLen; i++) {
@@ -522,7 +583,6 @@ function HomeContent() {
           });
 
         } else {
-          // Standard fetching if the user explicitly clicked "Movies" or "TV" in the Nav
           const genreListRes = await fetch(`${BASE_URL}/genre/${contentType}/list?api_key=${API_KEY}`);
           const genreListData = await genreListRes.json();
           
@@ -595,12 +655,9 @@ function HomeContent() {
     return () => clearInterval(interval);
   }, [heroMovies]);
 
+  /* REPLACED SPINNER WITH THE INITIAL HOME LAYOUT SKELETON */
   if (isLoading) {
-    return (
-      <div className="min-h-[100dvh] flex items-center justify-center bg-[#050505]">
-        <div className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
+    return <HomeSkeleton />;
   }
 
   const activeHero = heroMovies[activeHeroIndex];
@@ -802,12 +859,9 @@ function HomeContent() {
 }
 
 export default function Home() {
+  /* REPLACED THE MAIN REACT SUSPENSE FALLBACK SPINNER WITH OUR HOMESKELETON COMPONENT */
   return (
-    <Suspense fallback={
-      <div className="min-h-[100dvh] flex items-center justify-center bg-[#050505]">
-        <div className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    }>
+    <Suspense fallback={<HomeSkeleton />}>
       <HomeContent />
     </Suspense>
   );
