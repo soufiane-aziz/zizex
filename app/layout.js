@@ -1,6 +1,7 @@
 import './globals.css';
 import Script from 'next/script';
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata = {
   title: 'zShow - Streaming Platform',
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
       <body>
         {children}
         <Analytics />
+        <SpeedInsights />
         
         {/* Script publicitaire Adsterra (Popunder / Social Bar) */}
         <Script 
