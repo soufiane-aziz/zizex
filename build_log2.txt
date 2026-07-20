@@ -1,0 +1,108 @@
+﻿Ôû▓ Next.js 16.2.10 (Turbopack)
+- Environments: .env.local
+
+node.exe : ÔÜá The "middleware" file 
+convention is deprecated. Please use 
+"proxy" instead. Learn more: https://nextjs.
+org/docs/messages/middleware-to-proxy
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" 
+"C:\Users\soufi\AppData\Roaming\ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: 
+    (ÔÜá The 
+"middle...leware-to-proxy:Strin    g) [], 
+RemoteException
+    + FullyQualifiedErrorId : 
+NativeCommandE    rror
+ 
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 3 errors:
+./app/[locale]/page.js:2:1
+Module not found: Can't resolve 
+'@/components/HomeClient'
+  [90m1 |[0m [36mimport[0m 
+[33mReact[0m [36mfrom[0m 
+[32m'react'[0m;
+[31m[1m>[0m [90m2 |[0m [36mimport[0m 
+[33mHomeClient[0m [36mfrom[0m 
+[32m'@/components/HomeClient'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m
+  [90m4 |[0m [36mexport[0m 
+[36mconst[0m revalidate = [35m86400[0m; 
+[90m// 24 hours caching at the edge CDN 
+level[0m
+  [90m5 |[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-
+found
+
+
+./app/[locale]/movie/[slug]/page.js:2:1
+Module not found: Can't resolve 
+'@/components/WatchMovieClient'
+  [90m1 |[0m [36mimport[0m 
+[33mReact[0m [36mfrom[0m 
+[32m'react'[0m;
+[31m[1m>[0m [90m2 |[0m [36mimport[0m 
+[33mWatchMovieClient[0m [36mfrom[0m 
+[32m'@/components/WatchMovieClient'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0
+m
+  [90m3 |[0m
+  [90m4 |[0m [36mexport[0m 
+[36mconst[0m revalidate = [35m86400[0m; 
+[90m// 24 hours caching on Edge CDN[0m
+  [90m5 |[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-
+found
+
+
+./app/[locale]/tv/[slug]/season-[seasonId]/e
+pisode-[episodeId]/page.js:2:1
+Module not found: Can't resolve 
+'@/components/WatchTVClient'
+  [90m1 |[0m [36mimport[0m 
+[33mReact[0m [36mfrom[0m 
+[32m'react'[0m;
+[31m[1m>[0m [90m2 |[0m [36mimport[0m 
+[33mWatchTVClient[0m [36mfrom[0m 
+[32m'@/components/WatchTVClient'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m
+  [90m4 |[0m [36mexport[0m 
+[36mconst[0m revalidate = [35m86400[0m; 
+[90m// 24 hours caching on Edge CDN[0m
+  [90m5 |[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-
+found
+
+
+    at <unknown> 
+(./app/[locale]/page.js:2:1)
+    at <unknown> (https://nextjs.org/docs/me
+ssages/module-not-found)
+    at <unknown> 
+(./app/[locale]/movie/[slug]/page.js:2:1)
+    at <unknown> (https://nextjs.org/docs/me
+ssages/module-not-found)
+    at <unknown> (./app/[locale]/tv/[slug]/s
+eason-[seasonId]/episode-[episodeId]/page.js
+:2:1)
+    at <unknown> (https://nextjs.org/docs/me
+ssages/module-not-found)

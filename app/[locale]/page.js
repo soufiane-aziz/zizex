@@ -1,0 +1,196 @@
+import React from 'react';
+import HomeClient from '../../components/HomeClient';
+
+export const revalidate = 86400; // 24 hours caching at the edge CDN level
+
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+const BASE_URL = "https://api.themoviedb.org/3";
+
+const UNIFIED_GENRES = [
+    { name: { en: "Action", fr: "Action", ar: "أكشن" }, movieIds: "28", tvId: "10759" },
+    { name: { en: "Adventure", fr: "Aventure", ar: "مغامرة" }, movieIds: "12", tvId: "10759" },
+    { name: { en: "Animation", fr: "Animation", ar: "أنيميشن" }, movieIds: "16", tvId: "16" },
+    { name: { en: "Comedy", fr: "Comédie", ar: "كوميدي" }, movieIds: "35", tvId: "35" },
+    { name: { en: "Crime", fr: "Crime", ar: "جريمة" }, movieIds: "80", tvId: "80" },
+    { name: { en: "Documentary", fr: "Documentaire", ar: "وثائقي" }, movieIds: "99", tvId: "99" },
+    { name: { en: "Drama", fr: "Drame", ar: "دراما" }, movieIds: "18", tvId: "18" },
+    { name: { en: "Family", fr: "Famille", ar: "عائلي" }, movieIds: "10751", tvId: "10751" },
+    { name: { en: "Fantasy", fr: "Fantaisie", ar: "فانتازيا" }, movieIds: "14", tvId: "10765" },
+    { name: { en: "Mystery", fr: "Mystère", ar: "غموض" }, movieIds: "9648", tvId: "9648" },
+    { name: { en: "Science Fiction", fr: "Science Fiction", ar: "خيال علمي" }, movieIds: "878", tvId: "10765" }
+];
+
+async function fetchFromTMDB(path, queryParams = '') {
+    const url = `${BASE_URL}${path}?api_key=${API_KEY}${queryParams}`;
+    try {
+        const res = await fetch(url, { next: { revalidate: 86400 } });
+        if (!res.ok) return null;
+        return await res.json();
+    } catch (err) {
+        console.error(`TMDB fetch error for ${path}:`, err);
+        return null;
+    }
+}
+
+export default async function LocalizedHomePage(props) {
+    const searchParams = await props.searchParams;
+    const params = await props.params;
+    const { locale } = params;
+
+    const contentType = searchParams.type || 'all';
+    const filterType = searchParams.filter || 'default';
+
+    // Format language parameter for TMDB calls
+    const tmdbLang = locale === 'ar' ? 'ar-AE' : locale === 'fr' ? 'fr-FR' : 'en-US';
+    const langQuery = `&language=${tmdbLang}`;
+
+    let primaryDataResults = [];
+    let heroMovies = [];
+    let allCategories = [];
+
+    // Fetch Hero and Primary Row data
+    if (contentType === 'all') {
+        const isTop = filterType === 'top_rated';
+        const moviePath = isTop ? '/movie/top_rated' : '/trending/movie/week';
+        const tvPath = isTop ? '/tv/top_rated' : '/trending/tv/week';
+
+        const [movieData, tvData] = await Promise.all([
+            fetchFromTMDB(moviePath, langQuery),
+            fetchFromTMDB(tvPath, langQuery)
+        ]);
+
+        const mResults = movieData?.results?.map(m => ({ ...m, media_type: 'movie' })) || [];
+        const tResults = tvData?.results?.map(t => ({ ...t, media_type: 'tv' })) || [];
+
+        const maxLen = Math.max(mResults.length, tResults.length);
+        for (let i = 0; i < maxLen; i++) {
+            if (mResults[i]) primaryDataResults.push(mResults[i]);
+            if (tResults[i]) primaryDataResults.push(tResults[i]);
+        }
+    } else {
+        // movie or tv
+        const isTop = filterType === 'top_rated';
+        const path = isTop ? `/${contentType}/top_rated` : `/trending/${contentType}/week`;
+        const data = await fetchFromTMDB(path, langQuery);
+        primaryDataResults = data?.results?.map(item => ({ ...item, media_type: contentType })) || [];
+    }
+
+    heroMovies = primaryDataResults.slice(0, 10);
+    const remainingPrimary = primaryDataResults.slice(10);
+
+    // Set up categories row
+    if (remainingPrimary.length > 0) {
+        let rowTitle = filterType === 'top_rated'
+            ? (locale === 'ar' ? "الأعلى تقييمًا" : locale === 'fr' ? "Succès Mieux Notés" : "Top Rated Hits")
+            : (locale === 'ar' ? "المتداول الآن" : locale === 'fr' ? "Tendances Actuelles" : "Trending Now");
+
+        if (contentType !== 'all') {
+            if (filterType === 'top_rated') {
+                rowTitle = contentType === 'movie'
+                    ? (locale === 'ar' ? "أفلام أعلى تقييمًا" : locale === 'fr' ? "Films Mieux Notés" : "Top Rated Movies")
+                    : (locale === 'ar' ? "مسلسلات أعلى تقييمًا" : locale === 'fr' ? "Séries Mieux Notées" : "Top Rated TV");
+            } else {
+                rowTitle = contentType === 'movie'
+                    ? (locale === 'ar' ? "أفلام متداولة" : locale === 'fr' ? "Films Tendances" : "Trending Movies")
+                    : (locale === 'ar' ? "مسلسلات متداولة" : locale === 'fr' ? "Séries Tendances" : "Trending TV");
+            }
+        }
+
+        allCategories.push({
+            id: 'primary-dynamic-row',
+            name: rowTitle,
+            movies: remainingPrimary,
+            // loadMore is client-side fallback - handled inside client row
+        });
+    }
+
+    // Fetch category rows
+    if (contentType === 'all') {
+        const blendedGenres = await Promise.all(
+            UNIFIED_GENRES.map(async (genre) => {
+                const mPath = `/discover/movie`;
+                const tPath = `/discover/tv`;
+
+                let mQuery = `&with_genres=${genre.movieIds}${langQuery}`;
+                let tQuery = `&with_genres=${genre.tvId}${langQuery}`;
+
+                if (filterType === 'top_rated') {
+                    mQuery += `&sort_by=vote_average.desc&vote_count.gte=200`;
+                    tQuery += `&sort_by=vote_average.desc&vote_count.gte=200`;
+                }
+
+                const [mData, tData] = await Promise.all([
+                    fetchFromTMDB(mPath, mQuery),
+                    fetchFromTMDB(tPath, tQuery)
+                ]);
+
+                const movieItems = mData?.results?.map(item => ({ ...item, media_type: 'movie' })) || [];
+                const tvItems = tData?.results?.map(item => ({ ...item, media_type: 'tv' })) || [];
+
+                const blendedList = [];
+                const maxLen = Math.max(movieItems.length, tvItems.length);
+                for (let i = 0; i < maxLen; i++) {
+                    if (movieItems[i]) blendedList.push(movieItems[i]);
+                    if (tvItems[i]) blendedList.push(tvItems[i]);
+                }
+
+                const resolvedRowName = genre.name[locale] || genre.name.en;
+
+                return {
+                    id: `blended-${resolvedRowName.toLowerCase().replace(/\s+/g, '-')}`,
+                    name: filterType === 'top_rated'
+                        ? (locale === 'ar' ? `الأعلى تقييمًا: ${resolvedRowName}` : locale === 'fr' ? `Top Mieux Notés: ${resolvedRowName}` : `Top Rated ${resolvedRowName}`)
+                        : resolvedRowName,
+                    movies: blendedList,
+                    movieGenreId: genre.movieIds,
+                    tvGenreId: genre.tvId,
+                };
+            })
+        );
+
+        blendedGenres.forEach(genreRow => {
+            if (genreRow.movies.length > 0) {
+                allCategories.push(genreRow);
+            }
+        });
+    } else {
+        // movie or tv genres
+        const genreListData = await fetchFromTMDB(`/genre/${contentType}/list`, langQuery);
+        const genres = genreListData?.genres || [];
+
+        const dynamicGenres = await Promise.all(
+            genres.map(async (genre) => {
+                let discoverQuery = `&with_genres=${genre.id}${langQuery}`;
+                if (filterType === 'top_rated') {
+                    discoverQuery += `&sort_by=vote_average.desc&vote_count.gte=300`;
+                }
+                const data = await fetchFromTMDB(`/discover/${contentType}`, discoverQuery);
+                return {
+                    id: `${contentType}-${genre.id}`,
+                    name: filterType === 'top_rated'
+                        ? (locale === 'ar' ? `أعلى تقييمًا: ${genre.name}` : locale === 'fr' ? `Top Mieux Noté: ${genre.name}` : `Top Rated ${genre.name}`)
+                        : genre.name,
+                    movies: data?.results?.map(item => ({ ...item, media_type: contentType })) || [],
+                    contentType,
+                    genreId: genre.id,
+                };
+            })
+        );
+
+        dynamicGenres.forEach(genreRow => {
+            if (genreRow.movies.length > 0) {
+                allCategories.push(genreRow);
+            }
+        });
+    }
+
+    return (
+        <HomeClient
+            initialHeroMovies={heroMovies}
+            initialCategories={allCategories}
+            contentType={contentType}
+            filterType={filterType}
+            locale={locale}
+        />
+    );
+}

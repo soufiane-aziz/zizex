@@ -9,7 +9,7 @@
   --color-crimson-400: #fb7185;
   --color-crimson-500: #f43f5e;
   --color-crimson-600: #e11d48;
-  --color-crimson-700: #be123c; 
+  --color-crimson-700: #be123c;
   --color-crimson-800: #9f1239;
   --color-crimson-900: #881337;
   --color-crimson-950: #4c0519;
@@ -33,19 +33,23 @@ body {
 @utility hide-scroll-bar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @utility glass-nav {
   background: rgba(10, 10, 12, 0.85);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 @utility img-zoom-hover {
   & img {
     transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
+
   &:hover img {
     transform: scale(1.08);
   }
@@ -74,7 +78,97 @@ select {
 }
 
 /* Scrollbar rules */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: #0a0a0c; }
-::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #be123c; }
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #be123c;
+}
+
+/* ─── Hero & UI Keyframe Animations ─── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(220, 38, 38, 0.5), 0 0 20px rgba(220, 38, 38, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 25px rgba(220, 38, 38, 0.8), 0 0 50px rgba(220, 38, 38, 0.5);
+  }
+}
+
+@keyframes laser-sheen {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+@utility animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@utility animate-laser-sheen {
+  animation: laser-sheen 2.5s ease-in-out infinite;
+}
+
+/* ─── Skeleton Shimmer ─── */
+@keyframes shimmer {
+  0% {
+    background-position: -800px 0;
+  }
+
+  100% {
+    background-position: 800px 0;
+  }
+}
+
+@utility skeleton {
+  background: linear-gradient(90deg,
+      #1a1a1f 0%,
+      #252530 40%,
+      #2e2e3a 50%,
+      #252530 60%,
+      #1a1a1f 100%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}

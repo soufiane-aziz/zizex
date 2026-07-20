@@ -3,41 +3,66 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
-export default function Navbar({ contentType, setContentType, filterType, setFilterType }) {
+export default function Navbar({ locale }) {
   const [isSearchInputVisible, setIsSearchInputVisible] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
-  
+
   const dropdownRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const inputRef = useRef(null);
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const isHomePage = pathname === '/';
+  // Derive active state from URL
+  const urlType = searchParams.get('type') || 'all';
+  const urlFilter = searchParams.get('filter') || 'default';
 
-  // Navigation principale
-  const handleNavigation = (type, filter) => {
-    if (isHomePage) {
-      setContentType(type);
-      setFilterType(filter);
+  // Detect locale from pathname if not passed as prop
+  const resolvedLocale = locale || pathname.split('/')[1] || 'en';
+  const homeBase = `/${resolvedLocale}`;
+
+  // Check if we're on the home page (has no sub-paths after locale)
+  const pathParts = pathname.split('/').filter(Boolean);
+  const isOnHomePage = pathParts.length === 1; // e.g. /en
+
+  // On home page: persist current filter to localStorage
+  // On watch pages: read from localStorage to keep highlight
+  const [activeType, setActiveType] = useState('all');
+  const [activeFilter, setActiveFilter] = useState('default');
+
+  useEffect(() => {
+    if (isOnHomePage) {
+      // Save the current state whenever we're on the home page
+      localStorage.setItem('zshow_nav_type', urlType);
+      localStorage.setItem('zshow_nav_filter', urlFilter);
+      setActiveType(urlType);
+      setActiveFilter(urlFilter);
     } else {
-      if (type === 'all' && filter === 'default') {
-        router.push('/');
-      } else if (filter === 'top_rated') {
-        const queryType = type !== 'all' ? `type=${type}&` : '';
-        router.push(`/?${queryType}filter=top_rated`);
-      } else {
-        router.push(`/?type=${type}`);
-      }
+      // On watch pages, restore the last known home filter
+      const savedType = localStorage.getItem('zshow_nav_type') || 'all';
+      const savedFilter = localStorage.getItem('zshow_nav_filter') || 'default';
+      setActiveType(savedType);
+      setActiveFilter(savedFilter);
     }
+  }, [isOnHomePage, urlType, urlFilter]);
+
+  // Always navigate via URL (works for both home and watch pages)
+  const handleNavigation = (type, filter) => {
+    let url = homeBase;
+    const params = [];
+    if (type !== 'all') params.push(`type=${type}`);
+    if (filter !== 'default') params.push(`filter=${filter}`);
+    if (params.length > 0) url += `?${params.join('&')}`;
+    router.push(url);
 
     setSearchQuery('');
     setSuggestions([]);
@@ -57,7 +82,7 @@ export default function Navbar({ contentType, setContentType, filterType, setFil
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setSuggestions([]);
-        if (searchQuery.trim() === '') setIsSearchInputVisible(false); 
+        if (searchQuery.trim() === '') setIsSearchInputVisible(false);
       }
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
         setIsMobileMenuOpen(false);
@@ -80,9 +105,9 @@ export default function Navbar({ contentType, setContentType, filterType, setFil
           `${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(searchQuery)}`
         );
         const data = await res.json();
-        
+
         const queryLower = searchQuery.trim().toLowerCase();
-        
+
         const validResults = (data.results || [])
           .filter(item => item.media_type === 'movie' || item.media_type === 'tv')
           .filter(item => item.poster_path || item.backdrop_path)
@@ -92,7 +117,7 @@ export default function Navbar({ contentType, setContentType, filterType, setFil
             return titleToDisplay.toLowerCase().startsWith(queryLower);
           });
 
-        setSuggestions(validResults.slice(0, 6)); 
+        setSuggestions(validResults.slice(0, 6));
       } catch (err) {
         console.error("Erreur suggestions:", err);
       }
@@ -123,30 +148,31 @@ export default function Navbar({ contentType, setContentType, filterType, setFil
 
   const redirectToItem = (item) => {
     const isTvShow = item.media_type === 'tv' || (!item.media_type && !!item.first_air_date);
-    const dynamicHref = isTvShow ? `/watch/tv/${item.id}` : `/watch/movie/${item.id}`;
-    
+    const dynamicHref = isTvShow
+      ? `/${resolvedLocale}/tv/${item.id}/season-1/episode-1`
+      : `/${resolvedLocale}/movie/${item.id}`;
+
     setSuggestions([]);
     setSearchQuery('');
     setIsSearchInputVisible(false);
     router.push(dynamicHref);
   };
 
-  const isHomeActive = contentType === 'all' && filterType === 'default';
-  const isMoviesActive = contentType === 'movie' && filterType === 'default';
-  const isTvActive = contentType === 'tv' && filterType === 'default';
-  // Actif uniquement si on est sur la combinaison globale Top Rated (Films + Séries)
-  const isTopRatedActive = contentType === 'all' && filterType === 'top_rated';
+  const isHomeActive = activeType === 'all' && activeFilter === 'default';
+  const isMoviesActive = activeType === 'movie' && activeFilter === 'default';
+  const isTvActive = activeType === 'tv' && activeFilter === 'default';
+  const isTopRatedActive = activeFilter === 'top_rated';
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-12 py-4 bg-gradient-to-b from-black/95 to-transparent backdrop-blur-md">
-      
+
       {/* 1. ZONE GAUCHE : LOGO */}
-      <div 
+      <div
         className={`flex items-center justify-start transition-all duration-300 ease-in-out overflow-hidden whitespace-nowrap
         ${isSearchInputVisible ? 'w-0 opacity-0 overflow-hidden sm:flex-1 sm:opacity-100 sm:pointer-events-auto' : 'flex-1'}`}
       >
-        <button 
-          onClick={() => handleNavigation('all', 'default')} 
+        <button
+          onClick={() => handleNavigation('all', 'default')}
           className="text-3xl md:text-4xl font-black tracking-wide cursor-pointer focus:outline-none"
         >
           <span className="text-red-600">z</span>
@@ -156,32 +182,31 @@ export default function Navbar({ contentType, setContentType, filterType, setFil
 
       {/* 2. ZONE CENTRALE : MENU PC & TABLETTE (PARFAITEMENT CENTRÉ) */}
       <div className="hidden sm:flex flex-1 items-center justify-center gap-6 md:gap-8 lg:gap-10 text-xs md:text-sm tracking-wide uppercase shrink-0 mx-4">
-        <button onClick={() => handleNavigation('all', 'default')} className={`transition-colors duration-300 hover:text-red-600 ${isHomeActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+        <button onClick={() => handleNavigation('all', 'default')} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isHomeActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
           Home
         </button>
-        <button onClick={() => handleNavigation('movie', 'default')} className={`transition-colors duration-300 hover:text-red-600 ${isMoviesActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+        <button onClick={() => handleNavigation('movie', 'default')} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isMoviesActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
           Movies
         </button>
-        <button onClick={() => handleNavigation('tv', 'default')} className={`transition-colors duration-300 hover:text-red-600 ${isTvActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+        <button onClick={() => handleNavigation('tv', 'default')} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isTvActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
           TV
         </button>
         {/* Modifié ici pour envoyer 'all' (Films + Séries combinés) */}
-        <button onClick={() => handleNavigation('all', 'top_rated')} className={`transition-colors duration-300 hover:text-red-600 ${isTopRatedActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+        <button onClick={() => handleNavigation('all', 'top_rated')} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isTopRatedActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
           Top Rated
         </button>
       </div>
 
       {/* 3. ZONE DROITE : RECHERCHE & BURGER MOBILE */}
       <div className={`flex items-center justify-end gap-0 sm:gap-3 transition-all duration-300 ease-in-out ${isSearchInputVisible ? 'w-full flex-1' : 'flex-1'}`}>
-        
+
         {/* Module Barre de recherche */}
-        <div 
-          ref={dropdownRef} 
-          className={`relative flex items-center transition-all duration-300 ease-in-out ${
-            isSearchInputVisible 
-              ? 'bg-black/80 px-4 py-1.5 rounded-full border border-white/10 shadow-inner w-full sm:w-60 md:w-72 lg:w-80' 
-              : 'w-10 h-10 bg-transparent justify-center border-transparent'
-          }`}
+        <div
+          ref={dropdownRef}
+          className={`relative flex items-center transition-all duration-300 ease-in-out ${isSearchInputVisible
+            ? 'bg-black/80 px-4 py-1.5 rounded-full border border-white/10 shadow-inner w-full sm:w-60 md:w-72 lg:w-80'
+            : 'w-10 h-10 bg-transparent justify-center border-transparent'
+            }`}
         >
           <input
             ref={inputRef}
@@ -193,8 +218,8 @@ export default function Navbar({ contentType, setContentType, filterType, setFil
             className={`bg-transparent outline-none text-white text-sm transition-all duration-300 ease-in-out placeholder:text-gray-500
               ${isSearchInputVisible ? 'w-full opacity-100 pr-2' : 'w-0 opacity-0 pointer-events-none'}`}
           />
-          
-          <button 
+
+          <button
             onClick={handleSearchAction}
             className="transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none flex items-center justify-center text-white shrink-0"
             aria-label="Search Toggle"
@@ -211,18 +236,20 @@ export default function Navbar({ contentType, setContentType, filterType, setFil
               <div className="flex flex-col max-h-[50vh] overflow-y-auto premium-nav-scrollbar">
                 {suggestions.map((item) => {
                   const isTvShow = item.media_type === 'tv' || (!item.media_type && !!item.first_air_date);
-                  const dynamicHref = isTvShow ? `/watch/tv/${item.id}` : `/watch/movie/${item.id}`;
+                  const dynamicHref = isTvShow
+                    ? `/${resolvedLocale}/tv/${item.id}/season-1/episode-1`
+                    : `/${resolvedLocale}/movie/${item.id}`;
 
                   return (
-                    <Link 
-                      key={item.id} 
+                    <Link
+                      key={item.id}
                       href={dynamicHref}
                       onClick={() => { setSuggestions([]); setSearchQuery(''); setIsSearchInputVisible(false); }}
                       className="flex items-center gap-3 p-3 transition-all hover:bg-white/[0.08] border-b border-white/5 group/item"
                     >
-                      <Image 
-                        src={`${IMAGE_BASE_URL}/w92${item.poster_path || item.backdrop_path}`} 
-                        alt={item.title || item.name || "Poster"} 
+                      <Image
+                        src={`${IMAGE_BASE_URL}/w92${item.poster_path || item.backdrop_path}`}
+                        alt={item.title || item.name || "Poster"}
                         width={36}
                         height={52}
                         className="w-9 h-13 object-cover rounded shadow-md bg-zinc-900 flex-shrink-0"
@@ -251,15 +278,14 @@ export default function Navbar({ contentType, setContentType, filterType, setFil
         </div>
 
         {/* Menu Burger (Mobile) */}
-        <div 
-          ref={mobileMenuRef} 
-          className={`relative flex items-center justify-center transition-all duration-300 ease-in-out sm:hidden ${
-            isSearchInputVisible 
-              ? 'w-0 opacity-0 overflow-hidden pointer-events-none' 
-              : 'w-10 h-10 opacity-100 overflow-visible'
-          }`}
+        <div
+          ref={mobileMenuRef}
+          className={`relative flex items-center justify-center transition-all duration-300 ease-in-out sm:hidden ${isSearchInputVisible
+            ? 'w-0 opacity-0 overflow-hidden pointer-events-none'
+            : 'w-10 h-10 opacity-100 overflow-visible'
+            }`}
         >
-          <button 
+          <button
             onClick={() => {
               setIsMobileMenuOpen(!isMobileMenuOpen);
               setIsSearchInputVisible(false);
@@ -292,7 +318,8 @@ export default function Navbar({ contentType, setContentType, filterType, setFil
 
       </div>
 
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .premium-nav-scrollbar::-webkit-scrollbar { width: 5px; }
         .premium-nav-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .premium-nav-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
