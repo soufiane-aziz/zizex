@@ -173,17 +173,12 @@ export default function WatchTVClient({
                                 </div>
                             )}
 
-                            {/* Smartlink Ad Overlay */}
+                            {/* Smartlink Ad Overlay (Invisible) */}
                             {!hasClickedPlayer && !isIframeLoading && (
-                                <div
-                                    className="absolute inset-0 z-10 cursor-pointer flex items-center justify-center bg-black/20 group/play"
-                                    onClick={handlePlayerClick}
-                                    title="Click to Play"
-                                >
-                                    <div className="w-16 h-16 bg-red-600/90 hover:bg-red-600 rounded-full flex items-center justify-center text-white shadow-2xl backdrop-blur-sm transform group-hover/play:scale-110 transition-all">
-                                        <i className="fa-solid fa-play text-2xl ml-1"></i>
-                                    </div>
-                                </div>
+                                 <div
+                                     className="absolute inset-0 z-10 cursor-pointer"
+                                     onClick={handlePlayerClick}
+                                 />
                             )}
 
                             <iframe
