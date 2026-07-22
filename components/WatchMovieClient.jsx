@@ -68,10 +68,10 @@ export default function WatchMovieClient({
     const servers = [
         { id: 'server1', name: 'VidSrc Me', url: `https://vidsrc.me/embed/movie?tmdb=${id}` },
         { id: 'server2', name: '2Embed', url: `https://www.2embed.cc/embed/${id}` },
-        { id: 'server3', name: 'VidSrc CC', url: `https://vidsrc.cc/v2/embed/movie/${id}` },
-        { id: 'server4', name: 'Embed SU', url: `https://embed.su/embed/movie/${id}` },
-        { id: 'server5', name: 'AutoEmbed', url: `https://player.autoembed.co/movie/${id}` },
-        { id: 'server6', name: 'VidSrc To', url: `https://vidsrc.to/embed/movie/${id}` },
+        { id: 'server3', name: 'VidLink Pro', url: `https://vidlink.pro/movie/${id}` },
+        { id: 'server4', name: 'MultiEmbed', url: `https://multiembed.mov/?video_id=${id}&tmdb=1` },
+        { id: 'server5', name: 'SmashyStream', url: `https://embed.smashystream.com/playere.php?tmdb=${id}` },
+        { id: 'server6', name: 'VidSrc Pro', url: `https://vidsrc.pro/embed/movie/${id}` },
     ];
 
     const activeServer = servers.find(s => s.id === activeServerId) || servers[0];

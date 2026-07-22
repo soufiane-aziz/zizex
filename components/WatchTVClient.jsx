@@ -81,10 +81,10 @@ export default function WatchTVClient({
     const servers = [
         { id: 'server1', name: 'VidSrc Me', url: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
         { id: 'server2', name: '2Embed', url: `https://www.2embed.cc/embedtv/${id}&s=${currentSeason}&e=${currentEpisode}` },
-        { id: 'server3', name: 'VidSrc CC', url: `https://vidsrc.cc/v2/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
-        { id: 'server4', name: 'Embed SU', url: `https://embed.su/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
-        { id: 'server5', name: 'AutoEmbed', url: `https://player.autoembed.co/tv/${id}/${currentSeason}/${currentEpisode}` },
-        { id: 'server6', name: 'VidSrc To', url: `https://vidsrc.to/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server3', name: 'VidLink Pro', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server4', name: 'MultiEmbed', url: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}` },
+        { id: 'server5', name: 'SmashyStream', url: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
+        { id: 'server6', name: 'VidSrc Pro', url: `https://vidsrc.pro/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
     ];
 
     const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
