@@ -1,10 +1,14 @@
-const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 const LOCALES = ['en', 'fr', 'ar'];
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
 
 async function fetchPopularFromTMDB(type: string, pages = 3) {
+    if (!API_KEY) {
+        console.warn(`Sitemap TMDB fetch skipped: TMDB_API_KEY is not defined.`);
+        return [];
+    }
     let allResults: any[] = [];
     for (let page = 1; page <= pages; page++) {
         const url = `${BASE_URL}/${type}/popular?api_key=${API_KEY}&page=${page}`;
@@ -26,9 +30,10 @@ export async function generateSitemaps() {
     return [{ id: 0 }, { id: 1 }];
 }
 
-export default async function sitemap(props: { id: number | string }) {
-    const id = Number(props?.id ?? 0);
-    const sitemapEntries = [];
+export default async function sitemap(props: { id: Promise<string | number> | string | number }) {
+    const rawId = await props?.id;
+    const id = Number(rawId ?? 0);
+    const sitemapEntries: any[] = [];
 
     // Home paths for each locale
     if (id === 0) {
