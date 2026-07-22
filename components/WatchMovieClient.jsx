@@ -67,21 +67,11 @@ export default function WatchMovieClient({
 
     const servers = [
         { id: 'server1', name: 'AutoEmbed', url: `https://autoembed.co/movie/tmdb/${id}` },
-        { id: 'server2', name: 'VidSrc To', url: `https://vidsrc.to/embed/movie/${id}` },
-        { id: 'server3', name: 'VidLink Red', url: `https://vidlink.pro/movie/${id}?primaryColor=E50914&autoplay=true` },
-        { id: 'server4', name: 'SmashyStream', url: `https://embed.smashystream.com/movie/${id}?sub=ar&subtitle=arabic&subtitles=arabic&cc=1&cc_lang_pref=ar&lang=ar` },
-        { id: 'server5', name: 'MultiEmbed', url: `https://multiembed.mov/?video_id=${id}&tmdb=1` },
-        { id: 'server6', name: 'VidSrc Me', url: `https://vidsrc.me/embed/movie?tmdb=${id}` },
-        { id: 'server7', name: '2Embed', url: `https://www.2embed.cc/embed/${id}` },
-        { id: 'server8', name: 'VidSrc CC', url: `https://vidsrc.cc/v2/embed/movie/${id}` },
-        { id: 'server9', name: 'VidSrc VIP', url: `https://vidsrc.vip/embed/movie/${id}` },
-        { id: 'server10', name: 'VidSrc PM', url: `https://vidsrc.pm/embed/movie?tmdb=${id}` },
-        { id: 'server11', name: 'VidLink Pro', url: `https://vidlink.pro/movie/${id}` },
-        { id: 'server12', name: 'MoviesAPI', url: `https://moviesapi.club/movie/${id}` },
-        { id: 'server13', name: 'Rive Stream', url: `https://rive.pw/embed?type=movie&id=${id}` },
-        { id: 'server14', name: 'VidSrc ICU', url: `https://vidsrc.icu/embed/movie/${id}` },
-        { id: 'server15', name: 'NontonGo', url: `https://www.nontongo.win/embed/movie/${id}` },
-        { id: 'server16', name: 'Embed SU', url: `https://embed.su/embed/movie/${id}` }
+        { id: 'server2', name: 'VidLink Red', url: `https://vidlink.pro/movie/${id}?primaryColor=E50914&autoplay=true` },
+        { id: 'server3', name: 'MultiEmbed', url: `https://multiembed.mov/?video_id=${id}&tmdb=1` },
+        { id: 'server4', name: 'VidSrc Me', url: `https://vidsrc.me/embed/movie?tmdb=${id}` },
+        { id: 'server5', name: '2Embed', url: `https://www.2embed.cc/embed/${id}` },
+        { id: 'server6', name: 'VidSrc PM', url: `https://vidsrc.pm/embed/movie?tmdb=${id}` },
     ];
 
     const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
@@ -182,6 +172,7 @@ export default function WatchMovieClient({
                                 frameBorder="0"
                                 title="Movie Player"
                                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                                sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups allow-popups-to-escape-sandbox"
                                 onLoad={() => setIsIframeLoading(false)}
                                 onError={handleServerError}
                             />
@@ -194,7 +185,7 @@ export default function WatchMovieClient({
                                 </span>
                             </div>
 
-                            <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5 sm:gap-2 w-full sm:flex-1">
+                            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-2.5 w-full sm:flex-1">
                                 {servers.map((srv) => (
                                     <button
                                         key={srv.id}
