@@ -63,17 +63,40 @@ export default function WatchMovieClient({
 }) {
     const [activeServerId, setActiveServerId] = useState('server1');
     const [hasClickedPlayer, setHasClickedPlayer] = useState(false);
+    const [isIframeLoading, setIsIframeLoading] = useState(true);
 
     const servers = [
-        { id: 'server1', name: 'VidSrc CC', url: `https://vidsrc.cc/v2/embed/movie/${id}` },
-        { id: 'server2', name: 'Embed SU', url: `https://embed.su/embed/movie/${id}` },
-        { id: 'server3', name: '2Embed', url: `https://www.2embed.cc/embed/${id}` },
-        { id: 'server4', name: 'VidSrc To', url: `https://vidsrc.to/embed/movie/${id}` },
+        { id: 'server1', name: 'VidSrc Me', url: `https://vidsrc.me/embed/movie?tmdb=${id}` },
+        { id: 'server2', name: '2Embed', url: `https://www.2embed.cc/embed/${id}` },
+        { id: 'server3', name: 'VidSrc CC', url: `https://vidsrc.cc/v2/embed/movie/${id}` },
+        { id: 'server4', name: 'Embed SU', url: `https://embed.su/embed/movie/${id}` },
         { id: 'server5', name: 'AutoEmbed', url: `https://player.autoembed.co/movie/${id}` },
-        { id: 'server6', name: 'VidSrc Me', url: `https://vidsrc.me/embed/movie?tmdb=${id}` },
+        { id: 'server6', name: 'VidSrc To', url: `https://vidsrc.to/embed/movie/${id}` },
     ];
 
     const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
+
+    const handleServerChange = (serverId) => {
+        if (serverId !== activeServerId) {
+            setActiveServerId(serverId);
+            setIsIframeLoading(true);
+            setHasClickedPlayer(false);
+        }
+    };
+
+    const handleServerError = () => {
+        const currentIndex = servers.findIndex(s => s.id === activeServerId);
+        const nextIndex = (currentIndex + 1) % servers.length;
+        if (nextIndex !== currentIndex) {
+            setActiveServerId(servers[nextIndex].id);
+            setIsIframeLoading(true);
+        }
+    };
+
+    const handlePlayerClick = () => {
+        window.open('https://environmenttalentrabble.com/niwvwhsdrt?key=6ae3e88a79f88c62bed220b8faec0bf0', '_blank');
+        setHasClickedPlayer(true);
+    };
 
     // Translations
     const isAr = locale === 'ar';
@@ -121,7 +144,32 @@ export default function WatchMovieClient({
                     <div className="lg:col-span-2 flex flex-col gap-6">
 
                         <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group">
+                            
+                            {/* Loading Indicator Overlay */}
+                            {isIframeLoading && (
+                                <div className="absolute inset-0 z-20 bg-zinc-950/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
+                                    <div className="w-12 h-12 border-4 border-red-600/20 border-t-red-600 rounded-full animate-spin"></div>
+                                    <span className="text-xs font-bold text-gray-300 uppercase tracking-widest">
+                                        {isAr ? 'جاري تحميل السيرفر...' : isFr ? 'Chargement du serveur...' : 'Loading Server...'}
+                                    </span>
+                                </div>
+                            )}
+
+                            {/* Smartlink Ad Overlay */}
+                            {!hasClickedPlayer && !isIframeLoading && (
+                                <div
+                                    className="absolute inset-0 z-10 cursor-pointer flex items-center justify-center bg-black/20 group/play"
+                                    onClick={handlePlayerClick}
+                                    title="Click to Play"
+                                >
+                                    <div className="w-16 h-16 bg-red-600/90 hover:bg-red-600 rounded-full flex items-center justify-center text-white shadow-2xl backdrop-blur-sm transform group-hover/play:scale-110 transition-all">
+                                        <i className="fa-solid fa-play text-2xl ml-1"></i>
+                                    </div>
+                                </div>
+                            )}
+
                             <iframe
+                                key={activeServer.url}
                                 src={activeServer.url}
                                 className="w-full h-full absolute inset-0"
                                 allowFullScreen
@@ -129,6 +177,8 @@ export default function WatchMovieClient({
                                 frameBorder="0"
                                 title="Movie Player"
                                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                                onLoad={() => setIsIframeLoading(false)}
+                                onError={handleServerError}
                             />
                         </div>
 
@@ -143,7 +193,7 @@ export default function WatchMovieClient({
                                 {servers.map((srv) => (
                                     <button
                                         key={srv.id}
-                                        onClick={() => setActiveServerId(srv.id)}
+                                        onClick={() => handleServerChange(srv.id)}
                                         className={`text-[11px] sm:text-xs font-bold py-1.5 sm:py-2 rounded-lg transition-all border cursor-pointer focus:outline-none text-center ${activeServerId === srv.id
                                             ? 'bg-red-600 border-red-600 text-white shadow-lg shadow-red-600/20'
                                             : 'bg-zinc-800 border-white/5 text-gray-300 hover:bg-zinc-700/60 hover:text-white'
