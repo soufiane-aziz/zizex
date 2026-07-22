@@ -466,7 +466,7 @@ export default function HomeClient({
             )}
 
             {heroMovies.length > 0 && !expandedCategoryId && (
-                <section className="relative w-full h-screen sm:h-[95vh] bg-black overflow-hidden group">
+                <section className="relative w-full h-[95vh] sm:h-screen bg-black overflow-hidden group">
                     {heroMovies.map((movie, index) => (
                         <div
                             key={movie.id}
