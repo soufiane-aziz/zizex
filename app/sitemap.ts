@@ -4,17 +4,21 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 const LOCALES = ['en', 'fr', 'ar'];
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
 
-async function fetchPopularFromTMDB(type, page = 1) {
-    const url = `${BASE_URL}/${type}/popular?api_key=${API_KEY}&page=${page}`;
-    try {
-        const res = await fetch(url, { next: { revalidate: 86400 } });
-        if (!res.ok) return [];
-        const data = await res.json();
-        return data.results || [];
-    } catch (err) {
-        console.error(`Sitemap TMDB fetch error for ${type}:`, err);
-        return [];
+async function fetchPopularFromTMDB(type: string, pages = 3) {
+    let allResults: any[] = [];
+    for (let page = 1; page <= pages; page++) {
+        const url = `${BASE_URL}/${type}/popular?api_key=${API_KEY}&page=${page}`;
+        try {
+            const res = await fetch(url, { next: { revalidate: 86400 } });
+            if (res.ok) {
+                const data = await res.json();
+                if (data.results) allResults = allResults.concat(data.results);
+            }
+        } catch (err) {
+            console.error(`Sitemap TMDB fetch error for ${type} page ${page}:`, err);
+        }
     }
+    return allResults;
 }
 
 export async function generateSitemaps() {
@@ -22,7 +26,8 @@ export async function generateSitemaps() {
     return [{ id: 0 }, { id: 1 }];
 }
 
-export default async function sitemap({ id }) {
+export default async function sitemap(props: { id: number | string }) {
+    const id = Number(props?.id ?? 0);
     const sitemapEntries = [];
 
     // Home paths for each locale
@@ -47,7 +52,7 @@ export default async function sitemap({ id }) {
 
     if (id === 0) {
         // Generate Movie Entries
-        const popularMovies = await fetchPopularFromTMDB('movie', 1);
+        const popularMovies = await fetchPopularFromTMDB('movie', 3);
 
         popularMovies.forEach(movie => {
             LOCALES.forEach(locale => {
@@ -81,7 +86,7 @@ export default async function sitemap({ id }) {
         });
     } else if (id === 1) {
         // Generate TV Series Entries (S1E1 as details watcher)
-        const popularTv = await fetchPopularFromTMDB('tv', 1);
+        const popularTv = await fetchPopularFromTMDB('tv', 3);
 
         popularTv.forEach(show => {
             LOCALES.forEach(locale => {
