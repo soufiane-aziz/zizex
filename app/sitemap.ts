@@ -96,10 +96,10 @@ export default async function sitemap(props: { id: Promise<string | number> | st
                     alternates: { languages: alternates },
                     videos: [
                         {
-                            thumbnailUrl: xmlEscape(videoThumbnail),
+                            thumbnail_loc: xmlEscape(videoThumbnail),
                             title: xmlEscape(movie.title || 'Movie playback'),
                             description: xmlEscape(movie.overview || 'Watch full movie online'),
-                            playerLoc: xmlEscape(`https://multiembed.mov/?video_id=${movie.id}&tmdb=1`),
+                            player_loc: xmlEscape(`https://multiembed.mov/?video_id=${movie.id}&tmdb=1`),
                         }
                     ]
                 });
@@ -130,10 +130,10 @@ export default async function sitemap(props: { id: Promise<string | number> | st
                     alternates: { languages: alternates },
                     videos: [
                         {
-                            thumbnailUrl: xmlEscape(videoThumbnail),
+                            thumbnail_loc: xmlEscape(videoThumbnail),
                             title: xmlEscape(show.name || 'TV series stream'),
                             description: xmlEscape(show.overview || 'Watch full series online'),
-                            playerLoc: xmlEscape(`https://multiembed.mov/?video_id=${show.id}&tmdb=1&s=1&e=1`),
+                            player_loc: xmlEscape(`https://multiembed.mov/?video_id=${show.id}&tmdb=1&s=1&e=1`),
                         }
                     ]
                 });
