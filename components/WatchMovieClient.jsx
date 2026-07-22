@@ -172,7 +172,6 @@ export default function WatchMovieClient({
                                 frameBorder="0"
                                 title="Movie Player"
                                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-                                sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups allow-popups-to-escape-sandbox"
                                 onLoad={() => setIsIframeLoading(false)}
                                 onError={handleServerError}
                             />

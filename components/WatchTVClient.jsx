@@ -190,7 +190,6 @@ export default function WatchTVClient({
                                 scrolling="no"
                                 frameBorder="0"
                                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-                                sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups allow-popups-to-escape-sandbox"
                                 onLoad={() => setIsIframeLoading(false)}
                                 onError={handleServerError}
                             />
