@@ -25,6 +25,22 @@ async function fetchPopularFromTMDB(type: string, pages = 3) {
     return allResults;
 }
 
+function xmlEscape(str: string): string {
+    if (!str) return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+}
+
+function safeDate(dateStr?: string): Date {
+    if (!dateStr) return new Date();
+    const d = new Date(dateStr);
+    return isNaN(d.getTime()) ? new Date() : d;
+}
+
 export async function generateSitemaps() {
     // Returns sitemap IDs: 0 for Movies, 1 for TV Shows
     return [{ id: 0 }, { id: 1 }];
@@ -62,7 +78,7 @@ export default async function sitemap(props: { id: Promise<string | number> | st
         popularMovies.forEach(movie => {
             LOCALES.forEach(locale => {
                 const path = `/movie/${movie.id}`;
-                const alternates = {};
+                const alternates: Record<string, string> = {};
                 LOCALES.forEach(loc => {
                     alternates[loc] = `${SITE_URL}/${loc}${path}`;
                 });
@@ -74,16 +90,16 @@ export default async function sitemap(props: { id: Promise<string | number> | st
 
                 sitemapEntries.push({
                     url: `${SITE_URL}/${locale}${path}`,
-                    lastModified: new Date(movie.release_date || new Date()),
+                    lastModified: safeDate(movie.release_date),
                     changeFrequency: 'weekly',
                     priority: 0.8,
                     alternates: { languages: alternates },
                     videos: [
                         {
-                            thumbnailUrl: videoThumbnail,
-                            title: movie.title || 'Movie playback',
-                            description: movie.overview || 'Watch full movie online',
-                            playerLoc: `https://multiembed.mov/?video_id=${movie.id}&tmdb=1`,
+                            thumbnailUrl: xmlEscape(videoThumbnail),
+                            title: xmlEscape(movie.title || 'Movie playback'),
+                            description: xmlEscape(movie.overview || 'Watch full movie online'),
+                            playerLoc: xmlEscape(`https://multiembed.mov/?video_id=${movie.id}&tmdb=1`),
                         }
                     ]
                 });
@@ -96,7 +112,7 @@ export default async function sitemap(props: { id: Promise<string | number> | st
         popularTv.forEach(show => {
             LOCALES.forEach(locale => {
                 const path = `/tv/${show.id}/season-1/episode-1`;
-                const alternates = {};
+                const alternates: Record<string, string> = {};
                 LOCALES.forEach(loc => {
                     alternates[loc] = `${SITE_URL}/${loc}${path}`;
                 });
@@ -108,16 +124,16 @@ export default async function sitemap(props: { id: Promise<string | number> | st
 
                 sitemapEntries.push({
                     url: `${SITE_URL}/${locale}${path}`,
-                    lastModified: new Date(show.first_air_date || new Date()),
+                    lastModified: safeDate(show.first_air_date),
                     changeFrequency: 'weekly',
                     priority: 0.8,
                     alternates: { languages: alternates },
                     videos: [
                         {
-                            thumbnailUrl: videoThumbnail,
-                            title: show.name || 'TV series stream',
-                            description: show.overview || 'Watch full series online',
-                            playerLoc: `https://multiembed.mov/?video_id=${show.id}&tmdb=1&s=1&e=1`,
+                            thumbnailUrl: xmlEscape(videoThumbnail),
+                            title: xmlEscape(show.name || 'TV series stream'),
+                            description: xmlEscape(show.overview || 'Watch full series online'),
+                            playerLoc: xmlEscape(`https://multiembed.mov/?video_id=${show.id}&tmdb=1&s=1&e=1`),
                         }
                     ]
                 });
