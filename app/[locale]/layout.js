@@ -24,22 +24,17 @@ export default async function LocaleLayout(props) {
     const isRtl = locale === 'ar';
 
     return (
-        <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} className="dark">
-            <head>
-                <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-            </head>
-            <body className={inter.className}>
-                {children}
-                <Analytics />
-                <SpeedInsights />
+        <div dir={isRtl ? 'rtl' : 'ltr'} className={inter.className}>
+            {children}
+            <Analytics />
+            <SpeedInsights />
 
-                {/* Script publicitaire Adsterra (Popunder / Social Bar) */}
-                <Script
-                    src="https://environmenttalentrabble.com/68/12/fd/6812fd2ddecf93fdec55c8887f83a17c.js"
-                    strategy="lazyOnload"
-                />
-            </body>
-        </html>
+            {/* Script publicitaire Adsterra (Popunder / Social Bar) */}
+            <Script
+                src="https://environmenttalentrabble.com/68/12/fd/6812fd2ddecf93fdec55c8887f83a17c.js"
+                strategy="lazyOnload"
+            />
+        </div>
     );
 }
 

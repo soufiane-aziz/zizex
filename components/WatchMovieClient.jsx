@@ -65,22 +65,13 @@ export default function WatchMovieClient({
     const [hasClickedPlayer, setHasClickedPlayer] = useState(false);
 
     const servers = [
-        { id: 'server1', name: 'MultiEmbed', url: `https://multiembed.mov/?video_id=${id}&tmdb=1` },
-        { id: 'server2', name: 'SuperEmbed', url: `https://embed.su/embed/movie/${id}` },
-        { id: 'server3', name: 'VidSrc Me', url: `https://vidsrc.me/embed/movie?tmdb=${id}` },
+        { id: 'server1', name: 'VidSrc CC', url: `https://vidsrc.cc/v2/embed/movie/${id}` },
+        { id: 'server2', name: 'Embed SU', url: `https://embed.su/embed/movie/${id}` },
+        { id: 'server3', name: '2Embed', url: `https://www.2embed.cc/embed/${id}` },
         { id: 'server4', name: 'VidSrc To', url: `https://vidsrc.to/embed/movie/${id}` },
         { id: 'server5', name: 'AutoEmbed', url: `https://player.autoembed.co/movie/${id}` },
-        { id: 'server6', name: 'VidSrc Pro', url: `https://vidsrc.pro/embed/movie/${id}` },
+        { id: 'server6', name: 'VidSrc Me', url: `https://vidsrc.me/embed/movie?tmdb=${id}` },
     ];
-
-    useEffect(() => {
-        setHasClickedPlayer(false);
-    }, [activeServerId, id]);
-
-    const handlePlayerClick = () => {
-        window.open('https://environmenttalentrabble.com/niwvwhsdrt?key=6ae3e88a79f88c62bed220b8faec0bf0', '_blank');
-        setHasClickedPlayer(true);
-    };
 
     const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
 
@@ -130,13 +121,6 @@ export default function WatchMovieClient({
                     <div className="lg:col-span-2 flex flex-col gap-6">
 
                         <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group">
-                            {!hasClickedPlayer && (
-                                <div
-                                    className="absolute inset-0 z-10 cursor-pointer"
-                                    onClick={handlePlayerClick}
-                                    title="Click to Play"
-                                />
-                            )}
                             <iframe
                                 src={activeServer.url}
                                 className="w-full h-full absolute inset-0"
@@ -144,6 +128,7 @@ export default function WatchMovieClient({
                                 scrolling="no"
                                 frameBorder="0"
                                 title="Movie Player"
+                                allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
                             />
                         </div>
 

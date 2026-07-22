@@ -73,24 +73,15 @@ export default function WatchTVClient({
     const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
     const servers = [
-        { id: 'server1', name: 'MultiEmbed', url: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}` },
-        { id: 'server2', name: 'VidSrc To', url: `https://vidsrc.to/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
-        { id: 'server3', name: 'VidSrc Me', url: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
-        { id: 'server4', name: 'SuperEmbed', url: `https://embed.su/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server1', name: 'VidSrc CC', url: `https://vidsrc.cc/v2/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server2', name: 'Embed SU', url: `https://embed.su/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server3', name: '2Embed', url: `https://www.2embed.cc/embedtv/${id}&s=${currentSeason}&e=${currentEpisode}` },
+        { id: 'server4', name: 'VidSrc To', url: `https://vidsrc.to/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
         { id: 'server5', name: 'AutoEmbed', url: `https://player.autoembed.co/tv/${id}/${currentSeason}/${currentEpisode}` },
-        { id: 'server6', name: 'VidSrc Pro', url: `https://vidsrc.pro/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server6', name: 'VidSrc Me', url: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
     ];
 
     const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
-
-    useEffect(() => {
-        setHasClickedPlayer(false);
-    }, [currentEpisode, currentSeason, activeServerId, id]);
-
-    const handlePlayerClick = () => {
-        window.open('https://environmenttalentrabble.com/niwvwhsdrt?key=6ae3e88a79f88c62bed220b8faec0bf0', '_blank');
-        setHasClickedPlayer(true);
-    };
 
     const activeSeasonData = seasons.find(s => s.season_number === currentSeason);
     const currentSeasonName = activeSeasonData ? (activeSeasonData.name || `Season ${activeSeasonData.season_number}`) : `Season ${currentSeason}`;
@@ -143,13 +134,6 @@ export default function WatchTVClient({
 
                         {/* LECTEUR VIDÉO */}
                         <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group">
-                            {!hasClickedPlayer && (
-                                <div
-                                    className="absolute inset-0 z-10 cursor-pointer"
-                                    onClick={handlePlayerClick}
-                                    title="Click to Play"
-                                />
-                            )}
                             <iframe
                                 src={activeServer.url}
                                 title="Video TV Player"
@@ -157,6 +141,7 @@ export default function WatchTVClient({
                                 allowFullScreen
                                 scrolling="no"
                                 frameBorder="0"
+                                allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
                             />
                         </div>
 
