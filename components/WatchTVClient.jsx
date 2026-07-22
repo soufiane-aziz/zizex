@@ -79,12 +79,22 @@ export default function WatchTVClient({
     const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
     const servers = [
-        { id: 'server1', name: 'VidSrc Me', url: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
-        { id: 'server2', name: '2Embed', url: `https://www.2embed.cc/embedtv/${id}&s=${currentSeason}&e=${currentEpisode}` },
-        { id: 'server3', name: 'VidLink Pro', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}` },
-        { id: 'server4', name: 'Rive Stream', url: `https://rive.pw/embed?type=tv&id=${id}&season=${currentSeason}&episode=${currentEpisode}` },
-        { id: 'server5', name: 'VidSrc ICU', url: `https://vidsrc.icu/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
-        { id: 'server6', name: 'NontonGo', url: `https://www.nontongo.win/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server1', name: 'AutoEmbed', url: `https://autoembed.co/tv/tmdb/${id}-${currentSeason}-${currentEpisode}` },
+        { id: 'server2', name: 'VidSrc To', url: `https://vidsrc.to/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server3', name: 'VidLink Red', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}?primaryColor=E50914&autoplay=true` },
+        { id: 'server4', name: 'SmashyStream', url: `https://embed.smashystream.com/tv/${id}?s=${currentSeason}&e=${currentEpisode}&sub=ar&subtitle=arabic&subtitles=arabic&cc=1&cc_lang_pref=ar&lang=ar` },
+        { id: 'server5', name: 'MultiEmbed', url: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}` },
+        { id: 'server6', name: 'VidSrc Me', url: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
+        { id: 'server7', name: '2Embed', url: `https://www.2embed.cc/embedtv/${id}&s=${currentSeason}&e=${currentEpisode}` },
+        { id: 'server8', name: 'VidSrc CC', url: `https://vidsrc.cc/v2/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server9', name: 'VidSrc VIP', url: `https://vidsrc.vip/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server10', name: 'VidSrc PM', url: `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
+        { id: 'server11', name: 'VidLink Pro', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server12', name: 'MoviesAPI', url: `https://moviesapi.club/tv/${id}-${currentSeason}-${currentEpisode}` },
+        { id: 'server13', name: 'Rive Stream', url: `https://rive.pw/embed?type=tv&id=${id}&season=${currentSeason}&episode=${currentEpisode}` },
+        { id: 'server14', name: 'VidSrc ICU', url: `https://vidsrc.icu/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server15', name: 'NontonGo', url: `https://www.nontongo.win/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server16', name: 'Embed SU', url: `https://embed.su/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
     ];
 
     const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
@@ -203,7 +213,7 @@ export default function WatchTVClient({
                                 </span>
                             </div>
 
-                            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-2.5 w-full sm:flex-1">
+                            <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5 sm:gap-2 w-full sm:flex-1">
                                 {servers.map((srv) => (
                                     <button
                                         key={srv.id}
