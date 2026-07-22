@@ -82,9 +82,9 @@ export default function WatchTVClient({
         { id: 'server1', name: 'VidSrc Me', url: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
         { id: 'server2', name: '2Embed', url: `https://www.2embed.cc/embedtv/${id}&s=${currentSeason}&e=${currentEpisode}` },
         { id: 'server3', name: 'VidLink Pro', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}` },
-        { id: 'server4', name: 'MultiEmbed', url: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}` },
-        { id: 'server5', name: 'SmashyStream', url: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
-        { id: 'server6', name: 'VidSrc Pro', url: `https://vidsrc.pro/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server4', name: 'Rive Stream', url: `https://rive.pw/embed?type=tv&id=${id}&season=${currentSeason}&episode=${currentEpisode}` },
+        { id: 'server5', name: 'VidSrc ICU', url: `https://vidsrc.icu/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server6', name: 'NontonGo', url: `https://www.nontongo.win/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
     ];
 
     const activeServer = servers.find(s => s.id === activeServerId) || servers[0];

@@ -69,9 +69,9 @@ export default function WatchMovieClient({
         { id: 'server1', name: 'VidSrc Me', url: `https://vidsrc.me/embed/movie?tmdb=${id}` },
         { id: 'server2', name: '2Embed', url: `https://www.2embed.cc/embed/${id}` },
         { id: 'server3', name: 'VidLink Pro', url: `https://vidlink.pro/movie/${id}` },
-        { id: 'server4', name: 'MultiEmbed', url: `https://multiembed.mov/?video_id=${id}&tmdb=1` },
-        { id: 'server5', name: 'SmashyStream', url: `https://embed.smashystream.com/playere.php?tmdb=${id}` },
-        { id: 'server6', name: 'VidSrc Pro', url: `https://vidsrc.pro/embed/movie/${id}` },
+        { id: 'server4', name: 'Rive Stream', url: `https://rive.pw/embed?type=movie&id=${id}` },
+        { id: 'server5', name: 'VidSrc ICU', url: `https://vidsrc.icu/embed/movie/${id}` },
+        { id: 'server6', name: 'NontonGo', url: `https://www.nontongo.win/embed/movie/${id}` },
     ];
 
     const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
