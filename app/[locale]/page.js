@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { cache } from 'react';
 import HomeClient from '../../components/HomeClient';
 
 export const revalidate = 86400; // 24 hours caching at the edge CDN level
@@ -20,7 +20,7 @@ const UNIFIED_GENRES = [
     { name: { en: "Science Fiction", fr: "Science Fiction", ar: "خيال علمي" }, movieIds: "878", tvId: "10765" }
 ];
 
-async function fetchFromTMDB(path, queryParams = '') {
+const fetchFromTMDB = cache(async (path, queryParams = '') => {
     const url = `${BASE_URL}${path}?api_key=${API_KEY}${queryParams}`;
     try {
         const res = await fetch(url, { next: { revalidate: 86400 } });
@@ -30,6 +30,69 @@ async function fetchFromTMDB(path, queryParams = '') {
         console.error(`TMDB fetch error for ${path}:`, err);
         return null;
     }
+});
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
+
+export async function generateMetadata(props) {
+    const params = await props.params;
+    const { locale } = params;
+
+    const isAr = locale === 'ar';
+    const isFr = locale === 'fr';
+
+    const title = isAr
+        ? 'شاهد أفلام ومسلسلات أونلاين مجاناً | zShow'
+        : isFr
+            ? 'Regarder Films et Séries en Streaming Gratuit | zShow'
+            : 'Watch Movies & TV Shows Online Free | zShow';
+
+    const description = isAr
+        ? 'استمتع بأفضل الأفلام والمسلسلات مجاناً وبجودة عالية HD على zShow. اكتشف آلاف العناوين بالعربية، الفرنسية والإنجليزية.'
+        : isFr
+            ? 'Regardez gratuitement les meilleurs films et séries en HD sur zShow. Des milliers de titres disponibles en Français, Anglais et Arabe.'
+            : 'Stream the best movies and TV shows for free in HD on zShow. Thousands of titles in English, French, and Arabic.';
+
+    return {
+        title,
+        description,
+        alternates: {
+            canonical: `${SITE_URL}/${locale}`,
+            languages: {
+                'en': `${SITE_URL}/en`,
+                'fr': `${SITE_URL}/fr`,
+                'ar': `${SITE_URL}/ar`,
+                'x-default': `${SITE_URL}/en`,
+            }
+        },
+        openGraph: {
+            title,
+            description,
+            url: `${SITE_URL}/${locale}`,
+            siteName: 'zShow',
+            images: [
+                {
+                    url: `${SITE_URL}/icon-512.png`,
+                    width: 512,
+                    height: 512,
+                    alt: 'zShow Streaming Platform',
+                }
+            ],
+            type: 'website',
+            locale: isAr ? 'ar_AE' : isFr ? 'fr_FR' : 'en_US',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images: [`${SITE_URL}/icon-512.png`],
+        },
+        keywords: isAr
+            ? ['أفلام', 'مسلسلات', 'مشاهدة مجانية', 'فيلم', 'مسلسل', 'بث مباشر', 'HD']
+            : isFr
+                ? ['films', 'séries', 'streaming gratuit', 'regarder en ligne', 'HD', 'cinéma']
+                : ['watch movies online', 'free streaming', 'TV shows', 'HD movies', 'watch online free'],
+    };
 }
 
 export default async function LocalizedHomePage(props) {

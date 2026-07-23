@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { createSlug } from '../lib/slug';
 
 // COMPOSANT PUBLICITAIRE ISOLÉ
 const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
@@ -325,7 +327,7 @@ export default function WatchTVClient({
                                         >
                                             <div className="relative w-24 aspect-[16/9] bg-zinc-950 rounded overflow-hidden flex-shrink-0 shadow border border-white/5">
                                                 {ep.still_path ? (
-                                                    <img src={`${IMAGE_BASE_URL}/w185${ep.still_path}`} alt={ep.name} className="w-full h-full object-cover" loading="lazy" />
+                                                    <Image src={`${IMAGE_BASE_URL}/w185${ep.still_path}`} alt={ep.name || 'Episode thumbnail'} width={96} height={54} className="w-full h-full object-cover" loading="lazy" />
                                                 ) : (
                                                     <div className="w-full h-full flex items-center justify-center bg-zinc-900 text-[10px] text-zinc-600">{noPreviewText}</div>
                                                 )}
@@ -335,9 +337,9 @@ export default function WatchTVClient({
                                             </div>
 
                                             <div className="min-w-0 flex-1 pt-0.5">
-                                                <h4 className={`text-xs font-bold line-clamp-1 transition-colors ${isSelected ? 'text-red-400' : 'text-gray-200 group-hover/ep:text-white'}`}>
+                                                <h3 className={`text-xs font-bold line-clamp-1 transition-colors ${isSelected ? 'text-red-400' : 'text-gray-200 group-hover/ep:text-white'}`}>
                                                     {ep.name || `Episode ${ep.episode_number}`}
-                                                </h4>
+                                                </h3>
                                                 <p className="text-[11px] text-gray-400 line-clamp-2 mt-1 leading-normal pr-1">
                                                     {ep.overview || noSummaryText}
                                                 </p>
@@ -363,20 +365,20 @@ export default function WatchTVClient({
 
                 {/* RECOMMANDATIONS */}
                 <div className="w-full">
-                    <h3 className="text-lg md:text-xl font-black tracking-wide uppercase mb-6 flex items-center gap-2">
+                    <h2 className="text-lg md:text-xl font-black tracking-wide uppercase mb-6 flex items-center gap-2">
                         <span className="w-1.5 h-5 bg-red-600 rounded-sm"></span> {moreShowsTitle}
-                    </h3>
+                    </h2>
 
                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4">
                         {similarShows.map((show) => (
-                            <a
-                                href={`/${locale}/tv/${show.id}/season-1/episode-1`}
+                            <Link
+                                href={`/${locale}/tv/${createSlug(show.name, show.id, 'tv')}/season-1/episode-1`}
                                 key={show.id}
                                 className="group flex flex-col bg-zinc-900/20 border border-white/5 rounded-lg overflow-hidden transition-all hover:scale-[1.03] hover:border-white/10 hover:shadow-xl cursor-pointer"
                             >
                                 <div className="relative aspect-[2/3] w-full bg-zinc-950">
                                     {show.poster_path ? (
-                                        <img src={`${IMAGE_BASE_URL}/w342${show.poster_path}`} alt={show.name} className="w-full h-full object-cover" loading="lazy" />
+                                        <Image src={`${IMAGE_BASE_URL}/w342${show.poster_path}`} alt={show.name || 'TV poster'} width={200} height={300} sizes="(max-width: 640px) 110px, 200px" className="w-full h-full object-cover" loading="lazy" />
                                     ) : (
                                         <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-900/60 text-center p-4 border-b border-white/5">
                                             <i className="fa-solid fa-clapperboard text-2xl text-zinc-600 mb-2"></i>
@@ -388,7 +390,7 @@ export default function WatchTVClient({
                                     </div>
                                 </div>
                                 <div className="p-2 sm:p-3 bg-zinc-900/60 backdrop-blur-sm min-w-0">
-                                    <h4 className="text-[11px] sm:text-xs md:text-sm font-bold text-gray-200 line-clamp-1 group-hover:text-white transition-colors">{show.name}</h4>
+                                    <h3 className="text-[11px] sm:text-xs md:text-sm font-bold text-gray-200 line-clamp-1 group-hover:text-white transition-colors">{show.name}</h3>
 
                                     <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-gray-400 mt-1.5 w-full whitespace-nowrap overflow-hidden">
                                         <span className="text-amber-400 font-bold flex items-center gap-0.5 flex-shrink-0">
@@ -400,7 +402,7 @@ export default function WatchTVClient({
                                         </span>
                                     </div>
                                 </div>
-                            </a>
+                            </Link>
                         ))}
                     </div>
                 </div>

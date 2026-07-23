@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { cache } from 'react';
 import WatchMovieClient from '../../../../components/WatchMovieClient';
+import { createSlug, extractIdFromSlug } from '../../../../lib/slug';
 
 export const revalidate = 86400; // 24 hours caching on Edge CDN
 
@@ -7,7 +8,7 @@ const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
-async function fetchFromTMDB(path, queryParams = '') {
+const fetchFromTMDB = cache(async (path, queryParams = '') => {
     const url = `${BASE_URL}${path}?api_key=${API_KEY}${queryParams}`;
     try {
         const res = await fetch(url, { next: { revalidate: 86400 } });
@@ -17,13 +18,13 @@ async function fetchFromTMDB(path, queryParams = '') {
         console.error(`TMDB fetch error for ${path}:`, err);
         return null;
     }
-}
+});
 
-// Helper to resolve Movie ID from slug (it can be pure digits or text search)
-async function resolveMovieId(slug) {
-    if (/^\d+$/.test(slug)) {
-        return parseInt(slug);
-    }
+// Helper to resolve Movie ID from slug (extracts trailing numeric ID or text search)
+const resolveMovieId = cache(async (slug) => {
+    const extractedId = extractIdFromSlug(slug);
+    if (extractedId) return extractedId;
+
     // Try search by query
     const cleanQuery = slug.replace(/-/g, ' ');
     const data = await fetchFromTMDB('/search/movie', `&query=${encodeURIComponent(cleanQuery)}`);
@@ -31,7 +32,7 @@ async function resolveMovieId(slug) {
         return data.results[0].id;
     }
     return null;
-}
+});
 
 // Generate dynamic metadata for French, Arabic and English
 export async function generateMetadata(props) {
@@ -69,14 +70,15 @@ export async function generateMetadata(props) {
         ? movieDetails.overview.substring(0, 160)
         : `Stream ${movieTitle} online on zShow.`;
 
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
     const ogImage = movieDetails.backdrop_path
         ? `${IMAGE_BASE_URL}/w780${movieDetails.backdrop_path}`
         : movieDetails.poster_path
             ? `${IMAGE_BASE_URL}/w500${movieDetails.poster_path}`
-            : 'https://zshow.me/window.svg';
+            : `${SITE_URL}/icon-512.png`;
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
-    const path = `/movie/${slug}`;
+    const seoSlug = createSlug(movieDetails.title, movieId, 'movie');
+    const path = `/movie/${seoSlug}`;
     const alternates = {
         canonical: `${SITE_URL}/${locale}${path}`,
         languages: {
@@ -94,7 +96,7 @@ export async function generateMetadata(props) {
         openGraph: {
             title: docTitle,
             description: docDesc,
-            url: `https://zshow.me/${locale}${path}`,
+            url: `${SITE_URL}/${locale}${path}`,
             images: [
                 {
                     url: ogImage,
@@ -183,6 +185,9 @@ export default async function LocalizedMoviePage(props) {
     const remainingOffset = Math.max(0, paddingNeeded);
     const finalBottomItems = uniqueSuggestions.slice(remainingOffset, remainingOffset + 32);
 
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
+    const seoMovieSlug = createSlug(movieDetails.title, movieId, 'movie');
+
     // Injected JSON-LD Schema
     const jsonLd = {
         '@context': 'https://schema.org',
@@ -201,11 +206,40 @@ export default async function LocalizedMoviePage(props) {
         } : undefined
     };
 
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+            {
+                '@type': 'ListItem',
+                'position': 1,
+                'name': locale === 'ar' ? 'الرئيسية' : locale === 'fr' ? 'Accueil' : 'Home',
+                'item': `${SITE_URL}/${locale}`
+            },
+            {
+                '@type': 'ListItem',
+                'position': 2,
+                'name': locale === 'ar' ? 'الأفلام' : locale === 'fr' ? 'Films' : 'Movies',
+                'item': `${SITE_URL}/${locale}?type=movie`
+            },
+            {
+                '@type': 'ListItem',
+                'position': 3,
+                'name': movieDetails.title,
+                'item': `${SITE_URL}/${locale}/movie/${seoMovieSlug}`
+            }
+        ]
+    };
+
     return (
         <>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
             />
             <WatchMovieClient
                 id={movieId}

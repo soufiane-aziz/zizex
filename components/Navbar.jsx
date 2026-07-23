@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { createSlug } from '../lib/slug';
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -148,9 +149,10 @@ export default function Navbar({ locale }) {
 
   const redirectToItem = (item) => {
     const isTvShow = item.media_type === 'tv' || (!item.media_type && !!item.first_air_date);
+    const slug = createSlug(item.title || item.name, item.id, isTvShow ? 'tv' : 'movie');
     const dynamicHref = isTvShow
-      ? `/${resolvedLocale}/tv/${item.id}/season-1/episode-1`
-      : `/${resolvedLocale}/movie/${item.id}`;
+      ? `/${resolvedLocale}/tv/${slug}/season-1/episode-1`
+      : `/${resolvedLocale}/movie/${slug}`;
 
     setSuggestions([]);
     setSearchQuery('');

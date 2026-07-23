@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { cache } from 'react';
 import WatchTVClient from '../../../../../../components/WatchTVClient';
+import { createSlug, extractIdFromSlug } from '../../../../../../lib/slug';
 
-export const dynamic = 'force-dynamic'; // Force dynamic rendering to bypass caching during debugging
+export const revalidate = 86400; // 24 hours caching on Edge CDN
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
-async function fetchFromTMDB(path, queryParams = '') {
+const fetchFromTMDB = cache(async (path, queryParams = '') => {
     const url = `${BASE_URL}${path}?api_key=${API_KEY}${queryParams}`;
     try {
         const res = await fetch(url, { next: { revalidate: 86400 } });
@@ -17,13 +18,13 @@ async function fetchFromTMDB(path, queryParams = '') {
         console.error(`TMDB fetch error for ${path}:`, err);
         return null;
     }
-}
+});
 
 // Helper to resolve TV Show ID from slug
-async function resolveTVShowId(slug) {
-    if (/^\d+$/.test(slug)) {
-        return parseInt(slug);
-    }
+const resolveTVShowId = cache(async (slug) => {
+    const extractedId = extractIdFromSlug(slug);
+    if (extractedId) return extractedId;
+
     // Try search by query
     const cleanQuery = slug.replace(/-/g, ' ');
     const data = await fetchFromTMDB('/search/tv', `&query=${encodeURIComponent(cleanQuery)}`);
@@ -31,7 +32,7 @@ async function resolveTVShowId(slug) {
         return data.results[0].id;
     }
     return null;
-}
+});
 
 // Extract number from parameters (e.g. season-1 -> 1)
 function parseParamNumber(paramStr) {
@@ -99,13 +100,14 @@ export async function generateMetadata(props) {
         : `Stream ${showName} Season ${seasonNum} Episode ${episodeNum} ("${episodeTitle}") on zShow.`;
 
     const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
+    const seoTvSlug = createSlug(showDetails.name, showId, 'tv');
     const ogImage = epData && epData.still_path
         ? `${IMAGE_BASE_URL}/w780${epData.still_path}`
         : showDetails.backdrop_path
             ? `${IMAGE_BASE_URL}/w780${showDetails.backdrop_path}`
-            : `${SITE_URL}/window.svg`;
+            : `${SITE_URL}/icon-512.png`;
 
-    const path = `/tv/${slug}/season-${seasonNum}/episode-${episodeNum}`;
+    const path = `/tv/${seoTvSlug}/season-${seasonNum}/episode-${episodeNum}`;
     const alternates = {
         canonical: `${SITE_URL}/${locale}${path}`,
         languages: {
@@ -123,7 +125,7 @@ export async function generateMetadata(props) {
         openGraph: {
             title: docTitle,
             description: docDesc,
-            url: `https://zshow.me/${locale}${path}`,
+            url: `${SITE_URL}/${locale}${path}`,
             images: [
                 {
                     url: ogImage,
@@ -145,10 +147,6 @@ export async function generateMetadata(props) {
 
 export default async function LocalizedEpisodePage(props) {
     const params = await props.params;
-    try {
-        const fs = require('fs');
-        fs.writeFileSync('params_debug.txt', JSON.stringify({ params, timestamp: new Date().toISOString() }) + '\n', { flag: 'a' });
-    } catch (e) { }
     const { locale, slug } = params;
     const seasonIdParam = extractParamValue(params, ['seasonid', 'season-id', 'season']);
     const episodeIdParam = extractParamValue(params, ['episodeid', 'episode-id', 'episode']);
@@ -220,12 +218,13 @@ export default async function LocalizedEpisodePage(props) {
     // Fetch current episode specific details for JSON-LD VideoObject and TVEpisode schemas
     const currentEpisodeDetails = episodes.find(e => e.episode_number === episodeNum) || {};
 
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
     const episodeName = currentEpisodeDetails.name || `Episode ${episodeNum}`;
     const episodeStill = currentEpisodeDetails.still_path
         ? `${IMAGE_BASE_URL}/w500${currentEpisodeDetails.still_path}`
         : showDetails.poster_path
             ? `${IMAGE_BASE_URL}/w500${showDetails.poster_path}`
-            : 'https://zshow.me/window.svg';
+            : `${SITE_URL}/icon-512.png`;
 
     // Embed URL for schema
     const schemaEmbedUrl = `https://multiembed.mov/?video_id=${showId}&tmdb=1&s=${seasonNum}&e=${episodeNum}`;
@@ -259,11 +258,42 @@ export default async function LocalizedEpisodePage(props) {
         }
     };
 
+    const seoTvSlug = createSlug(showDetails.name, showId, 'tv');
+
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+            {
+                '@type': 'ListItem',
+                'position': 1,
+                'name': locale === 'ar' ? 'الرئيسية' : locale === 'fr' ? 'Accueil' : 'Home',
+                'item': `${SITE_URL}/${locale}`
+            },
+            {
+                '@type': 'ListItem',
+                'position': 2,
+                'name': locale === 'ar' ? 'المسلسلات' : locale === 'fr' ? 'Séries' : 'TV Shows',
+                'item': `${SITE_URL}/${locale}?type=tv`
+            },
+            {
+                '@type': 'ListItem',
+                'position': 3,
+                'name': showDetails.name,
+                'item': `${SITE_URL}/${locale}/tv/${seoTvSlug}/season-${seasonNum}/episode-${episodeNum}`
+            }
+        ]
+    };
+
     return (
         <>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
             />
             <WatchTVClient
                 id={showId}

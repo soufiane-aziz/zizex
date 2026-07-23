@@ -23,8 +23,40 @@ export default async function LocaleLayout(props) {
 
     const isRtl = locale === 'ar';
 
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
+    const websiteJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        'name': 'zShow',
+        'url': `${SITE_URL}/${locale}`,
+        'potentialAction': {
+            '@type': 'SearchAction',
+            'target': {
+                '@type': 'EntryPoint',
+                'urlTemplate': `${SITE_URL}/${locale}?q={search_term_string}`
+            },
+            'query-input': 'required name=search_term_string'
+        }
+    };
+
+    const organizationJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        'name': 'zShow',
+        'url': `${SITE_URL}/${locale}`,
+        'logo': `${SITE_URL}/icon-512.png`
+    };
+
     return (
-        <div dir={isRtl ? 'rtl' : 'ltr'} className={inter.className}>
+        <div dir={isRtl ? 'rtl' : 'ltr'} lang={locale} className={inter.className}>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+            />
             {children}
             <Analytics />
             <SpeedInsights />

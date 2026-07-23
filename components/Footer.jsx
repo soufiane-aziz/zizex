@@ -2,8 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
+  const pathname = usePathname();
+  const locale = pathname?.split('/')[1] || 'en';
   const [activeModal, setActiveModal] = useState(null); // 'about' | 'faq' | 'terms' | 'privacy' | 'dmca' | null
 
   const closeModal = () => setActiveModal(null);
@@ -48,10 +51,10 @@ export default function Footer() {
           <div className="hidden md:flex flex-col gap-4 col-span-1">
             <h4 className="text-xs font-semibold uppercase tracking-widest text-zinc-300">Explore</h4>
             <ul className="space-y-3 text-sm text-zinc-500">
-              <li><Link href="/" className="hover:text-red-500 transition-colors duration-200">Home</Link></li>
-              <li><Link href="/?type=movie" className="hover:text-red-500 transition-colors duration-200">Movies</Link></li>
-              <li><Link href="/?type=tv" className="hover:text-red-500 transition-colors duration-200">TV Shows</Link></li>
-              <li><Link href="/?filter=top_rated" className="hover:text-red-500 transition-colors duration-200">Top Rated</Link></li>
+              <li><Link href={`/${locale}`} className="hover:text-red-500 transition-colors duration-200">Home</Link></li>
+              <li><Link href={`/${locale}?type=movie`} className="hover:text-red-500 transition-colors duration-200">Movies</Link></li>
+              <li><Link href={`/${locale}?type=tv`} className="hover:text-red-500 transition-colors duration-200">TV Shows</Link></li>
+              <li><Link href={`/${locale}?filter=top_rated`} className="hover:text-red-500 transition-colors duration-200">Top Rated</Link></li>
             </ul>
           </div>
 

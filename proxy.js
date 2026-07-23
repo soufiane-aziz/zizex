@@ -50,14 +50,21 @@ export function proxy(req) {
         }
     }
 
-    // We perform a redirection here to keep the URL clean for SEO indexing
+    // We perform a permanent redirect to keep the URL clean for SEO indexing
     const targetPath = pathname === '/' ? '' : pathname;
-    return NextResponse.redirect(new URL(`/${locale}${targetPath}`, req.url), 307);
+    return NextResponse.redirect(new URL(`/${locale}${targetPath}`, req.url), 308);
 }
 
 export const config = {
     matcher: [
-        // Skip all internal paths (_next) and public directories/files
-        '/((?!_next|api|favicon.ico).*)',
+        /*
+         * Match all request paths except for:
+         * - _next/static (static files)
+         * - _next/image (image optimization)
+         * - api (API routes)
+         * - static file extensions (.png, .jpg, .svg, .ico, etc.)
+         * - favicon.ico, sitemap.xml, robots.txt, manifest.webmanifest
+         */
+        '/((?!api|_next/static|_next/image|favicon\\.ico|sitemap\\.xml|sitemap/|robots\\.txt|manifest\\.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2|ttf|otf|xml|txt)$).*)',
     ],
 };

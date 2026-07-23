@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { createSlug } from '../lib/slug';
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
@@ -145,19 +147,22 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
 
     const renderMovieCard = (movie, index) => {
         const isTv = movie.media_type === 'tv' || movie.first_air_date || movie.name;
-        const mediaRoute = isTv ? 'tv' : 'movie';
+        const slug = createSlug(movie.title || movie.name, movie.id, isTv ? 'tv' : 'movie');
         const targetUrl = isTv
-            ? `/${locale}/tv/${movie.id}/season-1/episode-1`
-            : `/${locale}/movie/${movie.id}`;
+            ? `/${locale}/tv/${slug}/season-1/episode-1`
+            : `/${locale}/movie/${slug}`;
 
         return (
             <div key={`${movie.media_type || 'item'}-${movie.id}-${index}`} className="snap-center w-full">
                 <Link href={targetUrl}>
                     <div className="relative rounded-lg overflow-hidden aspect-[2/3] transform transition-all duration-300 ease-out hover:-translate-y-1 sm:hover:-translate-y-2.5 hover:shadow-[0_10px_20px_rgba(245,158,11,0.2)] sm:hover:shadow-[0_15px_30px_rgba(245,158,11,0.25)] group/card cursor-pointer border border-transparent hover:border-amber-500/60 bg-[#121212]">
 
-                        <img
-                            src={movie.poster_path ? `${IMAGE_BASE_URL}/w500${movie.poster_path}` : "https://placehold.co/400x600/000000/ffffff?text=No+Image"}
-                            alt={movie.title || movie.name}
+                        <Image
+                            src={movie.poster_path ? `${IMAGE_BASE_URL}/w342${movie.poster_path}` : "/icon-512.png"}
+                            alt={movie.title || movie.name || 'Poster'}
+                            width={342}
+                            height={513}
+                            sizes="(max-width: 640px) 120px, (max-width: 768px) 160px, (max-width: 1024px) 210px, 240px"
                             className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover/card:scale-105"
                             loading="lazy"
                         />
@@ -172,9 +177,9 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
                         </div>
 
                         <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 flex flex-col justify-end z-20 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
-                            <h4 className="font-bold text-white text-[11px] sm:text-sm md:text-base line-clamp-1 drop-shadow-md leading-tight mb-1 sm:mb-2">
+                            <h3 className="font-bold text-white text-[11px] sm:text-sm md:text-base line-clamp-1 drop-shadow-md leading-tight mb-1 sm:mb-2">
                                 {movie.title || movie.name}
-                            </h4>
+                            </h3>
                             <div className="flex justify-between items-center text-[9px] sm:text-[11px] md:text-xs font-semibold text-gray-300">
                                 <span className="flex items-center gap-1 text-amber-400 drop-shadow">
                                     <i className="fa-solid fa-star text-[8px] sm:text-[10px] md:text-xs"></i>
@@ -206,11 +211,11 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
                 ? 'fixed top-0 left-0 right-0 w-full bg-[#050505]/95 backdrop-blur-md py-4 sm:py-5 px-4 sm:px-8 border-b border-white/10 z-[100] shadow-2xl'
                 : 'mb-4 sm:mb-6 relative z-20 px-2 sm:px-0'
                 }`}>
-                <h3 className={`font-black flex items-center gap-2 sm:gap-4 tracking-wider uppercase text-gray-100 transition-all duration-300 ${isExpanded ? 'text-lg sm:text-3xl' : 'text-xl sm:text-2xl'
+                <h2 className={`font-black flex items-center gap-2 sm:gap-4 tracking-wider uppercase text-gray-100 transition-all duration-300 ${isExpanded ? 'text-lg sm:text-3xl' : 'text-xl sm:text-2xl'
                     }`}>
                     <span className="w-1 sm:w-1.5 h-4 sm:h-6 rounded-sm bg-amber-500"></span>
                     {title}
-                </h3>
+                </h2>
 
                 <button
                     onClick={() => onExpandToggle(!isExpanded)}
@@ -475,9 +480,12 @@ export default function HomeClient({
                             <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/35 to-transparent z-10"></div>
                             <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/60 via-transparent to-transparent z-10"></div>
 
-                            <img
-                                src={`${IMAGE_BASE_URL}/original${movie.backdrop_path}`}
-                                alt={movie.title || movie.name}
+                            <Image
+                                src={`${IMAGE_BASE_URL}/w1280${movie.backdrop_path}`}
+                                alt={movie.title || movie.name || 'Hero backdrop'}
+                                fill
+                                priority={index === 0}
+                                sizes="100vw"
                                 className={`w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${index === activeHeroIndex ? 'scale-110' : 'scale-100'} object-top sm:object-center`}
                             />
                         </div>
@@ -508,7 +516,9 @@ export default function HomeClient({
 
                             <div className="opacity-0 animate-[fadeInUp_0.5s_ease-out_0.6s_forwards]">
                                 <Link
-                                    href={isHeroTv ? `/${locale}/tv/${activeHero.id}/season-1/episode-1` : `/${locale}/movie/${activeHero.id}`}
+                                    href={isHeroTv 
+                                        ? `/${locale}/tv/${createSlug(activeHero.name || activeHero.title, activeHero.id, 'tv')}/season-1/episode-1` 
+                                        : `/${locale}/movie/${createSlug(activeHero.title || activeHero.name, activeHero.id, 'movie')}`}
                                     className="group relative inline-flex items-center gap-2 sm:gap-4 px-6 sm:px-10 py-3 sm:py-4 bg-red-600 rounded-sm font-bold text-sm sm:text-lg overflow-hidden transition-all hover:scale-105 active:scale-95 animate-pulse-glow text-white cursor-pointer shadow-xl"
                                 >
                                     <div className="absolute inset-0 w-1/3 h-full bg-gradient-to-r from-transparent via-white/40 to-transparent animate-laser-sheen"></div>

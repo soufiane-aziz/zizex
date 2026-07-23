@@ -1,8 +1,11 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { createSlug } from '../lib/slug';
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
@@ -251,23 +254,23 @@ export default function WatchMovieClient({
                             <div className="flex-1 overflow-y-auto premium-panel-scrollbar pr-1 flex flex-col gap-3">
                                 {sidebarMovies.length > 0 ? (
                                     sidebarMovies.map((movie) => (
-                                        <a
+                                        <Link
                                             key={movie.id}
-                                            href={`/${locale}/movie/${movie.id}`}
+                                            href={`/${locale}/movie/${createSlug(movie.title, movie.id, 'movie')}`}
                                             className="w-full flex items-start gap-3 p-2 rounded-lg bg-zinc-900/40 border border-transparent hover:border-white/5 hover:bg-zinc-800/40 transition-all group/side cursor-pointer"
                                         >
-                                            <div className="w-16 aspect-[2/3] bg-zinc-950 rounded overflow-hidden flex-shrink-0 shadow border border-white/5">
+                                            <div className="w-16 aspect-[2/3] bg-zinc-950 rounded overflow-hidden flex-shrink-0 shadow border border-white/5 relative">
                                                 {movie.poster_path ? (
-                                                    <img src={`${IMAGE_BASE_URL}/w185${movie.poster_path}`} alt={movie.title} className="w-full h-full object-cover" loading="lazy" />
+                                                    <Image src={`${IMAGE_BASE_URL}/w185${movie.poster_path}`} alt={movie.title || 'Movie poster'} width={64} height={96} className="w-full h-full object-cover" loading="lazy" />
                                                 ) : (
                                                     <div className="w-full h-full flex items-center justify-center bg-zinc-900 text-[9px] text-zinc-600 text-center p-1">No Pic</div>
                                                 )}
                                             </div>
 
                                             <div className="min-w-0 flex-1 pt-0.5">
-                                                <h4 className="text-xs font-bold line-clamp-1 text-gray-200 group-hover/side:text-red-400 transition-colors">
+                                                <h3 className="text-xs font-bold line-clamp-1 text-gray-200 group-hover/side:text-red-400 transition-colors">
                                                     {movie.title}
-                                                </h4>
+                                                </h3>
                                                 <div className="flex items-center gap-2 text-[10px] text-gray-400 mt-1">
                                                     <span className="text-amber-400 font-bold">★ {movie.vote_average?.toFixed(1)}</span>
                                                 </div>
@@ -275,7 +278,7 @@ export default function WatchMovieClient({
                                                     {movie.overview || (isAr ? 'لا يوجد ملخص متاح.' : isFr ? 'Aucun résumé disponible.' : 'No summary listed.')}
                                                 </p>
                                             </div>
-                                        </a>
+                                        </Link>
                                     ))
                                 ) : (
                                     <div className="text-center text-xs text-gray-500 py-8">{noSidebarText}</div>
@@ -297,20 +300,20 @@ export default function WatchMovieClient({
 
                 {/* SECTION MORE MOVIES */}
                 <div className="w-full">
-                    <h3 className="text-lg md:text-xl font-black tracking-wide uppercase mb-6 flex items-center gap-2">
+                    <h2 className="text-lg md:text-xl font-black tracking-wide uppercase mb-6 flex items-center gap-2">
                         <span className="w-1.5 h-5 bg-red-600 rounded-sm"></span> {moreMoviesTitle}
-                    </h3>
+                    </h2>
 
                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4">
                         {bottomSimilarMovies.map((movie) => (
-                            <a
-                                href={`/${locale}/movie/${movie.id}`}
+                            <Link
+                                href={`/${locale}/movie/${createSlug(movie.title, movie.id, 'movie')}`}
                                 key={movie.id}
                                 className="group flex flex-col bg-zinc-900/20 border border-white/5 rounded-lg overflow-hidden transition-all hover:scale-[1.03] hover:border-white/10 hover:shadow-xl cursor-pointer"
                             >
                                 <div className="relative aspect-[2/3] w-full bg-zinc-950">
                                     {movie.poster_path ? (
-                                        <img src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`} alt={movie.title} className="w-full h-full object-cover" loading="lazy" />
+                                        <Image src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`} alt={movie.title || 'Movie poster'} width={200} height={300} sizes="(max-width: 640px) 110px, 200px" className="w-full h-full object-cover" loading="lazy" />
                                     ) : (
                                         <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-900/60 text-center p-4 border-b border-white/5">
                                             <i className="fa-solid fa-clapperboard text-2xl text-zinc-600 mb-2"></i>
@@ -322,7 +325,7 @@ export default function WatchMovieClient({
                                     </div>
                                 </div>
                                 <div className="p-2 sm:p-3 bg-zinc-900/60 backdrop-blur-sm min-w-0">
-                                    <h4 className="text-[11px] sm:text-xs md:text-sm font-bold text-gray-200 line-clamp-1 group-hover:text-white transition-colors">{movie.title}</h4>
+                                    <h3 className="text-[11px] sm:text-xs md:text-sm font-bold text-gray-200 line-clamp-1 group-hover:text-white transition-colors">{movie.title}</h3>
 
                                     <div className="flex items-center justify-between gap-1 text-[10px] sm:text-[11px] text-gray-400 mt-1.5 w-full">
                                         <span className="text-amber-400 font-bold flex items-center gap-0.5 flex-shrink-0">
@@ -335,7 +338,7 @@ export default function WatchMovieClient({
                                         </span>
                                     </div>
                                 </div>
-                            </a>
+                            </Link>
                         ))}
                     </div>
                 </div>
