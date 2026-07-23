@@ -128,14 +128,6 @@ export default async function sitemap(props: { id: Promise<string | number> | st
                     changeFrequency: 'weekly',
                     priority: 0.8,
                     alternates: { languages: alternates },
-                    videos: [
-                        {
-                            thumbnail_loc: xmlEscape(videoThumbnail),
-                            title: xmlEscape(movie.title || 'Movie playback'),
-                            description: xmlEscape(movie.overview || 'Watch full movie online'),
-                            player_loc: xmlEscape(`https://multiembed.mov/?video_id=${movie.id}&tmdb=1`),
-                        }
-                    ]
                 });
             });
         });
@@ -154,24 +146,12 @@ export default async function sitemap(props: { id: Promise<string | number> | st
                 });
                 alternates['x-default'] = `${SITE_URL}/en${path}`;
 
-                const videoThumbnail = show.backdrop_path
-                    ? `${IMAGE_BASE_URL}/w780${show.backdrop_path}`
-                    : `${IMAGE_BASE_URL}/w500${show.poster_path}`;
-
                 sitemapEntries.push({
                     url: `${SITE_URL}/${locale}${path}`,
                     lastModified: safeDate(show.first_air_date),
                     changeFrequency: 'weekly',
                     priority: 0.8,
                     alternates: { languages: alternates },
-                    videos: [
-                        {
-                            thumbnail_loc: xmlEscape(videoThumbnail),
-                            title: xmlEscape(show.name || 'TV series stream'),
-                            description: xmlEscape(show.overview || 'Watch full series online'),
-                            player_loc: xmlEscape(`https://multiembed.mov/?video_id=${show.id}&tmdb=1&s=1&e=1`),
-                        }
-                    ]
                 });
             });
         });

@@ -12,6 +12,9 @@ export function proxy(req) {
         pathname.startsWith('/_next') ||
         pathname.startsWith('/api') ||
         pathname.startsWith('/favicon.ico') ||
+        pathname.startsWith('/sitemap') ||
+        pathname.startsWith('/robots') ||
+        pathname.startsWith('/manifest') ||
         PUBLIC_FILE.test(pathname)
     ) {
         return NextResponse.next();
