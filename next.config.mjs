@@ -13,6 +13,14 @@ const nextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/sitemap/:id.xml',
+        destination: '/sitemap.xml',
+      },
+    ];
+  },
   async headers() {
     return [
       {
