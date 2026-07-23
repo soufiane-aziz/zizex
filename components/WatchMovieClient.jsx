@@ -69,8 +69,8 @@ export default function WatchMovieClient({
     const [isIframeLoading, setIsIframeLoading] = useState(true);
 
     const servers = [
-        { id: 'server1', name: 'AutoEmbed', url: `https://autoembed.co/movie/tmdb/${id}` },
-        { id: 'server2', name: 'VidLink Red', url: `https://vidlink.pro/movie/${id}?primaryColor=E50914&autoplay=true` },
+        { id: 'server1', name: 'VidLink Red', url: `https://vidlink.pro/movie/${id}?primaryColor=E50914&autoplay=true` },
+        { id: 'server2', name: 'AutoEmbed', url: `https://autoembed.co/movie/tmdb/${id}` },
         { id: 'server3', name: 'MultiEmbed', url: `https://multiembed.mov/?video_id=${id}&tmdb=1` },
         { id: 'server4', name: 'VidSrc Me', url: `https://vidsrc.me/embed/movie?tmdb=${id}` },
         { id: 'server5', name: '2Embed', url: `https://www.2embed.cc/embed/${id}` },
@@ -147,7 +147,7 @@ export default function WatchMovieClient({
                     <div className="lg:col-span-2 flex flex-col gap-6">
 
                         <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group">
-                            
+
                             {/* Loading Indicator Overlay */}
                             {isIframeLoading && (
                                 <div className="absolute inset-0 z-20 bg-zinc-950/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3">

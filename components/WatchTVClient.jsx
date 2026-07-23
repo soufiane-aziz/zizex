@@ -81,8 +81,8 @@ export default function WatchTVClient({
     const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
     const servers = [
-        { id: 'server1', name: 'AutoEmbed', url: `https://autoembed.co/tv/tmdb/${id}-${currentSeason}-${currentEpisode}` },
-        { id: 'server2', name: 'VidLink Red', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}?primaryColor=E50914&autoplay=true` },
+        { id: 'server1', name: 'VidLink Red', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}?primaryColor=E50914&autoplay=true` },
+        { id: 'server2', name: 'AutoEmbed', url: `https://autoembed.co/tv/tmdb/${id}-${currentSeason}-${currentEpisode}` },
         { id: 'server3', name: 'MultiEmbed', url: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}` },
         { id: 'server4', name: 'VidSrc Me', url: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
         { id: 'server5', name: '2Embed', url: `https://www.2embed.cc/embedtv/${id}&s=${currentSeason}&e=${currentEpisode}` },
@@ -164,7 +164,7 @@ export default function WatchTVClient({
 
                         {/* LECTEUR VIDÉO */}
                         <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group">
-                            
+
                             {/* Loading Indicator Overlay */}
                             {isIframeLoading && (
                                 <div className="absolute inset-0 z-20 bg-zinc-950/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
@@ -177,10 +177,10 @@ export default function WatchTVClient({
 
                             {/* Smartlink Ad Overlay (Invisible) */}
                             {!hasClickedPlayer && !isIframeLoading && (
-                                 <div
-                                     className="absolute inset-0 z-10 cursor-pointer"
-                                     onClick={handlePlayerClick}
-                                 />
+                                <div
+                                    className="absolute inset-0 z-10 cursor-pointer"
+                                    onClick={handlePlayerClick}
+                                />
                             )}
 
                             <iframe
