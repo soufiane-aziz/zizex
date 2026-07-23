@@ -184,19 +184,18 @@ export default function Navbar({ locale }) {
 
       {/* 2. ZONE CENTRALE : MENU PC & TABLETTE (PARFAITEMENT CENTRÉ) */}
       <div className="hidden sm:flex flex-1 items-center justify-center gap-6 md:gap-8 lg:gap-10 text-xs md:text-sm tracking-wide uppercase shrink-0 mx-4">
-        <button onClick={() => handleNavigation('all', 'default')} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isHomeActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+        <Link href={`${homeBase}`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isHomeActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
           Home
-        </button>
-        <button onClick={() => handleNavigation('movie', 'default')} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isMoviesActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+        </Link>
+        <Link href={`${homeBase}?type=movie`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isMoviesActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
           Movies
-        </button>
-        <button onClick={() => handleNavigation('tv', 'default')} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isTvActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+        </Link>
+        <Link href={`${homeBase}?type=tv`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isTvActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
           TV
-        </button>
-        {/* Modifié ici pour envoyer 'all' (Films + Séries combinés) */}
-        <button onClick={() => handleNavigation('all', 'top_rated')} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isTopRatedActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+        </Link>
+        <Link href={`${homeBase}?filter=top_rated`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isTopRatedActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
           Top Rated
-        </button>
+        </Link>
       </div>
 
       {/* 3. ZONE DROITE : RECHERCHE & BURGER MOBILE */}
@@ -301,19 +300,18 @@ export default function Navbar({ locale }) {
           {/* Dropdown Menu Mobile Déroulant */}
           {isMobileMenuOpen && (
             <div className="absolute right-0 top-full mt-4 w-48 bg-black/95 backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 py-1.5 flex flex-col text-sm uppercase tracking-wider font-semibold animate-[fadeIn_0.2s_ease-out]">
-              <button onClick={() => handleNavigation('all', 'default')} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isHomeActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
+              <Link href={`${homeBase}`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isHomeActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
                 Home
-              </button>
-              <button onClick={() => handleNavigation('movie', 'default')} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isMoviesActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
+              </Link>
+              <Link href={`${homeBase}?type=movie`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isMoviesActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
                 Movies
-              </button>
-              <button onClick={() => handleNavigation('tv', 'default')} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isTvActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
+              </Link>
+              <Link href={`${homeBase}?type=tv`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isTvActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
                 TV
-              </button>
-              {/* Modifié également ici sur mobile pour envoyer 'all' */}
-              <button onClick={() => handleNavigation('all', 'top_rated')} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isTopRatedActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
+              </Link>
+              <Link href={`${homeBase}?filter=top_rated`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isTopRatedActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
                 Top Rated
-              </button>
+              </Link>
             </div>
           )}
         </div>
