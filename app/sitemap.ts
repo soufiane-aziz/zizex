@@ -36,20 +36,25 @@ async function fetchPopularFromTMDB(type: string, pages = 20) {
 }
 
 function safeDateString(dateStr?: string | null): string {
-    const today = new Date().toISOString().split('T')[0];
-    if (!dateStr || typeof dateStr !== 'string') return today;
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+    if (!dateStr || typeof dateStr !== 'string') return todayStr;
     const clean = dateStr.trim();
-    if (!clean || clean.length < 4) return today;
+    if (!clean || clean.length < 4) return todayStr;
     
     try {
         const d = new Date(clean);
-        if (d instanceof Date && !isNaN(d.getTime()) && d.getFullYear() >= 1900 && d.getFullYear() <= 2100) {
+        if (d instanceof Date && !isNaN(d.getTime()) && d.getFullYear() >= 1900) {
+            // Google Search Console rejects lastmod dates that are in the future
+            if (d > now) {
+                return todayStr;
+            }
             return d.toISOString().split('T')[0];
         }
     } catch {
-        // Fallback to today's date in YYYY-MM-DD format
+        // Fallback to today's date on any parsing exception
     }
-    return today;
+    return todayStr;
 }
 
 const GENRE_SLUGS = [
