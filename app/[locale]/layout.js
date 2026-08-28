@@ -1,6 +1,5 @@
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
-import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({
@@ -58,7 +57,6 @@ export default async function LocaleLayout(props) {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
             />
             {children}
-            <Analytics />
             <SpeedInsights />
 
             {/* Script publicitaire Adsterra (Popunder / Social Bar) */}
