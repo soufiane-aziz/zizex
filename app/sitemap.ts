@@ -35,10 +35,20 @@ async function fetchPopularFromTMDB(type: string, pages = 20) {
     }
 }
 
-function safeDate(dateStr?: string): Date {
-    if (!dateStr) return new Date();
-    const d = new Date(dateStr);
-    return isNaN(d.getTime()) ? new Date() : d;
+function safeDate(dateStr?: string | null): Date {
+    if (!dateStr || typeof dateStr !== 'string') return new Date();
+    const clean = dateStr.trim();
+    if (!clean || clean.length < 4) return new Date();
+    
+    try {
+        const d = new Date(clean);
+        if (d instanceof Date && !isNaN(d.getTime()) && d.getFullYear() >= 1900 && d.getFullYear() <= 2100) {
+            return d;
+        }
+    } catch {
+        // Fallback to current date on any parsing exception
+    }
+    return new Date();
 }
 
 const GENRE_SLUGS = [
