@@ -42,7 +42,7 @@ export async function generateMetadata(props) {
 
     if (!movieId) {
         return {
-            title: 'zShow - Watch Movies Online',
+            title: 'ZizHub - Watch Movies Online',
             description: 'Stream movie databases seamlessly.'
         };
     }
@@ -52,7 +52,7 @@ export async function generateMetadata(props) {
 
     if (!movieDetails) {
         return {
-            title: 'zShow - Watch Movies Online'
+            title: 'ZizHub - Watch Movies Online'
         };
     }
 
@@ -61,16 +61,16 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const docTitle = isAr
-        ? `شاهد ${movieTitle} أونلاين مجاناً | zShow`
+        ? `شاهد ${movieTitle} أونلاين مجاناً | ZizHub`
         : isFr
-            ? `Regarder ${movieTitle} en Streaming Gratuit | zShow`
-            : `Watch ${movieTitle} Online | zShow`;
+            ? `Regarder ${movieTitle} en Streaming Gratuit | ZizHub`
+            : `Watch ${movieTitle} Online | ZizHub`;
 
     const docDesc = movieDetails.overview
         ? movieDetails.overview.substring(0, 160)
-        : `Stream ${movieTitle} online on zShow.`;
+        : `Stream ${movieTitle} online on ZizHub.`;
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
     const ogImage = movieDetails.backdrop_path
         ? `${IMAGE_BASE_URL}/w780${movieDetails.backdrop_path}`
         : movieDetails.poster_path
@@ -185,7 +185,7 @@ export default async function LocalizedMoviePage(props) {
     const remainingOffset = Math.max(0, paddingNeeded);
     const finalBottomItems = uniqueSuggestions.slice(remainingOffset, remainingOffset + 32);
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
     const seoMovieSlug = createSlug(movieDetails.title, movieId, 'movie');
 
     // Injected JSON-LD Schema

@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+.build
+dist
+public
+build
+.cache
+coverage
+.vscode
+.env
+.env.local
+*.log

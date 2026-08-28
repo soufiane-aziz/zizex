@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Tailwind v4 Configuration Setup */
 @theme {
@@ -25,8 +25,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* Custom Global Element Styling */
-body {
-  @apply bg-dark-bg text-gray-200 font-sans antialiased overflow-x-hidden selection:bg-crimson-700 selection:text-white;
+body {@apply bg-dark-bg text-gray-200 font-sans antialiased overflow-x-hidden selection:bg-crimson-700 selection:text-white;
 }
 
 /* Custom Platform Utilities */
@@ -35,8 +34,8 @@ body {
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
-    display: none;
-  }
+      display: none;
+    }
 }
 
 @utility glass-nav {
@@ -122,14 +121,17 @@ select {
 }
 
 @keyframes pulse-glow {
-
   0%,
   100% {
-    box-shadow: 0 0 10px rgba(220, 38, 38, 0.5), 0 0 20px rgba(220, 38, 38, 0.3);
+    box-shadow:
+      0 0 10px rgba(220, 38, 38, 0.5),
+      0 0 20px rgba(220, 38, 38, 0.3);
   }
 
   50% {
-    box-shadow: 0 0 25px rgba(220, 38, 38, 0.8), 0 0 50px rgba(220, 38, 38, 0.5);
+    box-shadow:
+      0 0 25px rgba(220, 38, 38, 0.8),
+      0 0 50px rgba(220, 38, 38, 0.5);
   }
 }
 
@@ -163,12 +165,14 @@ select {
 }
 
 @utility skeleton {
-  background: linear-gradient(90deg,
-      #1a1a1f 0%,
-      #252530 40%,
-      #2e2e3a 50%,
-      #252530 60%,
-      #1a1a1f 100%);
+  background: linear-gradient(
+    90deg,
+    #1a1a1f 0%,
+    #252530 40%,
+    #2e2e3a 50%,
+    #252530 60%,
+    #1a1a1f 100%
+  );
   background-size: 800px 100%;
   animation: shimmer 1.6s ease-in-out infinite;
 }

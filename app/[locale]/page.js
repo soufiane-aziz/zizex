@@ -32,7 +32,7 @@ const fetchFromTMDB = cache(async (path, queryParams = '') => {
     }
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
 
 export async function generateMetadata(props) {
     const params = await props.params;
@@ -42,16 +42,16 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const title = isAr
-        ? 'شاهد أفلام ومسلسلات أونلاين مجاناً | zShow'
+        ? 'شاهد أفلام ومسلسلات أونلاين مجاناً | ZizHub'
         : isFr
-            ? 'Regarder Films et Séries en Streaming Gratuit | zShow'
-            : 'Watch Movies & TV Shows Online Free | zShow';
+            ? 'Regarder Films et Séries en Streaming Gratuit | ZizHub'
+            : 'Watch Movies & TV Shows Online Free | ZizHub';
 
     const description = isAr
-        ? 'استمتع بأفضل الأفلام والمسلسلات مجاناً وبجودة عالية HD على zShow. اكتشف آلاف العناوين بالعربية، الفرنسية والإنجليزية.'
+        ? 'استمتع بأفضل الأفلام والمسلسلات مجاناً وبجودة عالية HD على ZizHub. اكتشف آلاف العناوين بالعربية، الفرنسية والإنجليزية.'
         : isFr
-            ? 'Regardez gratuitement les meilleurs films et séries en HD sur zShow. Des milliers de titres disponibles en Français, Anglais et Arabe.'
-            : 'Stream the best movies and TV shows for free in HD on zShow. Thousands of titles in English, French, and Arabic.';
+            ? 'Regardez gratuitement les meilleurs films et séries en HD sur ZizHub. Des milliers de titres disponibles en Français, Anglais et Arabe.'
+            : 'Stream the best movies and TV shows for free in HD on ZizHub. Thousands of titles in English, French, and Arabic.';
 
     return {
         title,
@@ -69,13 +69,13 @@ export async function generateMetadata(props) {
             title,
             description,
             url: `${SITE_URL}/${locale}`,
-            siteName: 'zShow',
+            siteName: 'ZizHub',
             images: [
                 {
                     url: `${SITE_URL}/icon-512.png`,
                     width: 512,
                     height: 512,
-                    alt: 'zShow Streaming Platform',
+                    alt: 'ZizHub Streaming Platform',
                 }
             ],
             type: 'website',

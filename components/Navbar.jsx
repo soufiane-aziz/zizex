@@ -43,14 +43,14 @@ export default function Navbar({ locale }) {
   useEffect(() => {
     if (isOnHomePage) {
       // Save the current state whenever we're on the home page
-      localStorage.setItem('zshow_nav_type', urlType);
-      localStorage.setItem('zshow_nav_filter', urlFilter);
+      localStorage.setItem('zizhub_nav_type', urlType);
+      localStorage.setItem('zizhub_nav_filter', urlFilter);
       setActiveType(urlType);
       setActiveFilter(urlFilter);
     } else {
       // On watch pages, restore the last known home filter
-      const savedType = localStorage.getItem('zshow_nav_type') || 'all';
-      const savedFilter = localStorage.getItem('zshow_nav_filter') || 'default';
+      const savedType = localStorage.getItem('zizhub_nav_type') || 'all';
+      const savedFilter = localStorage.getItem('zizhub_nav_filter') || 'default';
       setActiveType(savedType);
       setActiveFilter(savedFilter);
     }
@@ -177,8 +177,8 @@ export default function Navbar({ locale }) {
           onClick={() => handleNavigation('all', 'default')}
           className="text-3xl md:text-4xl font-black tracking-wide cursor-pointer focus:outline-none"
         >
-          <span className="text-red-600">z</span>
-          <span className="text-white">Show</span>
+          <span className="text-red-600">Ziz</span>
+          <span className="text-white">Hub</span>
         </button>
       </div>
 

@@ -13,20 +13,20 @@ export default function Footer() {
 
   const faqItems = [
     {
-      q: "What exactly is zShow?",
-      a: "zShow is an advanced, high-performance media discovery platform engineered to help cinephiles browse, track, and locate content across global streaming architectures. We synthesize metadata to deliver a fluid browsing experience."
+      q: "What exactly is ZizHub?",
+      a: "ZizHub is an advanced, high-performance media discovery platform engineered to help cinephiles browse, track, and locate content across global streaming architectures. We synthesize metadata to deliver a fluid browsing experience."
     },
     {
-      q: "Can I stream or watch movies directly on zShow?",
-      a: "No. zShow is strictly a metadata aggregator, discovery engine, and cataloging tool. We do not host, stream, or redistribute any copyrighted digital media files. Instead, we direct you to official legal streaming platforms."
+      q: "Can I stream or watch movies directly on ZizHub?",
+      a: "No. ZizHub is strictly a metadata aggregator, discovery engine, and cataloging tool. We do not host, stream, or redistribute any copyrighted digital media files. Instead, we direct you to official legal streaming platforms."
     },
     {
       q: "Where does the movie and TV data come from?",
       a: "Our entire structural ecosystem is driven dynamically by the public TMDB API. This ensures real-time updates for trending global charts, dynamic synopsis architectures, cast directories, and high-resolution cover artwork."
     },
     {
-      q: "Is zShow free to use?",
-      a: "Yes. zShow is a non-commercial, open web application built for optimization, personal portfolio demonstration, and community media discovery."
+      q: "Is ZizHub free to use?",
+      a: "Yes. ZizHub is a non-commercial, open web application built for optimization, personal portfolio demonstration, and community media discovery."
     }
   ];
 
@@ -40,7 +40,7 @@ export default function Footer() {
           {/* Brand & Description */}
           <div className="col-span-2 flex flex-col gap-4">
             <Link href="/" className="font-black text-3xl tracking-wide text-white focus:outline-none w-max">
-              <span className="text-red-600">z</span>Show
+              <span className="text-red-600">Ziz</span>Hub
             </Link>
             <p className="text-sm text-zinc-500 max-w-sm leading-relaxed">
               Your premium companion for tracking and discovering movies and TV shows. Built by cinephiles, for cinephiles.
@@ -119,7 +119,7 @@ export default function Footer() {
         <div className="border-t border-zinc-800/60 pt-8 flex flex-col lg:flex-row justify-between items-center gap-4 md:gap-6">
           <div className="text-xs text-zinc-500 text-center lg:text-left">
             <p className="font-medium text-zinc-400">
-              &copy; {new Date().getFullYear()} zShow. All rights reserved.
+              &copy; {new Date().getFullYear()} ZizHub. All rights reserved.
             </p>
           </div>
           
@@ -165,16 +165,16 @@ export default function Footer() {
               <>
                 <div className="mb-6 pr-8">
                   <h3 className="text-2xl font-bold text-white tracking-tight">
-                    About <span className="text-red-600">z</span>Show
+                    About <span className="text-red-600">Ziz</span>Hub
                   </h3>
                   <div className="h-[2px] w-12 bg-red-600 mt-2.5 rounded"></div>
                 </div>
                 <div className="space-y-5 text-sm text-zinc-400 leading-relaxed">
                   <p>
-                    Welcome to <strong className="text-zinc-100">zShow</strong>, an advanced data-driven media tracking index and exploration architecture built explicitly for digital cinema enthusiasts.
+                    Welcome to <strong className="text-zinc-100">ZizHub</strong>, an advanced data-driven media tracking index and exploration architecture built explicitly for digital cinema enthusiasts.
                   </p>
                   <p>
-                    Our mission is to eliminate the systematic friction of discovering content across highly fragmented digital networks. By parsing scalable public data infrastructure arrays, zShow provides responsive filtering, comprehensive cast mapping, real-time community media discovery, and historical television tracking matrices inside a unified, high-end dashboard.
+                    Our mission is to eliminate the systematic friction of discovering content across highly fragmented digital networks. By parsing scalable public data infrastructure arrays, ZizHub provides responsive filtering, comprehensive cast mapping, real-time community media discovery, and historical television tracking matrices inside a unified, high-end dashboard.
                   </p>
                   <p className="text-xs text-zinc-500 pt-2 border-t border-zinc-900 italic">
                     Disclaimer: This deployment operates entirely on client-side routing and external dynamic pipelines. No copyrighted stream components or storage paradigms exist within our internal cluster schemas.
@@ -223,7 +223,7 @@ export default function Footer() {
                 <div className="space-y-4 text-sm text-zinc-400 leading-relaxed">
                   <p className="text-xs text-zinc-500">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
                   <p>
-                    By accessing and using <strong className="text-zinc-100">zShow</strong>, you automatically agree to abide by these Terms of Service. This platform functions purely as an open search directory and dynamic user interface layout.
+                    By accessing and using <strong className="text-zinc-100">ZizHub</strong>, you automatically agree to abide by these Terms of Service. This platform functions purely as an open search directory and dynamic user interface layout.
                   </p>
                   <h4 className="text-white font-medium text-base pt-2">1. Use of Service</h4>
                   <p>
@@ -231,7 +231,7 @@ export default function Footer() {
                   </p>
                   <h4 className="text-white font-medium text-base pt-2">2. Limitation of Liability</h4>
                   <p>
-                    zShow aggregates external metadata and imagery dynamically. We do not warrant or guarantee the complete absolute accuracy, timestamp completeness, or persistent online availability of data fields fetched via public communication wrappers.
+                    ZizHub aggregates external metadata and imagery dynamically. We do not warrant or guarantee the complete absolute accuracy, timestamp completeness, or persistent online availability of data fields fetched via public communication wrappers.
                   </p>
                 </div>
               </>
@@ -249,11 +249,11 @@ export default function Footer() {
                 <div className="space-y-4 text-sm text-zinc-400 leading-relaxed">
                   <p className="text-xs text-zinc-500">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
                   <p>
-                    At <strong className="text-zinc-100">zShow</strong>, we respect user privacy. This privacy policy highlights our commitment to data transparency.
+                    At <strong className="text-zinc-100">ZizHub</strong>, we respect user privacy. This privacy policy highlights our commitment to data transparency.
                   </p>
                   <h4 className="text-white font-medium text-base pt-2">Data Collection & Cookies</h4>
                   <p>
-                    zShow does not require profile configurations, billing information, or backend record-keeping. We do not collect, track, store, or trade any personal user analytics. 
+                    ZizHub does not require profile configurations, billing information, or backend record-keeping. We do not collect, track, store, or trade any personal user analytics. 
                   </p>
                   <p>
                     We may utilize minimal client-side browser storage (such as LocalStorage or basic session tokens) simply to retain interface configurations and user visual settings. Third-party data services (like TMDB) handle network queries under their own distinct analytical policies.
@@ -273,7 +273,7 @@ export default function Footer() {
                 </div>
                 <div className="space-y-4 text-sm text-zinc-400 leading-relaxed">
                   <p>
-                    <strong className="text-zinc-100">zShow</strong> takes copyright security and DMCA guidelines very seriously. 
+                    <strong className="text-zinc-100">ZizHub</strong> takes copyright security and DMCA guidelines very seriously. 
                   </p>
                   <h4 className="text-white font-medium text-base pt-2">No Hosting Statement</h4>
                   <p>

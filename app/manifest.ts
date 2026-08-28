@@ -1,7 +1,7 @@
 export default function manifest() {
     return {
-        name: 'zShow',
-        short_name: 'zShow',
+        name: 'ZizHub',
+        short_name: 'ZizHub',
         description: 'Watch your favorite movies and TV shows for free in HD',
         start_url: '/',
         display: 'standalone',

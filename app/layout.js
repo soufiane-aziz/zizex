@@ -2,8 +2,8 @@ import './globals.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app'),
-  title: 'zShow - Streaming Platform',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app'),
+  title: 'ZizHub - Streaming Platform',
   description: 'Watch your favorite movies and TV shows free in HD',
   icons: {
     icon: '/favicon.ico',

@@ -66,7 +66,7 @@ export async function generateMetadata(props) {
 
     if (!showId) {
         return {
-            title: 'zShow - Search and Watch TV Series',
+            title: 'ZizHub - Search and Watch TV Series',
             description: 'Stream series metadata seamlessly.'
         };
     }
@@ -75,7 +75,7 @@ export async function generateMetadata(props) {
     const showDetails = await fetchFromTMDB(`/tv/${showId}`, `&language=${tmdbLang}`);
 
     if (!showDetails) {
-        return { title: 'zShow - Streaming Platform' };
+        return { title: 'ZizHub - Streaming Platform' };
     }
 
     const showName = showDetails.name;
@@ -90,16 +90,16 @@ export async function generateMetadata(props) {
     }
 
     const docTitle = isAr
-        ? `شاهد مسلسل ${showName} الموسم ${seasonNum} الحلقة ${episodeNum} أونلاين | zShow`
+        ? `شاهد مسلسل ${showName} الموسم ${seasonNum} الحلقة ${episodeNum} أونلاين | ZizHub`
         : isFr
-            ? `Regarder ${showName} Saison ${seasonNum} Épisode ${episodeNum} en Streaming | zShow`
-            : `Watch ${showName} Season ${seasonNum} Episode ${episodeNum} Online | zShow`;
+            ? `Regarder ${showName} Saison ${seasonNum} Épisode ${episodeNum} en Streaming | ZizHub`
+            : `Watch ${showName} Season ${seasonNum} Episode ${episodeNum} Online | ZizHub`;
 
     const docDesc = epData && epData.overview
         ? epData.overview.substring(0, 160)
-        : `Stream ${showName} Season ${seasonNum} Episode ${episodeNum} ("${episodeTitle}") on zShow.`;
+        : `Stream ${showName} Season ${seasonNum} Episode ${episodeNum} ("${episodeTitle}") on ZizHub.`;
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
     const seoTvSlug = createSlug(showDetails.name, showId, 'tv');
     const ogImage = epData && epData.still_path
         ? `${IMAGE_BASE_URL}/w780${epData.still_path}`
@@ -218,7 +218,7 @@ export default async function LocalizedEpisodePage(props) {
     // Fetch current episode specific details for JSON-LD VideoObject and TVEpisode schemas
     const currentEpisodeDetails = episodes.find(e => e.episode_number === episodeNum) || {};
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
     const episodeName = currentEpisodeDetails.name || `Episode ${episodeNum}`;
     const episodeStill = currentEpisodeDetails.still_path
         ? `${IMAGE_BASE_URL}/w500${currentEpisodeDetails.still_path}`

@@ -44,18 +44,18 @@ export async function generateMetadata(props) {
     const genreTitle = genreConfig?.title[locale] || genreConfig?.title.en || cleanSlug.replace(/-/g, ' ');
 
     const title = isAr
-        ? `شاهد ${genreTitle} أونلاين مجاناً | zShow`
+        ? `شاهد ${genreTitle} أونلاين مجاناً | ZizHub`
         : isFr
-            ? `Regarder ${genreTitle} en Streaming Gratuit | zShow`
-            : `Watch ${genreTitle} Online | zShow`;
+            ? `Regarder ${genreTitle} en Streaming Gratuit | ZizHub`
+            : `Watch ${genreTitle} Online | ZizHub`;
 
     const description = isAr
-        ? `استكشف أفضل ${genreTitle} بجودة عالية وبدون إعلانات مزعجة على zShow.`
+        ? `استكشف أفضل ${genreTitle} بجودة عالية وبدون إعلانات مزعجة على ZizHub.`
         : isFr
-            ? `Découvrez les meilleurs ${genreTitle} en haute définition sur zShow.`
-            : `Stream top ${genreTitle} in HD quality online for free on zShow.`;
+            ? `Découvrez les meilleurs ${genreTitle} en haute définition sur ZizHub.`
+            : `Stream top ${genreTitle} in HD quality online for free on ZizHub.`;
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zshow.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
     const path = `/genre/${cleanSlug}`;
 
     return {
