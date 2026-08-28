@@ -334,7 +334,7 @@ const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
                 'params' : {}
               };
             </script>
-            <script type="text/javascript" src="https://environmenttalentrabble.com/${adKey}/invoke.js"></script>
+            <script type="text/javascript" src="https://bashsecret.com/${adKey}/invoke.js"></script>
           </body>
         </html>
       `);
@@ -556,8 +556,8 @@ export default function HomeClient({
 
             {!expandedCategoryId && (
                 <>
-                    <AdComponent adKey="505a6081e767b51fdf7cd7a743de887b" width={728} height={90} wrapperClassName="mt-6 sm:mt-12 mb-2 px-2 sm:px-4 hidden sm:flex" />
-                    <AdComponent adKey="505a6081e767b51fdf7cd7a743de887b" width={320} height={50} wrapperClassName="mt-6 mb-2 px-2 flex sm:hidden" />
+                    <AdComponent adKey="e1df92cdb6f2e478f4ab97be681e48db" width={728} height={90} wrapperClassName="mt-6 sm:mt-12 mb-2 px-2 sm:px-4 hidden sm:flex" />
+                    <AdComponent adKey="e1df92cdb6f2e478f4ab97be681e48db" width={320} height={50} wrapperClassName="mt-6 mb-2 px-2 flex sm:hidden" />
                 </>
             )}
 
@@ -600,9 +600,9 @@ export default function HomeClient({
                         {index === 2 && !expandedCategoryId && (
                             <RevealOnScroll delay={Math.min((index + 1) * 50, 300)}>
                                 <AdComponent
-                                    adKey="2d00d5f1f381c5bf760e84da1f51d68c"
-                                    width={468}
-                                    height={60}
+                                    adKey="faa2a02f6d8302209a4adbf8333b74b2"
+                                    width={160}
+                                    height={600}
                                     wrapperClassName="mb-14 px-4 bg-black/20 rounded-lg py-4 border border-white/5 shadow-2xl"
                                 />
                             </RevealOnScroll>
@@ -611,9 +611,9 @@ export default function HomeClient({
                         {index === 5 && !expandedCategoryId && (
                             <RevealOnScroll delay={Math.min((index + 1) * 50, 300)}>
                                 <AdComponent
-                                    adKey="0219cd05b1d4804869fc178ab5c3dce2"
-                                    width={320}
-                                    height={50}
+                                    adKey="b7ca2ffee5ca2841019c2a47c86661ea"
+                                    width={300}
+                                    height={250}
                                     wrapperClassName="mb-14 px-4 bg-black/20 rounded-lg py-4 border border-white/5 shadow-2xl"
                                 />
                             </RevealOnScroll>
@@ -625,9 +625,9 @@ export default function HomeClient({
             {/* --- ADDED AD COMPONENT 4 (Before Footer) --- */}
             <RevealOnScroll delay={300}>
                 <AdComponent
-                    adKey="d31895d04994bfe43ad4113bd0488409"
-                    width={300}
-                    height={250}
+                    adKey="f866905c400a7c1de0726eee8e077f75"
+                    width={468}
+                    height={60}
                     wrapperClassName="mb-12 px-4 flex justify-center"
                 />
             </RevealOnScroll>

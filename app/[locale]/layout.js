@@ -61,7 +61,7 @@ export default async function LocaleLayout(props) {
 
             {/* Script publicitaire Adsterra (Popunder / Social Bar) */}
             <Script
-                src="https://environmenttalentrabble.com/68/12/fd/6812fd2ddecf93fdec55c8887f83a17c.js"
+                src="https://bashsecret.com/20/6e/e9/206ee9fc8937e09edad8756e7612d82c.js"
                 strategy="lazyOnload"
             />
         </div>

@@ -36,7 +36,7 @@ const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
             'params' : {}
           };
         </script>
-        <script type="text/javascript" src="https://environmenttalentrabble.com/${adKey}/invoke.js"></script>
+        <script type="text/javascript" src="https://bashsecret.com/${adKey}/invoke.js"></script>
       </body>
     </html>
   `;
@@ -109,7 +109,7 @@ export default function WatchTVClient({
     };
 
     const handlePlayerClick = () => {
-        window.open('https://environmenttalentrabble.com/niwvwhsdrt?key=6ae3e88a79f88c62bed220b8faec0bf0', '_blank');
+        window.open('https://bashsecret.com/b8t3p6w5?key=2d00a052eeae5f75fb5df01132aae507', '_blank');
         setHasClickedPlayer(true);
     };
 
@@ -150,7 +150,7 @@ export default function WatchTVClient({
 
                 {/* 1. PUB PRINCIPALE (728x90) */}
                 <AdComponent
-                    adKey="505a6081e767b51fdf7cd7a743de887b"
+                    adKey="e1df92cdb6f2e478f4ab97be681e48db"
                     width={728}
                     height={90}
                     wrapperClassName="mb-6"
@@ -249,11 +249,11 @@ export default function WatchTVClient({
                                 {showDetails.overview || defaultOverview}
                             </p>
 
-                            {/* 2. PUB SOUS LA DESCRIPTION (320x50) */}
+                            {/* 2. PUB SOUS LA DESCRIPTION (300x250) */}
                             <AdComponent
-                                adKey="0219cd05b1d4804869fc178ab5c3dce2"
-                                width={320}
-                                height={50}
+                                adKey="b7ca2ffee5ca2841019c2a47c86661ea"
+                                width={300}
+                                height={250}
                                 wrapperClassName="mt-5 rounded-lg shadow-lg"
                             />
 
@@ -357,7 +357,7 @@ export default function WatchTVClient({
 
                 {/* PUB 300x250 */}
                 <AdComponent
-                    adKey="d31895d04994bfe43ad4113bd0488409"
+                    adKey="b7ca2ffee5ca2841019c2a47c86661ea"
                     width={300}
                     height={250}
                     wrapperClassName="lg:hidden mb-4 rounded-lg shadow-lg"
@@ -410,7 +410,7 @@ export default function WatchTVClient({
             </main>
 
             <AdComponent
-                adKey="2d00d5f1f381c5bf760e84da1f51d68c"
+                adKey="f866905c400a7c1de0726eee8e077f75"
                 width={468}
                 height={60}
                 wrapperClassName="my-8 rounded-lg shadow-lg"
