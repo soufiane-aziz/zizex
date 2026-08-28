@@ -298,57 +298,49 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
 
 // --- Production balanced ads ---
 const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
-    const containerRef = useRef(null);
-
-    useEffect(() => {
-        if (typeof window === "undefined" || !containerRef.current) return;
-
-        containerRef.current.innerHTML = '';
-
-        const iframe = document.createElement('iframe');
-        iframe.width = `${width}`;
-        iframe.height = `${height}`;
-        iframe.style.border = 'none';
-        iframe.style.overflow = 'hidden';
-        iframe.style.background = 'transparent';
-        iframe.scrolling = 'no';
-
-        containerRef.current.appendChild(iframe);
-
-        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-        if (iframeDoc) {
-            iframeDoc.open();
-            iframeDoc.write(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <style>body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; background: transparent; }</style>
-          </head>
-          <body>
-            <script type="text/javascript">
-              atOptions = {
-                'key' : '${adKey}',
-                'format' : 'iframe',
-                'height' : ${height},
-                'width' : ${width},
-                'params' : {}
-              };
-            </script>
-            <script type="text/javascript" src="https://bashsecret.com/${adKey}/invoke.js"></script>
-          </body>
-        </html>
-      `);
-            iframeDoc.close();
-        }
-    }, [adKey, width, height]);
+    const srcDoc = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background: transparent; 
+            overflow: hidden; 
+          }
+        </style>
+      </head>
+      <body>
+        <script type="text/javascript">
+          atOptions = {
+            'key' : '${adKey}',
+            'format' : 'iframe',
+            'height' : ${height},
+            'width' : ${width},
+            'params' : {}
+          };
+        </script>
+        <script type="text/javascript" src="https://bashsecret.com/${adKey}/invoke.js"></script>
+      </body>
+    </html>
+  `;
 
     return (
-        <div className={`w-full flex justify-center items-center overflow-hidden ${wrapperClassName}`}>
-            <div
-                ref={containerRef}
-                style={{ width: '100%', maxWidth: `${width}px`, minHeight: `${height}px` }}
-                className="clear-both flex justify-center items-center overflow-x-auto overflow-y-hidden origin-center transform scale-[0.85] sm:scale-95 md:scale-100"
-            />
+        <div className={`w-full flex justify-center items-center overflow-hidden ${wrapperClassName}`} style={{ minHeight: `${height}px` }}>
+            <iframe
+                srcDoc={srcDoc}
+                width={width}
+                height={height}
+                frameBorder="0"
+                scrolling="no"
+                title="Advertisement"
+                style={{ display: 'block', maxWidth: '100%', border: 'none', background: 'transparent' }}
+            ></iframe>
         </div>
     );
 };
@@ -600,9 +592,9 @@ export default function HomeClient({
                         {index === 2 && !expandedCategoryId && (
                             <RevealOnScroll delay={Math.min((index + 1) * 50, 300)}>
                                 <AdComponent
-                                    adKey="faa2a02f6d8302209a4adbf8333b74b2"
-                                    width={160}
-                                    height={600}
+                                    adKey="b7ca2ffee5ca2841019c2a47c86661ea"
+                                    width={300}
+                                    height={250}
                                     wrapperClassName="mb-14 px-4 bg-black/20 rounded-lg py-4 border border-white/5 shadow-2xl"
                                 />
                             </RevealOnScroll>
