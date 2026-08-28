@@ -118,9 +118,16 @@ export async function generateMetadata(props) {
         }
     };
 
+    const keywords = isAr
+        ? [`مسلسل ${showName}`, `شاهد ${showName} الموسم ${seasonNum} الحلقة ${episodeNum}`, `${showName} حلقة ${episodeNum} مترجم`, `تحميل ${showName}`]
+        : isFr
+            ? [`regarder ${showName}`, `${showName} saison ${seasonNum} episode ${episodeNum}`, `${showName} streaming vf`, `serie ${showName} streaming`]
+            : [`watch ${showName} online`, `${showName} season ${seasonNum} episode ${episodeNum}`, `stream ${showName} free`, `${showName} S${seasonNum}E${episodeNum} HD`];
+
     return {
         title: docTitle,
         description: docDesc,
+        keywords: keywords,
         alternates,
         openGraph: {
             title: docTitle,

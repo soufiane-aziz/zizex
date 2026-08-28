@@ -35,6 +35,29 @@ async function fetchPopularFromTMDB(type: string, pages = 20) {
     }
 }
 
+async function fetchTrendingFromTMDB(type: string, pages = 10) {
+    if (!API_KEY) return [];
+    const pageNumbers = Array.from({ length: pages }, (_, i) => i + 1);
+    try {
+        const responses = await Promise.all(
+            pageNumbers.map(page =>
+                fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}&page=${page}`, { next: { revalidate: 86400 } })
+                    .then(res => res.ok ? res.json() : null)
+                    .catch(() => null)
+            )
+        );
+        let allResults: any[] = [];
+        responses.forEach(data => {
+            if (data && data.results) {
+                allResults = allResults.concat(data.results);
+            }
+        });
+        return allResults;
+    } catch {
+        return [];
+    }
+}
+
 function safeDateString(dateStr?: string | null): string {
     const now = new Date();
     const todayStr = now.toISOString().split('T')[0];
@@ -101,10 +124,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         });
     });
 
-    // 2. Movies
-    const popularMovies = await fetchPopularFromTMDB('movie', 20);
-    popularMovies.forEach(movie => {
+    const seenIds = new Set<string>();
+
+    // 2. Movies (Popular & Trending)
+    const [popularMovies, trendingMovies] = await Promise.all([
+        fetchPopularFromTMDB('movie', 25),
+        fetchTrendingFromTMDB('movie', 10)
+    ]);
+    const allMovies = [...popularMovies, ...trendingMovies];
+
+    allMovies.forEach(movie => {
         if (!movie || !movie.id || !movie.title) return;
+        const key = `movie-${movie.id}`;
+        if (seenIds.has(key)) return;
+        seenIds.add(key);
+
         const movieSlug = createSlug(movie.title, movie.id, 'movie');
         LOCALES.forEach(locale => {
             const path = `/movie/${movieSlug}`;
@@ -124,10 +158,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         });
     });
 
-    // 3. TV Series
-    const popularTv = await fetchPopularFromTMDB('tv', 20);
-    popularTv.forEach(show => {
+    // 3. TV Series (Popular & Trending)
+    const [popularTv, trendingTv] = await Promise.all([
+        fetchPopularFromTMDB('tv', 25),
+        fetchTrendingFromTMDB('tv', 10)
+    ]);
+    const allTv = [...popularTv, ...trendingTv];
+
+    allTv.forEach(show => {
         if (!show || !show.id || !show.name) return;
+        const key = `tv-${show.id}`;
+        if (seenIds.has(key)) return;
+        seenIds.add(key);
+
         const tvSlug = createSlug(show.name, show.id, 'tv');
         LOCALES.forEach(locale => {
             const path = `/tv/${tvSlug}/season-1/episode-1`;

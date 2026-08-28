@@ -1,5 +1,6 @@
 import React, { cache } from 'react';
 import HomeClient from '../../../../components/HomeClient';
+import { createSlug } from '../../../../lib/slug';
 
 export const revalidate = 86400; // 24 hours caching on Edge CDN
 
@@ -112,14 +113,63 @@ export default async function LocalizedGenrePage(props) {
         tvGenreId: genreConfig?.tv,
     };
 
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
+    const canonicalUrl = `${SITE_URL}/${locale}/genre/${cleanSlug}`;
+
+    const collectionLd = {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        'name': `${categoryTitle} Movies & TV Shows - ZizHub`,
+        'description': `Explore top ${categoryTitle} movies and TV shows streaming on ZizHub. Free full HD stream without ads limits.`,
+        'url': canonicalUrl,
+        'mainEntity': {
+            '@type': 'ItemList',
+            'itemListElement': blendedList.slice(0, 20).map((item, index) => ({
+                '@type': 'ListItem',
+                'position': index + 1,
+                'name': item.title || item.name,
+                'url': `${SITE_URL}/${locale}/${item.media_type || 'movie'}/${createSlug(item.title || item.name, item.id, item.media_type || 'movie')}`
+            }))
+        }
+    };
+
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+            {
+                '@type': 'ListItem',
+                'position': 1,
+                'name': locale === 'ar' ? 'الرئيسية' : locale === 'fr' ? 'Accueil' : 'Home',
+                'item': `${SITE_URL}/${locale}`
+            },
+            {
+                '@type': 'ListItem',
+                'position': 2,
+                'name': categoryTitle,
+                'item': canonicalUrl
+            }
+        ]
+    };
+
     return (
-        <HomeClient
-            initialHeroMovies={heroMovies}
-            initialCategories={[categoryRow]}
-            contentType="all"
-            filterType="default"
-            locale={locale}
-        />
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+            />
+            <HomeClient
+                initialHeroMovies={heroMovies}
+                initialCategories={[categoryRow]}
+                contentType="all"
+                filterType="default"
+                locale={locale}
+            />
+        </>
     );
 }
 

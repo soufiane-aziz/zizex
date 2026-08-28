@@ -89,9 +89,18 @@ export async function generateMetadata(props) {
         }
     };
 
+    const genresList = (movieDetails.genres || []).map(g => g.name).join(', ');
+    const year = movieDetails.release_date ? movieDetails.release_date.split('-')[0] : '';
+    const keywords = isAr
+        ? [`شاهد ${movieTitle}`, `فيلم ${movieTitle} مترجم`, `${movieTitle} كامل HD`, `تحميل فيلم ${movieTitle}`, `أفلام ${year}`, genresList]
+        : isFr
+            ? [`regarder ${movieTitle}`, `film ${movieTitle} streaming vf`, `${movieTitle} complet hd`, `telecharger ${movieTitle}`, `films ${year}`, genresList]
+            : [`watch ${movieTitle} online`, `stream ${movieTitle} free`, `${movieTitle} full movie HD`, `${movieTitle} ${year}`, `watch ${movieTitle} HD`, genresList];
+
     return {
         title: docTitle,
         description: docDesc,
+        keywords: keywords,
         alternates,
         openGraph: {
             title: docTitle,
