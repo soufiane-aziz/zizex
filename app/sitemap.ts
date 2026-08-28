@@ -58,6 +58,14 @@ async function fetchTrendingFromTMDB(type: string, pages = 10) {
     }
 }
 
+function safeUrl(url: string): string {
+    try {
+        return encodeURI(url);
+    } catch {
+        return url;
+    }
+}
+
 function safeDateString(dateStr?: string | null): string {
     const now = new Date();
     const todayStr = now.toISOString().split('T')[0];
@@ -92,16 +100,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // 1. Home & Genre paths for each locale
     LOCALES.forEach(locale => {
         sitemapEntries.push({
-            url: `${SITE_URL}/${locale}`,
+            url: safeUrl(`${SITE_URL}/${locale}`),
             lastModified: todayDate,
             changeFrequency: 'daily',
             priority: 1.0,
             alternates: {
                 languages: {
-                    'en': `${SITE_URL}/en`,
-                    'fr': `${SITE_URL}/fr`,
-                    'ar': `${SITE_URL}/ar`,
-                    'x-default': `${SITE_URL}/en`,
+                    'en': safeUrl(`${SITE_URL}/en`),
+                    'fr': safeUrl(`${SITE_URL}/fr`),
+                    'ar': safeUrl(`${SITE_URL}/ar`),
+                    'x-default': safeUrl(`${SITE_URL}/en`),
                 }
             }
         });
@@ -110,12 +118,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             const genrePath = `/genre/${slug}`;
             const alternates: Record<string, string> = {};
             LOCALES.forEach(loc => {
-                alternates[loc] = `${SITE_URL}/${loc}${genrePath}`;
+                alternates[loc] = safeUrl(`${SITE_URL}/${loc}${genrePath}`);
             });
-            alternates['x-default'] = `${SITE_URL}/en${genrePath}`;
+            alternates['x-default'] = safeUrl(`${SITE_URL}/en${genrePath}`);
 
             sitemapEntries.push({
-                url: `${SITE_URL}/${locale}${genrePath}`,
+                url: safeUrl(`${SITE_URL}/${locale}${genrePath}`),
                 lastModified: todayDate,
                 changeFrequency: 'weekly',
                 priority: 0.7,
@@ -144,12 +152,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             const path = `/movie/${movieSlug}`;
             const alternates: Record<string, string> = {};
             LOCALES.forEach(loc => {
-                alternates[loc] = `${SITE_URL}/${loc}${path}`;
+                alternates[loc] = safeUrl(`${SITE_URL}/${loc}${path}`);
             });
-            alternates['x-default'] = `${SITE_URL}/en${path}`;
+            alternates['x-default'] = safeUrl(`${SITE_URL}/en${path}`);
 
             sitemapEntries.push({
-                url: `${SITE_URL}/${locale}${path}`,
+                url: safeUrl(`${SITE_URL}/${locale}${path}`),
                 lastModified: safeDateString(movie.release_date),
                 changeFrequency: 'weekly',
                 priority: 0.8,
@@ -176,12 +184,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             const path = `/tv/${tvSlug}/season-1/episode-1`;
             const alternates: Record<string, string> = {};
             LOCALES.forEach(loc => {
-                alternates[loc] = `${SITE_URL}/${loc}${path}`;
+                alternates[loc] = safeUrl(`${SITE_URL}/${loc}${path}`);
             });
-            alternates['x-default'] = `${SITE_URL}/en${path}`;
+            alternates['x-default'] = safeUrl(`${SITE_URL}/en${path}`);
 
             sitemapEntries.push({
-                url: `${SITE_URL}/${locale}${path}`,
+                url: safeUrl(`${SITE_URL}/${locale}${path}`),
                 lastModified: safeDateString(show.first_air_date),
                 changeFrequency: 'weekly',
                 priority: 0.8,
