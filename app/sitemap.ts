@@ -35,20 +35,21 @@ async function fetchPopularFromTMDB(type: string, pages = 20) {
     }
 }
 
-function safeDate(dateStr?: string | null): Date {
-    if (!dateStr || typeof dateStr !== 'string') return new Date();
+function safeDateString(dateStr?: string | null): string {
+    const today = new Date().toISOString().split('T')[0];
+    if (!dateStr || typeof dateStr !== 'string') return today;
     const clean = dateStr.trim();
-    if (!clean || clean.length < 4) return new Date();
+    if (!clean || clean.length < 4) return today;
     
     try {
         const d = new Date(clean);
         if (d instanceof Date && !isNaN(d.getTime()) && d.getFullYear() >= 1900 && d.getFullYear() <= 2100) {
-            return d;
+            return d.toISOString().split('T')[0];
         }
     } catch {
-        // Fallback to current date on any parsing exception
+        // Fallback to today's date in YYYY-MM-DD format
     }
-    return new Date();
+    return today;
 }
 
 const GENRE_SLUGS = [
@@ -58,12 +59,13 @@ const GENRE_SLUGS = [
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const sitemapEntries: MetadataRoute.Sitemap = [];
+    const todayDate = new Date().toISOString().split('T')[0];
 
     // 1. Home & Genre paths for each locale
     LOCALES.forEach(locale => {
         sitemapEntries.push({
             url: `${SITE_URL}/${locale}`,
-            lastModified: new Date(),
+            lastModified: todayDate,
             changeFrequency: 'daily',
             priority: 1.0,
             alternates: {
@@ -86,7 +88,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
             sitemapEntries.push({
                 url: `${SITE_URL}/${locale}${genrePath}`,
-                lastModified: new Date(),
+                lastModified: todayDate,
                 changeFrequency: 'weekly',
                 priority: 0.7,
                 alternates: { languages: alternates }
@@ -109,7 +111,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
             sitemapEntries.push({
                 url: `${SITE_URL}/${locale}${path}`,
-                lastModified: safeDate(movie.release_date),
+                lastModified: safeDateString(movie.release_date),
                 changeFrequency: 'weekly',
                 priority: 0.8,
                 alternates: { languages: alternates },
@@ -132,7 +134,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
             sitemapEntries.push({
                 url: `${SITE_URL}/${locale}${path}`,
-                lastModified: safeDate(show.first_air_date),
+                lastModified: safeDateString(show.first_air_date),
                 changeFrequency: 'weekly',
                 priority: 0.8,
                 alternates: { languages: alternates },
