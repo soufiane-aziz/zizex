@@ -11,7 +11,7 @@ const inter = Inter({
 export const metadata = {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app'),
     verification: {
-        google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+        google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM',
     },
 };
 

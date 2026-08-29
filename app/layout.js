@@ -60,6 +60,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
       <head>
+        <meta name="google-site-verification" content="RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM" />
         <link rel="preconnect" href="https://image.tmdb.org" />
         <link rel="dns-prefetch" href="https://image.tmdb.org" />
         <link rel="preconnect" href="https://api.themoviedb.org" />
