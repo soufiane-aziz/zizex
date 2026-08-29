@@ -5,10 +5,36 @@ import { Analytics } from '@vercel/analytics/next';
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app'),
   title: 'ZizHub - Streaming Platform',
-  description: 'Watch your favorite movies and TV shows free in HD',
+  description: 'Watch your favorite movies and TV shows free in HD on ZizHub.',
   icons: {
-    icon: '/favicon.ico',
-    apple: '/icon-192.png',
+    icon: [
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+  },
+  openGraph: {
+    siteName: 'ZizHub',
+    title: 'ZizHub - Free Movies & TV Shows Streaming Platform',
+    description: 'Stream thousands of top movies and TV series free in full HD on ZizHub.',
+    url: 'https://zizhub.vercel.app',
+    type: 'website',
+    images: [
+      {
+        url: '/icon-512.png',
+        width: 512,
+        height: 512,
+        alt: 'ZizHub Streaming Platform Logo',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ZizHub - Free Movies & TV Shows Streaming',
+    description: 'Stream thousands of top movies and TV series free in full HD on ZizHub.',
+    images: ['/icon-512.png'],
   },
   robots: {
     index: true,
