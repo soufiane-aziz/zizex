@@ -36,6 +36,13 @@ export const metadata = {
     description: 'Stream thousands of top movies and TV series free in full HD on ZizHub.',
     images: ['/icon-512.png'],
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM',
+    yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || undefined,
+    other: {
+      'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION || undefined,
+    },
+  },
   robots: {
     index: true,
     follow: true,
