@@ -95,13 +95,11 @@ const GENRE_SLUGS = [
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const sitemapEntries: MetadataRoute.Sitemap = [];
-    const todayDate = new Date().toISOString().split('T')[0];
 
     // 1. Home & Genre paths for each locale
     LOCALES.forEach(locale => {
         sitemapEntries.push({
             url: safeUrl(`${SITE_URL}/${locale}`),
-            lastModified: todayDate,
             changeFrequency: 'daily',
             priority: 1.0,
             alternates: {
@@ -124,7 +122,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
             sitemapEntries.push({
                 url: safeUrl(`${SITE_URL}/${locale}${genrePath}`),
-                lastModified: todayDate,
                 changeFrequency: 'weekly',
                 priority: 0.7,
                 alternates: { languages: alternates }
@@ -158,7 +155,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
             sitemapEntries.push({
                 url: safeUrl(`${SITE_URL}/${locale}${path}`),
-                lastModified: safeDateString(movie.release_date),
                 changeFrequency: 'weekly',
                 priority: 0.8,
                 alternates: { languages: alternates },
@@ -190,7 +186,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
             sitemapEntries.push({
                 url: safeUrl(`${SITE_URL}/${locale}${path}`),
-                lastModified: safeDateString(show.first_air_date),
                 changeFrequency: 'weekly',
                 priority: 0.8,
                 alternates: { languages: alternates },
