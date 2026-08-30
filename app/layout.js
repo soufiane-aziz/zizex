@@ -26,10 +26,10 @@ export const metadata = {
     type: 'website',
     images: [
       {
-        url: '/icon-512.png',
-        width: 512,
-        height: 512,
-        alt: 'ZizHub Streaming Platform Logo',
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'ZizHub - Watch Movies & TV Shows Free in HD',
       },
     ],
   },
@@ -37,7 +37,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'ZizHub - Free Movies & TV Shows Streaming',
     description: 'Stream thousands of top movies and TV series free in full HD on ZizHub.',
-    images: ['/icon-512.png'],
+    images: ['/og-image.png'],
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM',

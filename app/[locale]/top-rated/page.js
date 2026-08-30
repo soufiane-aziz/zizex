@@ -73,9 +73,9 @@ export async function generateMetadata(props) {
             siteName: 'ZizHub',
             images: [
                 {
-                    url: `${SITE_URL}/icon-512.png`,
-                    width: 512,
-                    height: 512,
+                    url: `${SITE_URL}/og-image.png`,
+                    width: 1200,
+                    height: 630,
                     alt: 'ZizHub Top Rated',
                 }
             ],
