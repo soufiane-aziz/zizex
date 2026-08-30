@@ -45,13 +45,13 @@ export async function generateMetadata(props) {
         ? 'ZizHub - شاهد أفلام ومسلسلات أونلاين مجاناً'
         : isFr
             ? 'ZizHub - Regarder Films et Séries en Streaming Gratuit'
-            : 'ZizHub - Watch Movies & TV Shows Online Free in HD';
+            : 'ZizHub - Watch Movies & TV Shows Online Free';
 
     const description = isAr
-        ? 'استمتع بأفضل الأفلام والمسلسلات مجاناً وبجودة عالية HD على ZizHub.'
+        ? 'استمتع بأفضل الأفلام والمسلسلات مجاناً وبجودة عالية على ZizHub.'
         : isFr
-            ? 'Regardez gratuitement les meilleurs films et séries en HD sur ZizHub.'
-            : 'Stream the best movies and TV shows for free in HD on ZizHub.';
+            ? 'Regardez gratuitement les meilleurs films et séries sur ZizHub.'
+            : 'Stream the best movies and TV shows for free on ZizHub.';
 
     const keywords = isAr
         ? ['موقع zizhub', 'مشاهدة افلام اونلاين', 'افلام ومسلسلات مجانا', 'موقع سيما', 'افلام مترجمة اونلاين', 'مسلسلات رمضان 2026', 'تحميل افلام مجانا', 'موقع مشاهدة افلام', 'افلام اكشن مترجمة', 'مسلسلات اجنبية مترجمة', 'موقع برستيج', 'ايجي بست البديل', 'السينما للجميع', 'افلام اون لاين hd', 'موقع سيما فور يو', 'مشاهدة مسلسلات اونلاين', 'افلام رعب مترجمة', 'موقع ماي سيما', 'افلام هندية مترجمة', 'تحميل مسلسلات مجانا', 'نتفليكس', 'موقع نتفليكس مجانا', 'ايجي بست', 'ماي سيما الاصلي', 'سيما فور يو', 'برستيج مسلسلات', 'سيما للكبار', 'عرب سيد', 'فاصل اعلاني', 'اكوام', 'توك توك سيما']
