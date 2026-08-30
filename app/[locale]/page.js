@@ -79,7 +79,7 @@ export async function generateMetadata(props) {
             siteName: 'ZizHub',
             images: [
                 {
-                    url: `${SITE_URL}/og-image.png?v=5`,
+                    url: `${SITE_URL}/og-image.png?v=6`,
                     width: 1200,
                     height: 630,
                     alt: 'ZizHub - Watch Movies & TV Shows For Free',
@@ -92,7 +92,7 @@ export async function generateMetadata(props) {
             card: 'summary_large_image',
             title,
             description,
-            images: [`${SITE_URL}/og-image.png?v=5`],
+            images: [`${SITE_URL}/og-image.png?v=6`],
         },
         keywords: isAr
             ? ['أفلام', 'مسلسلات', 'مشاهدة مجانية', 'فيلم', 'مسلسل', 'بث مباشر', 'HD']
