@@ -5,7 +5,7 @@ import { Analytics } from '@vercel/analytics/next';
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app'),
   title: 'ZizHub - Streaming Platform',
-  description: 'Watch your favorite movies and TV shows free in HD on ZizHub.',
+  description: 'Watch your favorite movies and TV shows free on ZizHub.',
   keywords: ['zizhub', 'ZizHub', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies free', 'sci-fi series online', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch free tv shows', 'best movie streaming site', 'cinema streaming free', 'Netflix', 'watch Netflix movies free', 'HBO Max streaming', 'Disney Plus free', 'TopCinema', 'EgyBest alternative', 'MyCima', 'Cima4U', 'Shahid VIP free', 'WatchIt movies'],
   icons: {
     icon: [
@@ -21,7 +21,7 @@ export const metadata = {
   openGraph: {
     siteName: 'ZizHub',
     title: 'ZizHub - Free Movies & TV Shows Streaming Platform',
-    description: 'Stream thousands of top movies and TV series free in full HD on ZizHub.',
+    description: 'Stream thousands of top movies and TV series free on ZizHub.',
     url: 'https://zizhub.vercel.app',
     type: 'website',
     images: [
@@ -36,7 +36,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'ZizHub - Free Movies & TV Shows Streaming',
-    description: 'Stream thousands of top movies and TV series free in full HD on ZizHub.',
+    description: 'Stream thousands of top movies and TV series free on ZizHub.',
     images: ['/og-image.png?v=5'],
   },
   verification: {
