@@ -13,6 +13,30 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/details',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/:locale/details',
+        destination: '/:locale',
+        permanent: true,
+      },
+      {
+        source: '/details/:path*',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/:locale/details/:path*',
+        destination: '/:locale',
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
