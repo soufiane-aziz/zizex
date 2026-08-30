@@ -463,23 +463,35 @@ export default function HomeClient({
             )}
 
             {heroMovies.length > 0 && !expandedCategoryId && (
-                <section className="relative w-full h-[95vh] sm:h-screen bg-black overflow-hidden group">
+                <section className="relative w-full h-[88vh] sm:h-screen bg-black overflow-hidden group">
                     {heroMovies.map((movie, index) => (
                         <div
                             key={movie.id}
                             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === activeHeroIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
                         >
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/35 to-transparent z-10"></div>
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/60 via-transparent to-transparent z-10"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent z-10"></div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/80 via-[#050505]/30 to-transparent z-10"></div>
 
+                            {/* Mobile Image: Vertical Poster for 100% sharp, un-cropped display on phones */}
+                            <Image
+                                src={movie.poster_path ? `${IMAGE_BASE_URL}/original${movie.poster_path}` : movie.backdrop_path ? `${IMAGE_BASE_URL}/original${movie.backdrop_path}` : '/icon-512.png'}
+                                alt={movie.title || movie.name || 'Hero poster'}
+                                fill
+                                priority={index === 0}
+                                sizes="100vw"
+                                quality={95}
+                                className={`sm:hidden w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${index === activeHeroIndex ? 'scale-105' : 'scale-100'} object-center`}
+                            />
+
+                            {/* Desktop Image: Horizontal Backdrop for widescreen displays */}
                             <Image
                                 src={movie.backdrop_path ? `${IMAGE_BASE_URL}/original${movie.backdrop_path}` : movie.poster_path ? `${IMAGE_BASE_URL}/original${movie.poster_path}` : '/icon-512.png'}
                                 alt={movie.title || movie.name || 'Hero backdrop'}
                                 fill
                                 priority={index === 0}
                                 sizes="100vw"
-                                quality={90}
-                                className={`w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${index === activeHeroIndex ? 'scale-110' : 'scale-100'} object-top sm:object-center`}
+                                quality={95}
+                                className={`hidden sm:block w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${index === activeHeroIndex ? 'scale-110' : 'scale-100'} object-center`}
                             />
                         </div>
                     ))}
