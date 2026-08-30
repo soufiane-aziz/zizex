@@ -26,7 +26,7 @@ export const metadata = {
     type: 'website',
     images: [
       {
-        url: '/og-image.png?v=2',
+        url: '/og-image.png?v=3',
         width: 1200,
         height: 630,
         alt: 'ZizHub - Watch Movies & TV Shows Free in HD',
@@ -37,7 +37,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'ZizHub - Free Movies & TV Shows Streaming',
     description: 'Stream thousands of top movies and TV series free in full HD on ZizHub.',
-    images: ['/og-image.png?v=2'],
+    images: ['/og-image.png?v=3'],
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM',
