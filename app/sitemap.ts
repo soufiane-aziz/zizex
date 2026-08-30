@@ -98,18 +98,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // 1. Home & Genre paths for each locale
     LOCALES.forEach(locale => {
-        sitemapEntries.push({
-            url: safeUrl(`${SITE_URL}/${locale}`),
-            changeFrequency: 'daily',
-            priority: 1.0,
-            alternates: {
-                languages: {
-                    'en': safeUrl(`${SITE_URL}/en`),
-                    'fr': safeUrl(`${SITE_URL}/fr`),
-                    'ar': safeUrl(`${SITE_URL}/ar`),
-                    'x-default': safeUrl(`${SITE_URL}/en`),
+        const corePages = [
+            { path: '', priority: 1.0, freq: 'daily' },
+            { path: '/movies', priority: 0.9, freq: 'daily' },
+            { path: '/tv', priority: 0.9, freq: 'daily' },
+            { path: '/top-rated', priority: 0.8, freq: 'weekly' }
+        ];
+
+        corePages.forEach(page => {
+            sitemapEntries.push({
+                url: safeUrl(`${SITE_URL}/${locale}${page.path}`),
+                changeFrequency: page.freq as any,
+                priority: page.priority,
+                alternates: {
+                    languages: {
+                        'en': safeUrl(`${SITE_URL}/en${page.path}`),
+                        'fr': safeUrl(`${SITE_URL}/fr${page.path}`),
+                        'ar': safeUrl(`${SITE_URL}/ar${page.path}`),
+                        'x-default': safeUrl(`${SITE_URL}/en${page.path}`),
+                    }
                 }
-            }
+            });
         });
 
         GENRE_SLUGS.forEach(slug => {

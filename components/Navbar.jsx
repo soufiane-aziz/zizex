@@ -160,10 +160,10 @@ export default function Navbar({ locale }) {
     router.push(dynamicHref);
   };
 
-  const isHomeActive = activeType === 'all' && activeFilter === 'default';
-  const isMoviesActive = activeType === 'movie' && activeFilter === 'default';
-  const isTvActive = activeType === 'tv' && activeFilter === 'default';
-  const isTopRatedActive = activeFilter === 'top_rated';
+  const isHomeActive = pathname === `/${resolvedLocale}` || pathname === `/${resolvedLocale}/`;
+  const isMoviesActive = pathname.includes(`/${resolvedLocale}/movies`);
+  const isTvActive = pathname.includes(`/${resolvedLocale}/tv`);
+  const isTopRatedActive = pathname.includes(`/${resolvedLocale}/top-rated`);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-12 py-4 bg-gradient-to-b from-black/95 to-transparent backdrop-blur-md">
@@ -187,13 +187,13 @@ export default function Navbar({ locale }) {
         <Link href={`${homeBase}`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isHomeActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
           Home
         </Link>
-        <Link href={`${homeBase}?type=movie`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isMoviesActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+        <Link href={`${homeBase}/movies`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isMoviesActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
           Movies
         </Link>
-        <Link href={`${homeBase}?type=tv`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isTvActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+        <Link href={`${homeBase}/tv`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isTvActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
           TV
         </Link>
-        <Link href={`${homeBase}?filter=top_rated`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isTopRatedActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+        <Link href={`${homeBase}/top-rated`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isTopRatedActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
           Top Rated
         </Link>
       </div>
@@ -303,13 +303,13 @@ export default function Navbar({ locale }) {
               <Link href={`${homeBase}`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isHomeActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
                 Home
               </Link>
-              <Link href={`${homeBase}?type=movie`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isMoviesActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
+              <Link href={`${homeBase}/movies`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isMoviesActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
                 Movies
               </Link>
-              <Link href={`${homeBase}?type=tv`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isTvActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
+              <Link href={`${homeBase}/tv`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isTvActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
                 TV
               </Link>
-              <Link href={`${homeBase}?filter=top_rated`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isTopRatedActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
+              <Link href={`${homeBase}/top-rated`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isTopRatedActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
                 Top Rated
               </Link>
             </div>
