@@ -158,10 +158,10 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
                     <div className="relative rounded-lg overflow-hidden aspect-[2/3] transform transition-all duration-300 ease-out hover:-translate-y-1 sm:hover:-translate-y-2.5 hover:shadow-[0_10px_20px_rgba(245,158,11,0.2)] sm:hover:shadow-[0_15px_30px_rgba(245,158,11,0.25)] group/card cursor-pointer border border-transparent hover:border-amber-500/60 bg-[#121212]">
 
                         <Image
-                            src={movie.poster_path ? `${IMAGE_BASE_URL}/w342${movie.poster_path}` : "/icon-512.png"}
+                            src={movie.poster_path ? `${IMAGE_BASE_URL}/w500${movie.poster_path}` : "/icon-512.png"}
                             alt={movie.title || movie.name || 'Poster'}
-                            width={342}
-                            height={513}
+                            width={500}
+                            height={750}
                             sizes="(max-width: 640px) 120px, (max-width: 768px) 160px, (max-width: 1024px) 210px, 240px"
                             className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover/card:scale-105"
                             loading="lazy"
@@ -473,11 +473,12 @@ export default function HomeClient({
                             <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/60 via-transparent to-transparent z-10"></div>
 
                             <Image
-                                src={`${IMAGE_BASE_URL}/w1280${movie.backdrop_path}`}
+                                src={movie.backdrop_path ? `${IMAGE_BASE_URL}/original${movie.backdrop_path}` : movie.poster_path ? `${IMAGE_BASE_URL}/original${movie.poster_path}` : '/icon-512.png'}
                                 alt={movie.title || movie.name || 'Hero backdrop'}
                                 fill
                                 priority={index === 0}
                                 sizes="100vw"
+                                quality={90}
                                 className={`w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${index === activeHeroIndex ? 'scale-110' : 'scale-100'} object-top sm:object-center`}
                             />
                         </div>
