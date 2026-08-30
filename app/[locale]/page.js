@@ -42,10 +42,10 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const title = isAr
-        ? 'شاهد أفلام ومسلسلات أونلاين مجاناً | ZizHub'
+        ? 'ZizHub - شاهد أفلام ومسلسلات أونلاين مجاناً'
         : isFr
-            ? 'Regarder Films et Séries en Streaming Gratuit | ZizHub'
-            : 'Watch Movies & TV Shows Online Free | ZizHub';
+            ? 'ZizHub - Regarder Films et Séries en Streaming Gratuit'
+            : 'ZizHub - Watch Movies & TV Shows Online Free in HD';
 
     const description = isAr
         ? 'استمتع بأفضل الأفلام والمسلسلات مجاناً وبجودة عالية HD على ZizHub. اكتشف آلاف العناوين بالعربية، الفرنسية والإنجليزية.'

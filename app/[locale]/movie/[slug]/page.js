@@ -61,10 +61,10 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const docTitle = isAr
-        ? `شاهد ${movieTitle} أونلاين مجاناً | ZizHub`
+        ? `ZizHub | شاهد ${movieTitle} أونلاين مجاناً`
         : isFr
-            ? `Regarder ${movieTitle} en Streaming Gratuit | ZizHub`
-            : `Watch ${movieTitle} Online | ZizHub`;
+            ? `ZizHub | Regarder ${movieTitle} en Streaming Gratuit`
+            : `ZizHub | Watch ${movieTitle} Online Free`;
 
     const docDesc = movieDetails.overview
         ? movieDetails.overview.substring(0, 160)

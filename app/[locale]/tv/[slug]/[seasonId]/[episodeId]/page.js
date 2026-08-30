@@ -90,10 +90,10 @@ export async function generateMetadata(props) {
     }
 
     const docTitle = isAr
-        ? `شاهد مسلسل ${showName} الموسم ${seasonNum} الحلقة ${episodeNum} أونلاين | ZizHub`
+        ? `ZizHub | شاهد مسلسل ${showName} الموسم ${seasonNum} الحلقة ${episodeNum} أونلاين`
         : isFr
-            ? `Regarder ${showName} Saison ${seasonNum} Épisode ${episodeNum} en Streaming | ZizHub`
-            : `Watch ${showName} Season ${seasonNum} Episode ${episodeNum} Online | ZizHub`;
+            ? `ZizHub | Regarder ${showName} Saison ${seasonNum} Épisode ${episodeNum} en Streaming`
+            : `ZizHub | Watch ${showName} Season ${seasonNum} Episode ${episodeNum} Online`;
 
     const docDesc = epData && epData.overview
         ? epData.overview.substring(0, 160)
