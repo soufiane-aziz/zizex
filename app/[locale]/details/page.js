@@ -1,4 +1,4 @@
-import { redirect, RedirectType } from 'next.navigation';
+import { redirect, RedirectType } from 'next/navigation';
 import { createSlug, extractIdFromSlug } from '../../../lib/slug';
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'f82feeca535cc0132d1ab38948a70405';
