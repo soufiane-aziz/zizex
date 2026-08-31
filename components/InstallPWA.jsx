@@ -14,14 +14,11 @@ export default function InstallPWA({ locale = 'en' }) {
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
     if (isStandalone) return;
 
-    // Check localStorage to see if dismissed recently
-    const isDismissed = localStorage.getItem('zizhub_pwa_banner_dismissed');
-    if (isDismissed) {
-      const dismissedTime = parseInt(isDismissed, 10);
-      // Show again if dismissed more than 3 days ago
-      if (Date.now() - dismissedTime < 3 * 24 * 60 * 60 * 1000) {
-        return;
-      }
+    // Check if already shown today
+    const lastShown = localStorage.getItem('zizhub_pwa_banner_last_shown');
+    const today = new Date().toDateString();
+    if (lastShown === today) {
+      return;
     }
 
     // Detect iOS
@@ -55,6 +52,12 @@ export default function InstallPWA({ locale = 'en' }) {
     };
   }, []);
 
+  useEffect(() => {
+    if (showBanner) {
+      localStorage.setItem('zizhub_pwa_banner_last_shown', new Date().toDateString());
+    }
+  }, [showBanner]);
+
   const handleInstallClick = async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
@@ -74,7 +77,6 @@ export default function InstallPWA({ locale = 'en' }) {
   const handleDismiss = () => {
     setShowBanner(false);
     setShowIosInstructions(false);
-    localStorage.setItem('zizhub_pwa_banner_dismissed', Date.now().toString());
   };
 
   if (!showBanner) return null;
