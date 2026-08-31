@@ -469,8 +469,8 @@ export default function HomeClient({
                             key={movie.id}
                             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === activeHeroIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
                         >
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent z-10"></div>
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/80 via-[#050505]/30 to-transparent z-10"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent z-10"></div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/65 via-transparent to-transparent z-10"></div>
 
                             {/* Mobile Image: Vertical Poster for 100% sharp, un-cropped display on phones */}
                             <Image

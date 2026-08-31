@@ -166,7 +166,7 @@ export default function Navbar({ locale }) {
   const isTopRatedActive = pathname.includes(`/${resolvedLocale}/top-rated`);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-12 py-4 bg-gradient-to-b from-black/95 to-transparent backdrop-blur-md">
+    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-12 py-4 bg-gradient-to-b from-black/75 via-black/35 to-transparent backdrop-blur-md">
 
       {/* 1. ZONE GAUCHE : LOGO */}
       <div
