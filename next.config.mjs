@@ -3,6 +3,7 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   images: {
+    unoptimized: true,
     minimumCacheTTL: 31536000,
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [

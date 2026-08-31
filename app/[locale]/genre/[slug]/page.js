@@ -2,7 +2,7 @@ import React, { cache } from 'react';
 import HomeClient from '../../../../components/HomeClient';
 import { createSlug } from '../../../../lib/slug';
 
-export const revalidate = 86400; // 24 hours caching on Edge CDN
+export const revalidate = 604800; // 7 days caching on Edge CDN
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'f82feeca535cc0132d1ab38948a70405';
 const BASE_URL = "https://api.themoviedb.org/3";

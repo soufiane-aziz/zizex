@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { createSlug } from '../lib/slug';
 
-export const revalidate = 86400; // 24 hours CDN cache for sitemap generation
+export const revalidate = 604800; // 7 days CDN cache for sitemap generation
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'f82feeca535cc0132d1ab38948a70405';
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -17,7 +17,7 @@ async function fetchPopularFromTMDB(type: string, pages = 20) {
     try {
         const responses = await Promise.all(
             pageNumbers.map(page =>
-                fetch(`${BASE_URL}/${type}/popular?api_key=${API_KEY}&page=${page}`, { next: { revalidate: 86400 } })
+                fetch(`${BASE_URL}/${type}/popular?api_key=${API_KEY}&page=${page}`, { next: { revalidate: 604800 } })
                     .then(res => res.ok ? res.json() : null)
                     .catch(() => null)
             )
@@ -41,7 +41,7 @@ async function fetchTrendingFromTMDB(type: string, pages = 10) {
     try {
         const responses = await Promise.all(
             pageNumbers.map(page =>
-                fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}&page=${page}`, { next: { revalidate: 86400 } })
+                fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}&page=${page}`, { next: { revalidate: 604800 } })
                     .then(res => res.ok ? res.json() : null)
                     .catch(() => null)
             )
@@ -64,7 +64,7 @@ async function fetchTopRatedFromTMDB(type: string, pages = 10) {
     try {
         const responses = await Promise.all(
             pageNumbers.map(page =>
-                fetch(`${BASE_URL}/${type}/top_rated?api_key=${API_KEY}&page=${page}`, { next: { revalidate: 86400 } })
+                fetch(`${BASE_URL}/${type}/top_rated?api_key=${API_KEY}&page=${page}`, { next: { revalidate: 604800 } })
                     .then(res => res.ok ? res.json() : null)
                     .catch(() => null)
             )

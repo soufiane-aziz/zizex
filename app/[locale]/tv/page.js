@@ -1,7 +1,7 @@
 import React, { cache } from 'react';
 import HomeClient from '../../../components/HomeClient';
 
-export const revalidate = 86400;
+export const revalidate = 604800;
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'f82feeca535cc0132d1ab38948a70405';
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -9,7 +9,7 @@ const BASE_URL = "https://api.themoviedb.org/3";
 const fetchFromTMDB = cache(async (path, queryParams = '') => {
     const url = `${BASE_URL}${path}?api_key=${API_KEY}${queryParams}`;
     try {
-        const res = await fetch(url, { next: { revalidate: 86400 } });
+        const res = await fetch(url, { next: { revalidate: 604800 } });
         if (!res.ok) return null;
         return await res.json();
     } catch (err) {

@@ -7,7 +7,7 @@ const BASE_URL = "https://api.themoviedb.org/3";
 async function fetchFromTMDB(path, queryParams = '') {
     const url = `${BASE_URL}${path}?api_key=${API_KEY}${queryParams}`;
     try {
-        const res = await fetch(url, { next: { revalidate: 86400 } });
+        const res = await fetch(url, { next: { revalidate: 604800 } });
         if (!res.ok) return null;
         return await res.json();
     } catch {
