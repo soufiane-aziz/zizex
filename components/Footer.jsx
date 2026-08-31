@@ -43,7 +43,7 @@ export default function Footer() {
               <span className="text-red-600">Ziz</span>Hub
             </Link>
             <p className="text-sm text-zinc-500 max-w-sm leading-relaxed">
-              Your premium companion for tracking and discovering movies and TV shows. Built by cinephiles, for cinephiles.
+              Stream your favorite movies and TV shows for free in HD on ZizHub. The ultimate destination for movie lovers.
             </p>
           </div>
 
@@ -52,9 +52,9 @@ export default function Footer() {
             <h4 className="text-xs font-semibold uppercase tracking-widest text-zinc-300">Explore</h4>
             <ul className="space-y-3 text-sm text-zinc-500">
               <li><Link href={`/${locale}`} className="hover:text-red-500 transition-colors duration-200">Home</Link></li>
-              <li><Link href={`/${locale}?type=movie`} className="hover:text-red-500 transition-colors duration-200">Movies</Link></li>
-              <li><Link href={`/${locale}?type=tv`} className="hover:text-red-500 transition-colors duration-200">TV Shows</Link></li>
-              <li><Link href={`/${locale}?filter=top_rated`} className="hover:text-red-500 transition-colors duration-200">Top Rated</Link></li>
+              <li><Link href={`/${locale}/movies`} className="hover:text-red-500 transition-colors duration-200">Movies</Link></li>
+              <li><Link href={`/${locale}/tv`} className="hover:text-red-500 transition-colors duration-200">TV Shows</Link></li>
+              <li><Link href={`/${locale}/top-rated`} className="hover:text-red-500 transition-colors duration-200">Top Rated</Link></li>
             </ul>
           </div>
 
@@ -78,7 +78,14 @@ export default function Footer() {
                   FAQ
                 </button>
               </li>
-              <li><Link href="/contact" className="hover:text-red-500 transition-colors duration-200">Contact Support</Link></li>
+              <li>
+                <button 
+                  onClick={() => setActiveModal('contact')} 
+                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none cursor-pointer"
+                >
+                  Contact Support
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -282,6 +289,34 @@ export default function Footer() {
                   <h4 className="text-white font-medium text-base pt-2">Data Inquiries</h4>
                   <p>
                     All localized titles, descriptions, synthetic data logs, and graphic assets displayed here are rendered directly via the public TMDB API architecture. If you wish to request a content takedown, please address structural asset modifications directly to the source provider at <a href="https://www.themoviedb.org" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:underline">themoviedb.org</a>.
+                  </p>
+                </div>
+              </>
+            )}
+
+            {/* CONTENT: CONTACT SUPPORT */}
+            {activeModal === 'contact' && (
+              <>
+                <div className="mb-6 pr-8">
+                  <h3 className="text-2xl font-bold text-white tracking-tight">
+                    Contact <span className="text-red-600">Ziz</span>Hub Support
+                  </h3>
+                  <div className="h-[2px] w-12 bg-red-600 mt-2.5 rounded"></div>
+                </div>
+                <div className="space-y-4 text-sm text-zinc-400 leading-relaxed">
+                  <p>
+                    Have questions, suggestions, or technical feedback? We are here to help!
+                  </p>
+                  <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/60 space-y-2">
+                    <p className="text-white font-medium flex items-center gap-2">
+                      <i className="fa-solid fa-envelope text-red-500"></i> Email Support
+                    </p>
+                    <p className="text-zinc-400 text-xs">
+                      Send us an email anytime at <a href="mailto:a.soufiane.dev@gmail.com" className="text-red-400 underline">a.soufiane.dev@gmail.com</a> or reach out through our official community channels.
+                    </p>
+                  </div>
+                  <p className="text-xs text-zinc-500 pt-2">
+                    Our team typically responds to inquiry tickets within 24–48 hours.
                   </p>
                 </div>
               </>
