@@ -58,6 +58,29 @@ async function fetchTrendingFromTMDB(type: string, pages = 10) {
     }
 }
 
+async function fetchTopRatedFromTMDB(type: string, pages = 10) {
+    if (!API_KEY) return [];
+    const pageNumbers = Array.from({ length: pages }, (_, i) => i + 1);
+    try {
+        const responses = await Promise.all(
+            pageNumbers.map(page =>
+                fetch(`${BASE_URL}/${type}/top_rated?api_key=${API_KEY}&page=${page}`, { next: { revalidate: 86400 } })
+                    .then(res => res.ok ? res.json() : null)
+                    .catch(() => null)
+            )
+        );
+        let allResults: any[] = [];
+        responses.forEach(data => {
+            if (data && data.results) {
+                allResults = allResults.concat(data.results);
+            }
+        });
+        return allResults;
+    } catch {
+        return [];
+    }
+}
+
 function safeUrl(url: string): string {
     try {
         return encodeURI(url);
@@ -90,7 +113,8 @@ function safeDateString(dateStr?: string | null): string {
 
 const GENRE_SLUGS = [
     'action', 'adventure', 'animation', 'comedy', 'crime',
-    'documentary', 'drama', 'family', 'fantasy', 'mystery', 'sci-fi'
+    'documentary', 'drama', 'family', 'fantasy', 'mystery', 'sci-fi',
+    'horror', 'romance', 'thriller', 'war', 'western'
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -110,6 +134,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 url: safeUrl(`${SITE_URL}/${locale}${page.path}`),
                 changeFrequency: page.freq as any,
                 priority: page.priority,
+                lastModified: new Date(),
                 alternates: {
                     languages: {
                         'en': safeUrl(`${SITE_URL}/en${page.path}`),
@@ -133,6 +158,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 url: safeUrl(`${SITE_URL}/${locale}${genrePath}`),
                 changeFrequency: 'weekly',
                 priority: 0.7,
+                lastModified: new Date(),
                 alternates: { languages: alternates }
             });
         });
@@ -140,12 +166,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const seenIds = new Set<string>();
 
-    // 2. Movies (Popular & Trending)
-    const [popularMovies, trendingMovies] = await Promise.all([
-        fetchPopularFromTMDB('movie', 25),
-        fetchTrendingFromTMDB('movie', 10)
+    // 2. Movies (Popular, Trending & Top Rated)
+    const [popularMovies, trendingMovies, topRatedMovies] = await Promise.all([
+        fetchPopularFromTMDB('movie', 20),
+        fetchTrendingFromTMDB('movie', 10),
+        fetchTopRatedFromTMDB('movie', 10)
     ]);
-    const allMovies = [...popularMovies, ...trendingMovies];
+    const allMovies = [...popularMovies, ...trendingMovies, ...topRatedMovies];
 
     allMovies.forEach(movie => {
         if (!movie || !movie.id || !movie.title) return;
@@ -154,6 +181,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         seenIds.add(key);
 
         const movieSlug = createSlug(movie.title, movie.id, 'movie');
+        const releaseDate = safeDateString(movie.release_date);
+
         LOCALES.forEach(locale => {
             const path = `/movie/${movieSlug}`;
             const alternates: Record<string, string> = {};
@@ -166,17 +195,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 url: safeUrl(`${SITE_URL}/${locale}${path}`),
                 changeFrequency: 'weekly',
                 priority: 0.8,
+                lastModified: releaseDate,
                 alternates: { languages: alternates },
             });
         });
     });
 
-    // 3. TV Series (Popular & Trending)
-    const [popularTv, trendingTv] = await Promise.all([
-        fetchPopularFromTMDB('tv', 25),
-        fetchTrendingFromTMDB('tv', 10)
+    // 3. TV Series (Popular, Trending & Top Rated)
+    const [popularTv, trendingTv, topRatedTv] = await Promise.all([
+        fetchPopularFromTMDB('tv', 20),
+        fetchTrendingFromTMDB('tv', 10),
+        fetchTopRatedFromTMDB('tv', 10)
     ]);
-    const allTv = [...popularTv, ...trendingTv];
+    const allTv = [...popularTv, ...trendingTv, ...topRatedTv];
 
     allTv.forEach(show => {
         if (!show || !show.id || !show.name) return;
@@ -185,6 +216,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         seenIds.add(key);
 
         const tvSlug = createSlug(show.name, show.id, 'tv');
+        const airDate = safeDateString(show.first_air_date);
+
         LOCALES.forEach(locale => {
             const path = `/tv/${tvSlug}/season-1/episode-1`;
             const alternates: Record<string, string> = {};
@@ -197,6 +230,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 url: safeUrl(`${SITE_URL}/${locale}${path}`),
                 changeFrequency: 'weekly',
                 priority: 0.8,
+                lastModified: airDate,
                 alternates: { languages: alternates },
             });
         });
