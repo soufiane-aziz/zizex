@@ -89,15 +89,11 @@ export async function generateMetadata(props) {
         episodeTitle = epData.name;
     }
 
-    let docTitle = isAr
-        ? `ZizHub | ${showName} S${seasonNum} E${episodeNum}`
+    const docTitle = isAr
+        ? `ZizHub | شاهد مسلسل ${showName} الموسم ${seasonNum} الحلقة ${episodeNum} أونلاين`
         : isFr
-            ? `ZizHub | ${showName} S${seasonNum} E${episodeNum}`
-            : `ZizHub | Watch ${showName} S${seasonNum} E${episodeNum}`;
-
-    if (docTitle.length > 65) {
-        docTitle = docTitle.substring(0, 62) + '...';
-    }
+            ? `ZizHub | Regarder ${showName} Saison ${seasonNum} Épisode ${episodeNum} en Streaming`
+            : `ZizHub | Watch ${showName} Season ${seasonNum} Episode ${episodeNum} Online`;
 
     const docDesc = epData && epData.overview
         ? epData.overview.substring(0, 160)
@@ -306,7 +302,6 @@ export default async function LocalizedEpisodePage(props) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
             />
-            <h1 className="sr-only">{showName} Season {seasonNum} Episode {episodeNum}</h1>
             <WatchTVClient
                 id={showId}
                 showDetails={showDetails}

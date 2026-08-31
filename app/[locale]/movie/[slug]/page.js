@@ -60,15 +60,11 @@ export async function generateMetadata(props) {
     const isAr = locale === 'ar';
     const isFr = locale === 'fr';
 
-    let docTitle = isAr
-        ? `ZizHub | ${movieTitle}`
+    const docTitle = isAr
+        ? `ZizHub | شاهد ${movieTitle} أونلاين مجاناً`
         : isFr
-            ? `ZizHub | Regarder ${movieTitle}`
-            : `ZizHub | Watch ${movieTitle} Free`;
-
-    if (docTitle.length > 65) {
-        docTitle = docTitle.substring(0, 62) + '...';
-    }
+            ? `ZizHub | Regarder ${movieTitle} en Streaming Gratuit`
+            : `ZizHub | Watch ${movieTitle} Online Free`;
 
     const docDesc = movieDetails.overview
         ? movieDetails.overview.substring(0, 160)
@@ -254,7 +250,6 @@ export default async function LocalizedMoviePage(props) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
             />
-            <h1 className="sr-only">{movieTitle}</h1>
             <WatchMovieClient
                 id={movieId}
                 movieDetails={movieDetails}

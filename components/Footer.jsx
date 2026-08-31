@@ -78,14 +78,7 @@ export default function Footer() {
                   FAQ
                 </button>
               </li>
-              <li>
-                <button 
-                  onClick={() => setActiveModal('contact')} 
-                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none cursor-pointer"
-                >
-                  Contact Support
-                </button>
-              </li>
+              <li><Link href="/contact" className="hover:text-red-500 transition-colors duration-200">Contact Support</Link></li>
             </ul>
           </div>
 
