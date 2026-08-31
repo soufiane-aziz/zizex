@@ -183,17 +183,17 @@ export default function Navbar({ locale }) {
       </div>
 
       {/* 2. ZONE CENTRALE : MENU PC & TABLETTE (PARFAITEMENT CENTRÉ) */}
-      <div className="hidden sm:flex flex-1 items-center justify-center gap-6 md:gap-8 lg:gap-10 text-xs md:text-sm tracking-wide uppercase shrink-0 mx-4">
-        <Link href={`${homeBase}`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isHomeActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+      <div className="hidden sm:flex flex-1 items-center justify-center gap-6 md:gap-8 lg:gap-10 text-xs md:text-sm tracking-wider uppercase shrink-0 mx-4">
+        <Link href={`${homeBase}`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`relative py-1 cursor-pointer focus:outline-none transition-all duration-300 text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isHomeActive ? 'font-black after:w-full' : 'font-bold after:w-0 hover:after:w-full'}`}>
           Home
         </Link>
-        <Link href={`${homeBase}/movies`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isMoviesActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+        <Link href={`${homeBase}/movies`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`relative py-1 cursor-pointer focus:outline-none transition-all duration-300 text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isMoviesActive ? 'font-black after:w-full' : 'font-bold after:w-0 hover:after:w-full'}`}>
           Movies
         </Link>
-        <Link href={`${homeBase}/tv`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isTvActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+        <Link href={`${homeBase}/tv`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`relative py-1 cursor-pointer focus:outline-none transition-all duration-300 text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isTvActive ? 'font-black after:w-full' : 'font-bold after:w-0 hover:after:w-full'}`}>
           TV
         </Link>
-        <Link href={`${homeBase}/top-rated`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`transition-colors duration-300 hover:text-red-600 cursor-pointer focus:outline-none ${isTopRatedActive ? 'text-red-600 font-extrabold' : 'text-gray-300 font-medium'}`}>
+        <Link href={`${homeBase}/top-rated`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`relative py-1 cursor-pointer focus:outline-none transition-all duration-300 text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isTopRatedActive ? 'font-black after:w-full' : 'font-bold after:w-0 hover:after:w-full'}`}>
           Top Rated
         </Link>
       </div>
@@ -299,17 +299,17 @@ export default function Navbar({ locale }) {
 
           {/* Dropdown Menu Mobile Déroulant */}
           {isMobileMenuOpen && (
-            <div className="absolute right-0 top-full mt-4 w-48 bg-black/95 backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 py-1.5 flex flex-col text-sm uppercase tracking-wider font-semibold animate-[fadeIn_0.2s_ease-out]">
-              <Link href={`${homeBase}`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isHomeActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
+            <div className="absolute right-0 top-full mt-4 w-48 bg-black/95 backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 py-1.5 flex flex-col text-sm uppercase tracking-wider font-bold animate-[fadeIn_0.2s_ease-out]">
+              <Link href={`${homeBase}`} onClick={() => setIsMobileMenuOpen(false)} className={`relative px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] text-white after:content-[''] after:absolute after:bottom-1 after:left-5 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isHomeActive ? 'font-black border-l-2 border-red-600 pl-4 bg-white/[0.03] after:w-[calc(100%-2.5rem)]' : 'font-bold after:w-0 hover:after:w-[calc(100%-2.5rem)]'}`}>
                 Home
               </Link>
-              <Link href={`${homeBase}/movies`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isMoviesActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
+              <Link href={`${homeBase}/movies`} onClick={() => setIsMobileMenuOpen(false)} className={`relative px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] text-white after:content-[''] after:absolute after:bottom-1 after:left-5 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isMoviesActive ? 'font-black border-l-2 border-red-600 pl-4 bg-white/[0.03] after:w-[calc(100%-2.5rem)]' : 'font-bold after:w-0 hover:after:w-[calc(100%-2.5rem)]'}`}>
                 Movies
               </Link>
-              <Link href={`${homeBase}/tv`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isTvActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
+              <Link href={`${homeBase}/tv`} onClick={() => setIsMobileMenuOpen(false)} className={`relative px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] text-white after:content-[''] after:absolute after:bottom-1 after:left-5 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isTvActive ? 'font-black border-l-2 border-red-600 pl-4 bg-white/[0.03] after:w-[calc(100%-2.5rem)]' : 'font-bold after:w-0 hover:after:w-[calc(100%-2.5rem)]'}`}>
                 TV
               </Link>
-              <Link href={`${homeBase}/top-rated`} onClick={() => setIsMobileMenuOpen(false)} className={`px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] hover:text-red-600 ${isTopRatedActive ? 'text-red-600 font-extrabold border-l-2 border-red-600 pl-4 bg-white/[0.03]' : 'text-gray-300'}`}>
+              <Link href={`${homeBase}/top-rated`} onClick={() => setIsMobileMenuOpen(false)} className={`relative px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] text-white after:content-[''] after:absolute after:bottom-1 after:left-5 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isTopRatedActive ? 'font-black border-l-2 border-red-600 pl-4 bg-white/[0.03] after:w-[calc(100%-2.5rem)]' : 'font-bold after:w-0 hover:after:w-[calc(100%-2.5rem)]'}`}>
                 Top Rated
               </Link>
             </div>
