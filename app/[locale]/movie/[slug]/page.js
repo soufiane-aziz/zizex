@@ -197,21 +197,64 @@ export default async function LocalizedMoviePage(props) {
     const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
     const seoMovieSlug = createSlug(movieDetails.title, movieId, 'movie');
 
-    // Injected JSON-LD Schema
+    // Fetch movie credits (director + main cast) — cached, runs in parallel
+    const creditsData = await fetchFromTMDB(`/movie/${movieId}/credits`, `&language=${tmdbLang}`);
+    const releaseDates = await fetchFromTMDB(`/movie/${movieId}/release_dates`, '');
+
+    const director = creditsData?.crew?.find(p => p.job === 'Director');
+    const topActors = (creditsData?.cast || []).slice(0, 8);
+
+    // Get content rating (US MPAA rating)
+    const usRelease = releaseDates?.results?.find(r => r.iso_3166_1 === 'US');
+    const contentRating = usRelease?.release_dates?.[0]?.certification || undefined;
+
+    // Build ISO 8601 duration from runtime (minutes)
+    const runtimeMin = movieDetails.runtime;
+    const isoDuration = runtimeMin
+        ? `PT${Math.floor(runtimeMin / 60)}H${runtimeMin % 60}M`
+        : undefined;
+
+    // Injected JSON-LD Schema — fully enriched for Google Rich Results
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'Movie',
         'name': movieDetails.title,
         'description': movieDetails.overview,
-        'image': movieDetails.poster_path ? `${IMAGE_BASE_URL}/w500${movieDetails.poster_path}` : undefined,
+        'url': `${SITE_URL}/${locale}/movie/${seoMovieSlug}`,
+        'image': movieDetails.poster_path ? `${IMAGE_BASE_URL}/w780${movieDetails.poster_path}` : undefined,
         'dateCreated': movieDetails.release_date,
         'datePublished': movieDetails.release_date,
-        'aggregateRating': movieDetails.vote_average ? {
+        ...(isoDuration && { 'duration': isoDuration }),
+        ...(contentRating && { 'contentRating': contentRating }),
+        ...(movieDetails.genres?.length > 0 && {
+            'genre': movieDetails.genres.map(g => g.name)
+        }),
+        ...(director && {
+            'director': {
+                '@type': 'Person',
+                'name': director.name,
+                'url': `https://www.themoviedb.org/person/${director.id}`
+            }
+        }),
+        ...(topActors.length > 0 && {
+            'actor': topActors.map(a => ({
+                '@type': 'Person',
+                'name': a.name,
+                'url': `https://www.themoviedb.org/person/${a.id}`
+            }))
+        }),
+        ...(movieDetails.production_companies?.length > 0 && {
+            'productionCompany': movieDetails.production_companies.slice(0, 3).map(c => ({
+                '@type': 'Organization',
+                'name': c.name
+            }))
+        }),
+        'aggregateRating': movieDetails.vote_average && movieDetails.vote_count > 10 ? {
             '@type': 'AggregateRating',
             'ratingValue': movieDetails.vote_average.toFixed(1),
             'bestRating': '10',
             'worstRating': '1',
-            'ratingCount': movieDetails.vote_count || '100',
+            'ratingCount': movieDetails.vote_count,
         } : undefined
     };
 

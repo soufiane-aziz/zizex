@@ -236,13 +236,24 @@ export default async function LocalizedEpisodePage(props) {
     // Embed URL for schema
     const schemaEmbedUrl = `https://multiembed.mov/?video_id=${showId}&tmdb=1&s=${seasonNum}&e=${episodeNum}`;
 
-    // TVEpisode schema nodes
+    // Fetch TV show credits for actors & creators
+    const tvCredits = await fetchFromTMDB(`/tv/${showId}/credits`, `&language=${tmdbLang}`);
+    const tvActors = (tvCredits?.cast || []).slice(0, 8);
+    const tvCreators = showDetails.created_by || [];
+
+    const seoTvSlug = createSlug(showDetails.name, showId, 'tv');
+
+    // TVEpisode schema nodes — fully enriched for Google Rich Results
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'TVEpisode',
         'name': episodeName,
+        'url': `${SITE_URL}/${locale}/tv/${seoTvSlug}/season-${seasonNum}/episode-${episodeNum}`,
         'episodeNumber': episodeNum,
         'seasonNumber': seasonNum,
+        'description': currentEpisodeDetails.overview || showDetails.overview,
+        'image': episodeStill,
+        'datePublished': currentEpisodeDetails.air_date || showDetails.first_air_date,
         'partOfSeason': {
             '@type': 'TVSeason',
             'seasonNumber': seasonNum,
@@ -252,7 +263,26 @@ export default async function LocalizedEpisodePage(props) {
             '@type': 'TVSeries',
             'name': showDetails.name,
             'description': showDetails.overview,
-            'image': showDetails.poster_path ? `${IMAGE_BASE_URL}/w500${showDetails.poster_path}` : undefined,
+            'url': `${SITE_URL}/${locale}/tv/${seoTvSlug}/season-1/episode-1`,
+            'image': showDetails.poster_path ? `${IMAGE_BASE_URL}/w780${showDetails.poster_path}` : undefined,
+            'startDate': showDetails.first_air_date,
+            ...(showDetails.status === 'Ended' && showDetails.last_air_date && { 'endDate': showDetails.last_air_date }),
+            ...(showDetails.genres?.length > 0 && { 'genre': showDetails.genres.map(g => g.name) }),
+            ...(tvCreators.length > 0 && {
+                'creator': tvCreators.map(c => ({ '@type': 'Person', 'name': c.name }))
+            }),
+            ...(tvActors.length > 0 && {
+                'actor': tvActors.map(a => ({ '@type': 'Person', 'name': a.name }))
+            }),
+            'aggregateRating': showDetails.vote_average && showDetails.vote_count > 10 ? {
+                '@type': 'AggregateRating',
+                'ratingValue': showDetails.vote_average.toFixed(1),
+                'bestRating': '10',
+                'worstRating': '1',
+                'ratingCount': showDetails.vote_count,
+            } : undefined,
+            ...(showDetails.number_of_seasons && { 'numberOfSeasons': showDetails.number_of_seasons }),
+            ...(showDetails.number_of_episodes && { 'numberOfEpisodes': showDetails.number_of_episodes }),
         },
         'video': {
             '@type': 'VideoObject',
@@ -261,11 +291,8 @@ export default async function LocalizedEpisodePage(props) {
             'thumbnailUrl': episodeStill,
             'uploadDate': currentEpisodeDetails.air_date || showDetails.first_air_date,
             'embedUrl': schemaEmbedUrl,
-            // Target key moments / timelines mapping for organic searches if needed
         }
     };
-
-    const seoTvSlug = createSlug(showDetails.name, showId, 'tv');
 
     const breadcrumbLd = {
         '@context': 'https://schema.org',
