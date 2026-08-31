@@ -165,7 +165,7 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
                             sizes="(max-width: 640px) 150px, (max-width: 768px) 200px, (max-width: 1024px) 250px, 300px"
                             unoptimized
                             className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover/card:scale-105"
-                            loading="lazy"
+                            loading={index < 6 ? "eager" : "lazy"}
                         />
 
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 pointer-events-none"></div>
@@ -475,23 +475,25 @@ export default function HomeClient({
 
                             {/* Mobile Image: Vertical Poster for 100% sharp, un-cropped display on phones */}
                             <Image
-                                src={movie.poster_path ? `${IMAGE_BASE_URL}/original${movie.poster_path}` : movie.backdrop_path ? `${IMAGE_BASE_URL}/original${movie.backdrop_path}` : '/no-poster.png'}
+                                src={movie.poster_path ? `${IMAGE_BASE_URL}/w780${movie.poster_path}` : movie.backdrop_path ? `${IMAGE_BASE_URL}/w1280${movie.backdrop_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero poster'}
                                 fill
                                 priority={index === 0}
+                                fetchPriority={index === 0 ? "high" : "auto"}
                                 sizes="100vw"
-                                quality={95}
+                                quality={90}
                                 className={`sm:hidden w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${index === activeHeroIndex ? 'scale-105' : 'scale-100'} object-center`}
                             />
 
                             {/* Desktop Image: Horizontal Backdrop for widescreen displays */}
                             <Image
-                                src={movie.backdrop_path ? `${IMAGE_BASE_URL}/original${movie.backdrop_path}` : movie.poster_path ? `${IMAGE_BASE_URL}/original${movie.poster_path}` : '/no-poster.png'}
+                                src={movie.backdrop_path ? `${IMAGE_BASE_URL}/w1280${movie.backdrop_path}` : movie.poster_path ? `${IMAGE_BASE_URL}/w780${movie.poster_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero backdrop'}
                                 fill
                                 priority={index === 0}
+                                fetchPriority={index === 0 ? "high" : "auto"}
                                 sizes="100vw"
-                                quality={95}
+                                quality={90}
                                 className={`hidden sm:block w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${index === activeHeroIndex ? 'scale-110' : 'scale-100'} object-center`}
                             />
                         </div>
