@@ -102,6 +102,22 @@ export async function generateMetadata(props) {
     };
 }
 
+function trimMediaItem(item, mediaTypeOverride) {
+    if (!item) return null;
+    return {
+        id: item.id,
+        title: item.title || item.name || '',
+        name: item.name || item.title || '',
+        poster_path: item.poster_path || null,
+        backdrop_path: item.backdrop_path || null,
+        vote_average: item.vote_average || 0,
+        release_date: item.release_date || null,
+        first_air_date: item.first_air_date || null,
+        media_type: mediaTypeOverride || item.media_type || 'movie',
+        overview: item.overview ? item.overview.substring(0, 150) : '',
+    };
+}
+
 export default async function LocalizedHomePage(props) {
     const searchParams = await props.searchParams;
     const params = await props.params;
@@ -129,8 +145,8 @@ export default async function LocalizedHomePage(props) {
             fetchFromTMDB(tvPath, langQuery)
         ]);
 
-        const mResults = movieData?.results?.map(m => ({ ...m, media_type: 'movie' })) || [];
-        const tResults = tvData?.results?.map(t => ({ ...t, media_type: 'tv' })) || [];
+        const mResults = movieData?.results?.map(m => trimMediaItem(m, 'movie')) || [];
+        const tResults = tvData?.results?.map(t => trimMediaItem(t, 'tv')) || [];
 
         const maxLen = Math.max(mResults.length, tResults.length);
         for (let i = 0; i < maxLen; i++) {
@@ -142,7 +158,7 @@ export default async function LocalizedHomePage(props) {
         const isTop = filterType === 'top_rated';
         const path = isTop ? `/${contentType}/top_rated` : `/trending/${contentType}/week`;
         const data = await fetchFromTMDB(path, langQuery);
-        primaryDataResults = data?.results?.map(item => ({ ...item, media_type: contentType })) || [];
+        primaryDataResults = data?.results?.map(item => trimMediaItem(item, contentType)) || [];
     }
 
     heroMovies = primaryDataResults.slice(0, 10);
@@ -194,8 +210,8 @@ export default async function LocalizedHomePage(props) {
                     fetchFromTMDB(tPath, tQuery)
                 ]);
 
-                const movieItems = mData?.results?.map(item => ({ ...item, media_type: 'movie' })) || [];
-                const tvItems = tData?.results?.map(item => ({ ...item, media_type: 'tv' })) || [];
+                const movieItems = mData?.results?.map(item => trimMediaItem(item, 'movie')) || [];
+                const tvItems = tData?.results?.map(item => trimMediaItem(item, 'tv')) || [];
 
                 const blendedList = [];
                 const maxLen = Math.max(movieItems.length, tvItems.length);
@@ -240,7 +256,7 @@ export default async function LocalizedHomePage(props) {
                     name: filterType === 'top_rated'
                         ? (locale === 'ar' ? `أعلى تقييمًا: ${genre.name}` : locale === 'fr' ? `Top Mieux Noté: ${genre.name}` : `Top Rated ${genre.name}`)
                         : genre.name,
-                    movies: data?.results?.map(item => ({ ...item, media_type: contentType })) || [],
+                    movies: data?.results?.map(item => trimMediaItem(item, contentType)) || [],
                     contentType,
                     genreId: genre.id,
                 };

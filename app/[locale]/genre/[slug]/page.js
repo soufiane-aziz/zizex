@@ -44,11 +44,15 @@ export async function generateMetadata(props) {
 
     const genreTitle = genreConfig?.title[locale] || genreConfig?.title.en || cleanSlug.replace(/-/g, ' ');
 
-    const title = isAr
-        ? `شاهد ${genreTitle} أونلاين مجاناً | ZizHub`
+    let title = isAr
+        ? `ZizHub | ${genreTitle}`
         : isFr
-            ? `Regarder ${genreTitle} en Streaming Gratuit | ZizHub`
-            : `Watch ${genreTitle} Online | ZizHub`;
+            ? `ZizHub | ${genreTitle}`
+            : `ZizHub | Watch ${genreTitle}`;
+
+    if (title.length > 65) {
+        title = title.substring(0, 62) + '...';
+    }
 
     const description = isAr
         ? `استكشف أفضل ${genreTitle} بجودة عالية وبدون إعلانات مزعجة على ZizHub.`
