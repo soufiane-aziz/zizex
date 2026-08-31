@@ -9,13 +9,13 @@ export const metadata = {
   keywords: ['zizhub', 'ZizHub', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies free', 'sci-fi series online', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch free tv shows', 'best movie streaming site', 'cinema streaming free', 'Netflix', 'watch Netflix movies free', 'HBO Max streaming', 'Disney Plus free', 'TopCinema', 'EgyBest alternative', 'MyCima', 'Cima4U', 'Shahid VIP free', 'WatchIt movies'],
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+      { url: '/favicon.ico?v=3', sizes: 'any' },
+      { url: '/icon-192.png?v=3', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png?v=3', sizes: '512x512', type: 'image/png' },
     ],
-    shortcut: ['/favicon.ico'],
+    shortcut: ['/favicon.ico?v=3'],
     apple: [
-      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+      { url: '/icon-512.png?v=3', sizes: '512x512', type: 'image/png' },
     ],
   },
   openGraph: {

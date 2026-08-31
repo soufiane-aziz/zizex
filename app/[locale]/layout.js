@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import InstallPWA from '../../components/InstallPWA';
 
 const inter = Inter({
     subsets: ['latin'],
@@ -59,6 +60,7 @@ export default async function LocaleLayout(props) {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
             />
             {children}
+            <InstallPWA locale={locale} />
             <SpeedInsights />
 
             {/* Script publicitaire Adsterra (Popunder / Social Bar) */}
