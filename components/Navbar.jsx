@@ -15,6 +15,7 @@ export default function Navbar({ locale }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const dropdownRef = useRef(null);
   const mobileMenuRef = useRef(null);
@@ -77,6 +78,16 @@ export default function Navbar({ locale }) {
       inputRef.current.focus();
     }
   }, [isSearchInputVisible]);
+
+  // Detect scroll to toggle bottom border
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Clic à l'extérieur pour fermer les éléments ouverts
   useEffect(() => {
@@ -166,7 +177,11 @@ export default function Navbar({ locale }) {
   const isTopRatedActive = pathname.includes(`/${resolvedLocale}/top-rated`);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-12 py-4 bg-gradient-to-b from-black/75 via-black/35 to-transparent backdrop-blur-md">
+    <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-12 transition-all duration-500 ease-in-out border-b ${
+      isScrolled 
+        ? 'py-1.5 sm:py-2 bg-black/90 backdrop-blur-md border-white shadow-lg' 
+        : 'py-3.5 sm:py-4 bg-gradient-to-b from-black/40 to-transparent backdrop-blur-none border-transparent'
+    }`}>
 
       {/* 1. ZONE GAUCHE : LOGO */}
       <div
@@ -175,7 +190,7 @@ export default function Navbar({ locale }) {
       >
         <button
           onClick={() => handleNavigation('all', 'default')}
-          className="text-3xl md:text-4xl font-black tracking-wide cursor-pointer focus:outline-none"
+          className="text-2xl md:text-3xl font-black tracking-wide cursor-pointer focus:outline-none"
         >
           <span className="text-red-600">Ziz</span>
           <span className="text-white">Hub</span>
