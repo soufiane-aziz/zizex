@@ -315,10 +315,7 @@ export default function WatchMovieClient({
                                     {movie.poster_path ? (
                                         <Image src={`${IMAGE_BASE_URL}/w342${movie.poster_path}`} alt={movie.title || 'Movie poster'} width={200} height={300} sizes="(max-width: 640px) 110px, 200px" className="w-full h-full object-cover" loading="lazy" />
                                     ) : (
-                                        <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-900/60 text-center p-4 border-b border-white/5">
-                                            <i className="fa-solid fa-clapperboard text-2xl text-zinc-600 mb-2"></i>
-                                            <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 line-clamp-3 px-1">{movie.title}</span>
-                                        </div>
+                                        <Image src="/no-poster.png" alt={movie.title || 'No Poster Available'} width={200} height={300} sizes="(max-width: 640px) 110px, 200px" className="w-full h-full object-cover" loading="lazy" />
                                     )}
                                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
                                         <span className="bg-red-600 text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded shadow">{watchNowBtnText}</span>

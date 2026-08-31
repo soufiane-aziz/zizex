@@ -158,7 +158,7 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
                     <div className="relative rounded-lg overflow-hidden aspect-[2/3] transform transition-all duration-300 ease-out hover:-translate-y-1 sm:hover:-translate-y-2.5 hover:shadow-[0_10px_20px_rgba(245,158,11,0.2)] sm:hover:shadow-[0_15px_30px_rgba(245,158,11,0.25)] group/card cursor-pointer border border-transparent hover:border-amber-500/60 bg-[#121212]">
 
                         <Image
-                            src={movie.poster_path ? `${IMAGE_BASE_URL}/w500${movie.poster_path}` : "/icon-512.png"}
+                            src={movie.poster_path ? `${IMAGE_BASE_URL}/w500${movie.poster_path}` : "/no-poster.png"}
                             alt={movie.title || movie.name || 'Poster'}
                             width={500}
                             height={750}
@@ -474,7 +474,7 @@ export default function HomeClient({
 
                             {/* Mobile Image: Vertical Poster for 100% sharp, un-cropped display on phones */}
                             <Image
-                                src={movie.poster_path ? `${IMAGE_BASE_URL}/original${movie.poster_path}` : movie.backdrop_path ? `${IMAGE_BASE_URL}/original${movie.backdrop_path}` : '/icon-512.png'}
+                                src={movie.poster_path ? `${IMAGE_BASE_URL}/original${movie.poster_path}` : movie.backdrop_path ? `${IMAGE_BASE_URL}/original${movie.backdrop_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero poster'}
                                 fill
                                 priority={index === 0}
@@ -485,7 +485,7 @@ export default function HomeClient({
 
                             {/* Desktop Image: Horizontal Backdrop for widescreen displays */}
                             <Image
-                                src={movie.backdrop_path ? `${IMAGE_BASE_URL}/original${movie.backdrop_path}` : movie.poster_path ? `${IMAGE_BASE_URL}/original${movie.poster_path}` : '/icon-512.png'}
+                                src={movie.backdrop_path ? `${IMAGE_BASE_URL}/original${movie.backdrop_path}` : movie.poster_path ? `${IMAGE_BASE_URL}/original${movie.poster_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero backdrop'}
                                 fill
                                 priority={index === 0}
