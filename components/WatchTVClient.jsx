@@ -84,6 +84,7 @@ export default function WatchTVClient({
     useEffect(() => {
         setIsIframeLoading(true);
         setHasClickedPlayer(false);
+        setActiveServerId('server1');
     }, [currentSeason, currentEpisode]);
 
     const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
