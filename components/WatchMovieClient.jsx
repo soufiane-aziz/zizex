@@ -82,6 +82,15 @@ export default function WatchMovieClient({
         return () => clearTimeout(timer);
     }, []);
 
+    // Auto-hide server loading overlay after 1.0s max for instant ultra-fast player load
+    useEffect(() => {
+        setIsIframeLoading(true);
+        const maxLoadTimer = setTimeout(() => {
+            setIsIframeLoading(false);
+        }, 1000);
+        return () => clearTimeout(maxLoadTimer);
+    }, [activeServerId]);
+
     const toggleScreenLock = (e) => {
         if (e) e.stopPropagation();
 
@@ -256,7 +265,7 @@ export default function WatchMovieClient({
 
                             {/* Loading Indicator Overlay */}
                             {isIframeLoading && (
-                                <div className="absolute inset-0 z-20 bg-zinc-950/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
+                                <div className="absolute inset-0 z-20 bg-zinc-950/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3 pointer-events-none transition-opacity duration-300">
                                     <div className="w-12 h-12 border-4 border-red-600/20 border-t-red-600 rounded-full animate-spin"></div>
                                     <span className="text-xs font-bold text-gray-300 uppercase tracking-widest">
                                         {isAr ? 'جاري تحميل السيرفر...' : isFr ? 'Chargement du serveur...' : 'Loading Server...'}
@@ -281,6 +290,8 @@ export default function WatchMovieClient({
                                 frameBorder="0"
                                 title="Movie Player"
                                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                                loading="eager"
+                                fetchPriority="high"
                                 onLoad={() => setIsIframeLoading(false)}
                                 onError={handleServerError}
                             />
