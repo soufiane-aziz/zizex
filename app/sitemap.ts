@@ -89,26 +89,25 @@ function safeUrl(url: string): string {
     }
 }
 
-function safeDateString(dateStr?: string | null): string {
+function safeDate(dateStr?: string | null): Date {
     const now = new Date();
-    const todayStr = now.toISOString().split('T')[0];
-    if (!dateStr || typeof dateStr !== 'string') return todayStr;
+    if (!dateStr || typeof dateStr !== 'string') return now;
     const clean = dateStr.trim();
-    if (!clean || clean.length < 4) return todayStr;
+    if (!clean || clean.length < 4) return now;
     
     try {
         const d = new Date(clean);
         if (d instanceof Date && !isNaN(d.getTime()) && d.getFullYear() >= 1900) {
             // Google Search Console rejects lastmod dates that are in the future
             if (d > now) {
-                return todayStr;
+                return now;
             }
-            return d.toISOString().split('T')[0];
+            return d;
         }
     } catch {
-        // Fallback to today's date on any parsing exception
+        // Fallback to current date on any parsing exception
     }
-    return todayStr;
+    return now;
 }
 
 const GENRE_SLUGS = [
@@ -181,7 +180,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         seenIds.add(key);
 
         const movieSlug = createSlug(movie.title, movie.id, 'movie');
-        const releaseDate = safeDateString(movie.release_date);
+        const releaseDate = safeDate(movie.release_date);
 
         LOCALES.forEach(locale => {
             const path = `/movie/${movieSlug}`;
@@ -216,7 +215,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         seenIds.add(key);
 
         const tvSlug = createSlug(show.name, show.id, 'tv');
-        const airDate = safeDateString(show.first_air_date);
+        const airDate = safeDate(show.first_air_date);
 
         LOCALES.forEach(locale => {
             const path = `/tv/${tvSlug}/season-1/episode-1`;
