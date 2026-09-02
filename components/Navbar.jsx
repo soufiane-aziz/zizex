@@ -125,7 +125,9 @@ export default function Navbar({ locale }) {
           .filter(item => {
             const titleToDisplay = item.title || item.name;
             if (!titleToDisplay) return false;
-            return titleToDisplay.toLowerCase().startsWith(queryLower);
+            const titleLower = titleToDisplay.toLowerCase();
+            const queryWords = queryLower.split(/\s+/).filter(Boolean);
+            return queryWords.every(word => titleLower.includes(word));
           });
 
         setSuggestions(validResults.slice(0, 6));
