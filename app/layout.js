@@ -1,6 +1,7 @@
 import './globals.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Analytics } from '@vercel/analytics/next';
+import Script from 'next/script';
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app'),
@@ -72,6 +73,18 @@ export default function RootLayout({ children }) {
       <body>
         {children}
         <Analytics />
+        {/* Service Worker: blocks unauthorized ad redirects from streaming iframes */}
+        <Script
+          id="sw-register"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function(){});
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );

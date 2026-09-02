@@ -33,6 +33,20 @@ const nextConfig = {
           },
         ],
       },
+      {
+        // Security headers on all watch pages
+        source: '/:locale/(movie|tv)/:path*',
+        headers: [
+          {
+            key: 'Permissions-Policy',
+            value: 'geolocation=(), microphone=(), camera=(), payment=(), usb=(), interest-cohort=()',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+        ],
+      },
     ];
   },
 };

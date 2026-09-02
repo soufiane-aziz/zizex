@@ -67,14 +67,22 @@ export default function WatchMovieClient({
     const [activeServerId, setActiveServerId] = useState('server1');
     const [hasClickedPlayer, setHasClickedPlayer] = useState(false);
     const [isIframeLoading, setIsIframeLoading] = useState(true);
+    const [showServerNotice, setShowServerNotice] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowServerNotice(false);
+        }, 3000);
+        return () => clearTimeout(timer);
+    }, []);
 
     const servers = [
-        { id: 'server1', name: 'VidLink Red', url: `https://vidlink.pro/movie/${id}?primaryColor=E50914&autoplay=true` },
+        { id: 'server1', name: 'VidSrc PM', url: `https://vidsrc.pm/embed/movie?tmdb=${id}` },
         { id: 'server2', name: 'AutoEmbed', url: `https://autoembed.co/movie/tmdb/${id}` },
         { id: 'server3', name: 'MultiEmbed', url: `https://multiembed.mov/?video_id=${id}&tmdb=1` },
         { id: 'server4', name: 'VidSrc Me', url: `https://vidsrc.me/embed/movie?tmdb=${id}` },
         { id: 'server5', name: '2Embed', url: `https://www.2embed.cc/embed/${id}` },
-        { id: 'server6', name: 'VidSrc PM', url: `https://vidsrc.pm/embed/movie?tmdb=${id}` },
+        { id: 'server6', name: 'VidLink Red', url: `https://vidlink.pro/movie/${id}?primaryColor=E50914&autoplay=true` },
     ];
 
     const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
@@ -179,6 +187,18 @@ export default function WatchMovieClient({
                                 onError={handleServerError}
                             />
                         </div>
+
+                        {/* Notice overlay above servers */}
+                        {showServerNotice && (
+                            <div className="flex items-center justify-center gap-2.5 sm:gap-3 bg-gradient-to-r from-amber-500/15 via-zinc-900/95 to-amber-500/15 border border-amber-500/30 text-white text-[11px] sm:text-xs font-bold px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl shadow-lg shadow-amber-500/10 backdrop-blur-xl pointer-events-none animate-bounce transition-all duration-300 mx-auto max-w-full w-full">
+                                <div className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 flex-shrink-0">
+                                    <i className="fa-solid fa-circle-info text-xs animate-pulse"></i>
+                                </div>
+                                <span className="text-gray-200 leading-tight text-center">
+                                    If a server doesn't work, please <span className="text-amber-400 font-extrabold underline decoration-amber-400/50 underline-offset-2">switch server</span> below!
+                                </span>
+                            </div>
+                        )}
 
                         <div className="bg-zinc-900/40 border border-white/5 backdrop-blur-md p-3 sm:p-4 rounded-xl flex flex-col sm:flex-row sm:items-center gap-3">
                             <div className="flex items-center justify-between sm:justify-start flex-shrink-0">
