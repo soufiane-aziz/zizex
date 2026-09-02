@@ -73,6 +73,7 @@ export default function WatchMovieClient({
 
     const playerContainerRef = useRef(null);
     const unlockTimerRef = useRef(null);
+    const lastLockAdTimeRef = useRef(0);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -85,6 +86,16 @@ export default function WatchMovieClient({
         if (e) e.stopPropagation();
 
         if (!isScreenLocked) {
+            // Trigger Smartlink ad on Lock (max once every 5 minutes)
+            const now = Date.now();
+            const FIVE_MINUTES = 5 * 60 * 1000;
+            if (now - lastLockAdTimeRef.current >= FIVE_MINUTES) {
+                window.open('https://bashsecret.com/b8t3p6w5?key=2d00a052eeae5f75fb5df01132aae507', '_blank');
+                lastLockAdTimeRef.current = now;
+                // Only open smartlink on ad click; do not lock screen yet
+                return;
+            }
+
             setIsScreenLocked(true);
             setShowUnlockButton(true);
 
