@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { createSlug } from '../lib/slug';
 
@@ -125,9 +126,7 @@ export default function Navbar({ locale }) {
           .filter(item => {
             const titleToDisplay = item.title || item.name;
             if (!titleToDisplay) return false;
-            const titleLower = titleToDisplay.toLowerCase();
-            const queryWords = queryLower.split(/\s+/).filter(Boolean);
-            return queryWords.every(word => titleLower.includes(word));
+            return titleToDisplay.toLowerCase().startsWith(queryLower);
           });
 
         setSuggestions(validResults.slice(0, 6));
@@ -253,9 +252,10 @@ export default function Navbar({ locale }) {
               <div className="flex flex-col max-h-[50vh] overflow-y-auto premium-nav-scrollbar">
                 {suggestions.map((item) => {
                   const isTvShow = item.media_type === 'tv' || (!item.media_type && !!item.first_air_date);
+                  const slug = createSlug(item.title || item.name, item.id, isTvShow ? 'tv' : 'movie');
                   const dynamicHref = isTvShow
-                    ? `/${resolvedLocale}/tv/${item.id}/season-1/episode-1`
-                    : `/${resolvedLocale}/movie/${item.id}`;
+                    ? `/${resolvedLocale}/tv/${slug}/season-1/episode-1`
+                    : `/${resolvedLocale}/movie/${slug}`;
 
                   return (
                     <Link
