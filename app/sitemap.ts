@@ -97,11 +97,8 @@ function safeDate(dateStr?: string | null): Date {
     
     try {
         const d = new Date(clean);
-        if (d instanceof Date && !isNaN(d.getTime()) && d.getFullYear() >= 1900) {
-            // Google Search Console rejects lastmod dates that are in the future
-            if (d > now) {
-                return now;
-            }
+        // Google Search Console rejects lastmod dates older than modern web standards (e.g. pre-2010) or in the future
+        if (d instanceof Date && !isNaN(d.getTime()) && d.getFullYear() >= 2010 && d <= now) {
             return d;
         }
     } catch {
