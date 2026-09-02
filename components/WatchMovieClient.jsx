@@ -81,58 +81,44 @@ export default function WatchMovieClient({
         return () => clearTimeout(timer);
     }, []);
 
-    // Auto-unlock screen when exiting fullscreen
-    useEffect(() => {
-        const handleFullscreenChange = () => {
-            const isFull = !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
-            if (!isFull) {
-                setIsScreenLocked(false);
-                setShowUnlockButton(false);
-            }
-        };
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-        document.addEventListener('msfullscreenchange', handleFullscreenChange);
-        return () => {
-            document.removeEventListener('fullscreenchange', handleFullscreenChange);
-            document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
-            document.removeEventListener('msfullscreenchange', handleFullscreenChange);
-        };
-    }, []);
-
     const toggleScreenLock = (e) => {
-        if (e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
+        if (e) e.stopPropagation();
 
         if (!isScreenLocked) {
             setIsScreenLocked(true);
             setShowUnlockButton(true);
 
-            // Container fullscreen so Lock/Unlock button remains visible in Fullscreen
-            if (playerContainerRef.current) {
+            // Auto-trigger fullscreen if not already in fullscreen mode
+            if (playerContainerRef.current && !document.fullscreenElement) {
                 const el = playerContainerRef.current;
-                const isFull = !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
-                if (!isFull) {
-                    if (el.requestFullscreen) {
-                        el.requestFullscreen().catch(() => {});
-                    } else if (el.webkitRequestFullscreen) {
-                        el.webkitRequestFullscreen();
-                    } else if (el.msRequestFullscreen) {
-                        el.msRequestFullscreen();
-                    }
+                if (el.requestFullscreen) {
+                    el.requestFullscreen().catch(() => {});
+                } else if (el.webkitRequestFullscreen) {
+                    el.webkitRequestFullscreen();
+                } else if (el.msRequestFullscreen) {
+                    el.msRequestFullscreen();
                 }
             }
 
             clearTimeout(unlockTimerRef.current);
             unlockTimerRef.current = setTimeout(() => {
                 setShowUnlockButton(false);
-            }, 3500);
+            }, 3000);
         } else {
             setIsScreenLocked(false);
             setShowUnlockButton(false);
             clearTimeout(unlockTimerRef.current);
+
+            // Exit container fullscreen on unlock if in fullscreen mode
+            if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
         }
     };
 
@@ -142,7 +128,7 @@ export default function WatchMovieClient({
         clearTimeout(unlockTimerRef.current);
         unlockTimerRef.current = setTimeout(() => {
             setShowUnlockButton(false);
-        }, 3500);
+        }, 3000);
     };
 
     const servers = [
@@ -229,28 +215,29 @@ export default function WatchMovieClient({
                             {!isIframeLoading && !isScreenLocked && (
                                 <button
                                     onClick={toggleScreenLock}
-                                    title="Lock Screen"
-                                    className="absolute top-3 right-3 z-25 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-950/80 hover:bg-red-600 text-white text-xs font-extrabold border border-white/15 shadow-xl backdrop-blur-md transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95"
+                                    title="Lock Screen & Go Fullscreen"
+                                    className="absolute top-3 right-3 z-35 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-950/80 hover:bg-red-600 text-white text-xs font-extrabold border border-white/15 shadow-xl backdrop-blur-md transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95"
                                 >
                                     <i className="fa-solid fa-lock text-xs text-red-400 group-hover:text-white"></i>
-                                    <span className="text-[11px] font-bold">Lock</span>
+                                    <span className="text-[11px] font-bold">Lock Screen</span>
                                 </button>
                             )}
 
                             {/* Screen Lock Touch Shield (locked state) */}
                             {isScreenLocked && (
                                 <div
-                                    className="absolute inset-0 z-40 bg-black/20 cursor-pointer select-none"
+                                    className="absolute inset-0 z-50 bg-black/10 backdrop-blur-[0.5px] cursor-pointer select-none"
                                     onClick={handleLockedScreenTap}
                                 >
-                                    {/* Red Unlock Button on top right when tapped */}
+                                    {/* Top-Right Red Unlock Button when screen is tapped */}
                                     {showUnlockButton && (
                                         <button
                                             onClick={toggleScreenLock}
-                                            className="absolute top-3 right-3 z-50 flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 active:scale-95 text-white font-extrabold text-xs sm:text-sm shadow-[0_0_20px_rgba(229,9,20,0.6)] border border-red-400/50 backdrop-blur-xl transition-all duration-200 cursor-pointer animate-fade-in"
+                                            title="Unlock Screen"
+                                            className="absolute top-3 right-3 z-50 flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white text-xs font-extrabold border border-red-400/50 shadow-[0_0_25px_rgba(229,9,20,0.7)] backdrop-blur-xl transition-all duration-200 cursor-pointer animate-pulse hover:scale-105 active:scale-95"
                                         >
-                                            <i className="fa-solid fa-lock-open text-xs sm:text-sm animate-bounce"></i>
-                                            <span>Unlock 🔓</span>
+                                            <i className="fa-solid fa-lock-open text-xs"></i>
+                                            <span className="text-xs font-black uppercase tracking-wider">Unlock</span>
                                         </button>
                                     )}
                                 </div>
