@@ -77,7 +77,7 @@ export default function WatchTVClient({
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowServerNotice(false);
-        }, 3000);
+        }, 5000);
         return () => clearTimeout(timer);
     }, []);
 
