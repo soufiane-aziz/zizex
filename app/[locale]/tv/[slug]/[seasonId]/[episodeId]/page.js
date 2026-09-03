@@ -10,14 +10,15 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
 const fetchFromTMDB = cache(async (path, queryParams = '') => {
     const url = `${BASE_URL}${path}?api_key=${API_KEY}${queryParams}`;
-    try {
-        const res = await fetch(url, { next: { revalidate: 604800 } });
-        if (!res.ok) return null;
-        return await res.json();
-    } catch (err) {
-        console.error(`TMDB fetch error for ${path}:`, err);
-        return null;
+    for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+            const res = await fetch(url, { next: { revalidate: 604800 } });
+            if (res.ok) return await res.json();
+        } catch (err) {
+            console.error(`TMDB fetch attempt ${attempt + 1} error for ${path}:`, err);
+        }
     }
+    return null;
 });
 
 // Helper to resolve TV Show ID from slug

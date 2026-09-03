@@ -108,7 +108,7 @@ export default function WatchTVClient({
             if (playerContainerRef.current && !document.fullscreenElement) {
                 const el = playerContainerRef.current;
                 if (el.requestFullscreen) {
-                    el.requestFullscreen().catch(() => {});
+                    el.requestFullscreen().catch(() => { });
                 } else if (el.webkitRequestFullscreen) {
                     el.webkitRequestFullscreen();
                 } else if (el.msRequestFullscreen) {
@@ -128,7 +128,7 @@ export default function WatchTVClient({
             // Exit container fullscreen on unlock if in fullscreen mode
             if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
                 if (document.exitFullscreen) {
-                    document.exitFullscreen().catch(() => {});
+                    document.exitFullscreen().catch(() => { });
                 } else if (document.webkitExitFullscreen) {
                     document.webkitExitFullscreen();
                 } else if (document.msExitFullscreen) {
@@ -200,6 +200,52 @@ export default function WatchTVClient({
     const activeSeasonData = seasons.find(s => s.season_number === currentSeason);
     const currentSeasonName = activeSeasonData ? (activeSeasonData.name || `Season ${activeSeasonData.season_number}`) : `Season ${currentSeason}`;
 
+    // Calculate Previous & Next episode navigation
+    const currentEpisodeNum = Number(currentEpisode);
+    const currentSeasonNum = Number(currentSeason);
+
+    let prevSeasonNum = null;
+    let prevEpisodeNum = null;
+    let nextSeasonNum = null;
+    let nextEpisodeNum = null;
+
+    // PREVIOUS EPISODE LOGIC:
+    if (currentEpisodeNum > 1) {
+        prevSeasonNum = currentSeasonNum;
+        prevEpisodeNum = currentEpisodeNum - 1;
+    } else {
+        const prevSeasonExists = Array.isArray(seasons) && seasons.some(s => s.season_number === currentSeasonNum - 1);
+        if (prevSeasonExists) {
+            prevSeasonNum = currentSeasonNum - 1;
+            prevEpisodeNum = 1;
+        } else {
+            prevSeasonNum = null;
+            prevEpisodeNum = null;
+        }
+    }
+
+    // NEXT EPISODE LOGIC:
+    const currentEpIndex = Array.isArray(episodes) ? episodes.findIndex(e => e.episode_number === currentEpisodeNum) : -1;
+    const isLastEpInCurrentSeason = (currentEpIndex !== -1 && currentEpIndex === episodes.length - 1) ||
+        (Array.isArray(episodes) && episodes.length > 0 && currentEpisodeNum === episodes[episodes.length - 1].episode_number);
+
+    if (currentEpIndex !== -1 && currentEpIndex < episodes.length - 1) {
+        nextSeasonNum = currentSeasonNum;
+        nextEpisodeNum = episodes[currentEpIndex + 1].episode_number;
+    } else if (!isLastEpInCurrentSeason && Array.isArray(episodes) && episodes.length > 0 && currentEpisodeNum < episodes[episodes.length - 1].episode_number) {
+        nextSeasonNum = currentSeasonNum;
+        nextEpisodeNum = currentEpisodeNum + 1;
+    } else {
+        const nextSeasonExists = Array.isArray(seasons) && seasons.some(s => s.season_number === currentSeasonNum + 1);
+        if (nextSeasonExists) {
+            nextSeasonNum = currentSeasonNum + 1;
+            nextEpisodeNum = 1;
+        } else {
+            nextSeasonNum = null;
+            nextEpisodeNum = null;
+        }
+    }
+
     // Translated texts
     const isAr = locale === 'ar';
     const isFr = locale === 'fr';
@@ -230,14 +276,14 @@ export default function WatchTVClient({
 
             <Navbar contentType="tv" filterType="default" locale={locale} />
 
-            <main className="pt-28 px-4 md:px-8 max-w-[1600px] mx-auto flex flex-col gap-10 mb-2">
+            <main className="pt-28 px-4 md:px-8 max-w-[1600px] mx-auto flex flex-col gap-6 mb-2">
 
                 {/* 1. PUB PRINCIPALE (728x90) */}
                 <AdComponent
                     adKey="e1df92cdb6f2e478f4ab97be681e48db"
                     width={728}
                     height={90}
-                    wrapperClassName="mb-6"
+                    wrapperClassName="mb-0 my-1"
                 />
 
                 {/* LECTEUR + INFOS & ÉPISODES GRID */}
@@ -245,75 +291,6 @@ export default function WatchTVClient({
 
                     {/* COLONNE GAUCHE : Lecteur & Infos */}
                     <div className="lg:col-span-2 flex flex-col gap-6">
-
-                        {/* LECTEUR VIDÉO */}
-                        <div ref={playerContainerRef} className="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group">
-
-                            {/* Lock Screen Toggle Button (unlocked state) */}
-                            {!isIframeLoading && !isScreenLocked && (
-                                <button
-                                    onClick={toggleScreenLock}
-                                    title="Lock Screen & Go Fullscreen"
-                                    className="absolute top-3 right-3 z-35 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-950/80 hover:bg-red-600 text-white text-xs font-extrabold border border-white/15 shadow-xl backdrop-blur-md transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95"
-                                >
-                                    <i className="fa-solid fa-lock text-xs text-red-400 group-hover:text-white"></i>
-                                    <span className="text-[11px] font-bold">Lock Screen</span>
-                                </button>
-                            )}
-
-                            {/* Screen Lock Touch Shield (locked state) */}
-                            {isScreenLocked && (
-                                <div
-                                    className="absolute inset-0 z-50 bg-black/10 backdrop-blur-[0.5px] cursor-pointer select-none"
-                                    onClick={handleLockedScreenTap}
-                                >
-                                    {/* Top-Right Red Unlock Button when screen is tapped */}
-                                    {showUnlockButton && (
-                                        <button
-                                            onClick={toggleScreenLock}
-                                            title="Unlock Screen"
-                                            className="absolute top-3 right-3 z-50 flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white text-xs font-extrabold border border-red-400/50 shadow-[0_0_25px_rgba(229,9,20,0.7)] backdrop-blur-xl transition-all duration-200 cursor-pointer animate-pulse hover:scale-105 active:scale-95"
-                                        >
-                                            <i className="fa-solid fa-lock-open text-xs"></i>
-                                            <span className="text-xs font-black uppercase tracking-wider">Unlock</span>
-                                        </button>
-                                    )}
-                                </div>
-                            )}
-
-                            {/* Loading Indicator Overlay */}
-                            {isIframeLoading && (
-                                <div className="absolute inset-0 z-20 bg-zinc-950/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3 pointer-events-none transition-opacity duration-300">
-                                    <div className="w-12 h-12 border-4 border-red-600/20 border-t-red-600 rounded-full animate-spin"></div>
-                                    <span className="text-xs font-bold text-gray-300 uppercase tracking-widest">
-                                        {isAr ? 'جاري تحميل السيرفر...' : isFr ? 'Chargement du serveur...' : 'Loading Server...'}
-                                    </span>
-                                </div>
-                            )}
-
-                            {/* Smartlink Ad Overlay (Invisible) */}
-                            {!hasClickedPlayer && !isIframeLoading && !isScreenLocked && (
-                                <div
-                                    className="absolute inset-0 z-10 cursor-pointer"
-                                    onClick={handlePlayerClick}
-                                />
-                            )}
-
-                            <iframe
-                                key={activeServer.url}
-                                src={activeServer.url}
-                                title="Video TV Player"
-                                className="w-full h-full absolute inset-0"
-                                allowFullScreen
-                                scrolling="no"
-                                frameBorder="0"
-                                allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-                                loading="eager"
-                                fetchPriority="high"
-                                onLoad={() => setIsIframeLoading(false)}
-                                onError={handleServerError}
-                            />
-                        </div>
 
                         {/* Notice overlay above servers */}
                         {showServerNotice && (
@@ -351,7 +328,103 @@ export default function WatchTVClient({
                             </div>
                         </div>
 
-                        {/* Métadonnées & Description */}
+                        {/* LECTEUR VIDÉO + NAVIGATION ÉPISODES */}
+                        <div className="flex flex-col gap-2">
+                            <div ref={playerContainerRef} className="relative w-full h-[calc(56.25vw+10px)] sm:h-auto sm:aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group">
+
+                                {/* Lock Screen Toggle Button (unlocked state) */}
+                                {!isIframeLoading && !isScreenLocked && (
+                                    <button
+                                        onClick={toggleScreenLock}
+                                        title="Lock Screen & Go Fullscreen"
+                                        className="absolute top-3 right-3 z-35 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-950/80 hover:bg-red-600 text-white text-xs font-extrabold border border-white/15 shadow-xl backdrop-blur-md transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95"
+                                    >
+                                        <i className="fa-solid fa-lock text-xs text-red-400 group-hover:text-white"></i>
+                                        <span className="text-[11px] font-bold">Lock Screen</span>
+                                    </button>
+                                )}
+
+                                {/* Screen Lock Touch Shield (locked state) */}
+                                {isScreenLocked && (
+                                    <div
+                                        className="absolute inset-0 z-50 bg-black/10 backdrop-blur-[0.5px] cursor-pointer select-none"
+                                        onClick={handleLockedScreenTap}
+                                    >
+                                        {/* Top-Right Red Unlock Button when screen is tapped */}
+                                        {showUnlockButton && (
+                                            <button
+                                                onClick={toggleScreenLock}
+                                                title="Unlock Screen"
+                                                className="absolute top-3 right-3 z-50 flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white text-xs font-extrabold border border-red-400/50 shadow-[0_0_25px_rgba(229,9,20,0.7)] backdrop-blur-xl transition-all duration-200 cursor-pointer animate-pulse hover:scale-105 active:scale-95"
+                                            >
+                                                <i className="fa-solid fa-lock-open text-xs"></i>
+                                                <span className="text-xs font-black uppercase tracking-wider">Unlock</span>
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Loading Indicator Overlay */}
+                                {isIframeLoading && (
+                                    <div className="absolute inset-0 z-20 bg-zinc-950/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3 pointer-events-none transition-opacity duration-300">
+                                        <div className="w-12 h-12 border-4 border-red-600/20 border-t-red-600 rounded-full animate-spin"></div>
+                                        <span className="text-xs font-bold text-gray-300 uppercase tracking-widest">
+                                            {isAr ? 'جاري تحميل السيرفر...' : isFr ? 'Chargement du serveur...' : 'Loading Server...'}
+                                        </span>
+                                    </div>
+                                )}
+
+                                {/* Smartlink Ad Overlay (Invisible) */}
+                                {!hasClickedPlayer && !isIframeLoading && !isScreenLocked && (
+                                    <div
+                                        className="absolute inset-0 z-10 cursor-pointer"
+                                        onClick={handlePlayerClick}
+                                    />
+                                )}
+
+                                <iframe
+                                    key={activeServer.url}
+                                    src={activeServer.url}
+                                    title="Video TV Player"
+                                    className="w-full h-full absolute inset-0"
+                                    allowFullScreen
+                                    scrolling="no"
+                                    frameBorder="0"
+                                    allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                                    loading="eager"
+                                    fetchPriority="high"
+                                    onLoad={() => setIsIframeLoading(false)}
+                                    onError={handleServerError}
+                                />
+                            </div>
+
+                            {/* Episode Navigation Buttons (Previous / Next) */}
+                            <div className="flex items-center justify-between gap-2 sm:gap-3 w-full">
+                                {prevEpisodeNum ? (
+                                    <Link
+                                        href={`/${locale}/tv/${slug}/season-${prevSeasonNum}/episode-${prevEpisodeNum}`}
+                                        className="flex-1 sm:flex-none max-w-[48%] sm:max-w-none flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-gray-300 hover:text-white border border-white/10 text-[11px] sm:text-sm font-bold backdrop-blur-md transition-all duration-200 shadow-md group"
+                                    >
+                                        <i className={`fa-solid ${isAr ? 'fa-arrow-right' : 'fa-arrow-left'} text-[10px] sm:text-xs group-hover:-translate-x-1 transition-transform text-red-500 flex-shrink-0`}></i>
+                                        <span className="whitespace-nowrap truncate">{isAr ? 'الحلقة السابقة' : isFr ? 'Épisode Précédent' : 'Previous Episode'}</span>
+                                    </Link>
+                                ) : (
+                                    <div className="flex-1 sm:flex-none" />
+                                )}
+
+                                {nextEpisodeNum ? (
+                                    <Link
+                                        href={`/${locale}/tv/${slug}/season-${nextSeasonNum}/episode-${nextEpisodeNum}`}
+                                        className="flex-1 sm:flex-none max-w-[48%] sm:max-w-none flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white border border-red-500/40 text-[11px] sm:text-sm font-extrabold shadow-lg shadow-red-600/30 transition-all duration-200 transform hover:scale-105 active:scale-95 group ml-auto"
+                                    >
+                                        <span className="whitespace-nowrap truncate">{isAr ? 'الحلقة التالية' : isFr ? 'Épisode Suivant' : 'Next Episode'}</span>
+                                        <i className={`fa-solid ${isAr ? 'fa-arrow-left' : 'fa-arrow-right'} text-[10px] sm:text-xs group-hover:translate-x-1 transition-transform flex-shrink-0`}></i>
+                                    </Link>
+                                ) : (
+                                    <div className="flex-1 sm:flex-none" />
+                                )}
+                            </div>
+                        </div>
                         <div className="p-1">
 
                             <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 mb-4 w-full">

@@ -216,20 +216,57 @@ export default function WatchMovieClient({
 
             <Navbar contentType="movie" filterType="default" locale={locale} />
 
-            <main className="pt-28 px-4 md:px-8 max-w-[1600px] mx-auto flex flex-col gap-10 mb-2">
+            <main className="pt-28 px-4 md:px-8 max-w-[1600px] mx-auto flex flex-col gap-6 mb-2">
 
                 <AdComponent
                     adKey="e1df92cdb6f2e478f4ab97be681e48db"
                     width={728}
                     height={90}
-                    wrapperClassName="mb-6"
+                    wrapperClassName="mb-0 my-1"
                 />
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
 
                     <div className="lg:col-span-2 flex flex-col gap-6">
 
-                        <div ref={playerContainerRef} className="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group">
+                        {/* Notice overlay above servers */}
+                        {showServerNotice && (
+                            <div className="flex items-center justify-center gap-2.5 sm:gap-3 bg-gradient-to-r from-amber-500/15 via-zinc-900/95 to-amber-500/15 border border-amber-500/30 text-white text-[11px] sm:text-xs font-bold px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl shadow-lg shadow-amber-500/10 backdrop-blur-xl pointer-events-none animate-bounce transition-all duration-300 mx-auto max-w-full w-full">
+                                <div className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 flex-shrink-0">
+                                    <i className="fa-solid fa-circle-info text-xs animate-pulse"></i>
+                                </div>
+                                <span className="text-gray-200 leading-tight text-center">
+                                    If a server doesn't work, please <span className="text-amber-400 font-extrabold underline decoration-amber-400/50 underline-offset-2">switch server</span> below!
+                                </span>
+                            </div>
+                        )}
+
+                        {/* SÉLECTION DES SERVEURS */}
+                        <div className="bg-zinc-900/40 border border-white/5 backdrop-blur-md p-3 sm:p-4 rounded-xl flex flex-col sm:flex-row sm:items-center gap-3">
+                            <div className="flex items-center justify-between sm:justify-start flex-shrink-0">
+                                <span className="text-[11px] sm:text-xs font-black text-gray-400 uppercase tracking-wider">
+                                    <i className="fa-solid fa-server text-red-500 mr-1.5"></i> {selectServerText}
+                                </span>
+                            </div>
+
+                            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-2.5 w-full sm:flex-1">
+                                {servers.map((srv) => (
+                                    <button
+                                        key={srv.id}
+                                        onClick={() => handleServerChange(srv.id)}
+                                        className={`text-[11px] sm:text-xs font-bold py-1.5 sm:py-2 rounded-lg transition-all border cursor-pointer focus:outline-none text-center ${activeServerId === srv.id
+                                            ? 'bg-red-600 border-red-600 text-white shadow-lg shadow-red-600/20'
+                                            : 'bg-zinc-800 border-white/5 text-gray-300 hover:bg-zinc-700/60 hover:text-white'
+                                            }`}
+                                    >
+                                        {srv.name}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* LECTEUR VIDÉO */}
+                        <div ref={playerContainerRef} className="relative w-full h-[calc(56.25vw+10px)] sm:h-auto sm:aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group">
 
                             {/* Lock Screen Toggle Button (unlocked state) */}
                             {!isIframeLoading && !isScreenLocked && (
@@ -295,41 +332,6 @@ export default function WatchMovieClient({
                                 onLoad={() => setIsIframeLoading(false)}
                                 onError={handleServerError}
                             />
-                        </div>
-
-                        {/* Notice overlay above servers */}
-                        {showServerNotice && (
-                            <div className="flex items-center justify-center gap-2.5 sm:gap-3 bg-gradient-to-r from-amber-500/15 via-zinc-900/95 to-amber-500/15 border border-amber-500/30 text-white text-[11px] sm:text-xs font-bold px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl shadow-lg shadow-amber-500/10 backdrop-blur-xl pointer-events-none animate-bounce transition-all duration-300 mx-auto max-w-full w-full">
-                                <div className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 flex-shrink-0">
-                                    <i className="fa-solid fa-circle-info text-xs animate-pulse"></i>
-                                </div>
-                                <span className="text-gray-200 leading-tight text-center">
-                                    If a server doesn't work, please <span className="text-amber-400 font-extrabold underline decoration-amber-400/50 underline-offset-2">switch server</span> below!
-                                </span>
-                            </div>
-                        )}
-
-                        <div className="bg-zinc-900/40 border border-white/5 backdrop-blur-md p-3 sm:p-4 rounded-xl flex flex-col sm:flex-row sm:items-center gap-3">
-                            <div className="flex items-center justify-between sm:justify-start flex-shrink-0">
-                                <span className="text-[11px] sm:text-xs font-black text-gray-400 uppercase tracking-wider">
-                                    <i className="fa-solid fa-server text-red-500 mr-1.5"></i> {selectServerText}
-                                </span>
-                            </div>
-
-                            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-2.5 w-full sm:flex-1">
-                                {servers.map((srv) => (
-                                    <button
-                                        key={srv.id}
-                                        onClick={() => handleServerChange(srv.id)}
-                                        className={`text-[11px] sm:text-xs font-bold py-1.5 sm:py-2 rounded-lg transition-all border cursor-pointer focus:outline-none text-center ${activeServerId === srv.id
-                                            ? 'bg-red-600 border-red-600 text-white shadow-lg shadow-red-600/20'
-                                            : 'bg-zinc-800 border-white/5 text-gray-300 hover:bg-zinc-700/60 hover:text-white'
-                                            }`}
-                                    >
-                                        {srv.name}
-                                    </button>
-                                ))}
-                            </div>
                         </div>
 
                         <div className="p-1">
