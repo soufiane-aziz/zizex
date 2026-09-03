@@ -78,40 +78,54 @@ export default async function LocalizedGenrePage(props) {
     const params = await props.params;
     const { locale, slug } = params;
     const cleanSlug = slug.toLowerCase();
-    const genreConfig = GENRE_MAP[cleanSlug];
+    const targetGenreConfig = GENRE_MAP[cleanSlug];
 
     const tmdbLang = locale === 'ar' ? 'ar-AE' : locale === 'fr' ? 'fr-FR' : 'en-US';
     const langQuery = `&language=${tmdbLang}`;
 
-    let movies = [];
-    let tvs = [];
+    // Sort genre keys so the target genre row is at the top, followed by all other genres
+    const genreKeys = Object.keys(GENRE_MAP);
+    const sortedGenreKeys = [
+        ...(targetGenreConfig ? [cleanSlug] : []),
+        ...genreKeys.filter(k => k !== cleanSlug)
+    ];
 
-    if (genreConfig) {
-        const [mData, tData] = await Promise.all([
-            fetchFromTMDB('/discover/movie', `&with_genres=${genreConfig.movie}${langQuery}`),
-            fetchFromTMDB('/discover/tv', `&with_genres=${genreConfig.tv}${langQuery}`)
-        ]);
-        movies = (mData?.results || []).map(m => ({ ...m, media_type: 'movie' }));
-        tvs = (tData?.results || []).map(t => ({ ...t, media_type: 'tv' }));
-    }
+    const allCategories = await Promise.all(
+        sortedGenreKeys.map(async (gKey) => {
+            const gConf = GENRE_MAP[gKey];
+            if (!gConf) return null;
 
-    const blendedList = [];
-    const maxLen = Math.max(movies.length, tvs.length);
-    for (let i = 0; i < maxLen; i++) {
-        if (movies[i]) blendedList.push(movies[i]);
-        if (tvs[i]) blendedList.push(tvs[i]);
-    }
+            const [mData, tData] = await Promise.all([
+                fetchFromTMDB('/discover/movie', `&with_genres=${gConf.movie}${langQuery}`),
+                fetchFromTMDB('/discover/tv', `&with_genres=${gConf.tv}${langQuery}`)
+            ]);
 
-    const heroMovies = blendedList.slice(0, 10);
-    const categoryTitle = genreConfig?.title[locale] || genreConfig?.title.en || cleanSlug.toUpperCase();
+            const mResults = (mData?.results || []).map(m => ({ ...m, media_type: 'movie' }));
+            const tResults = (tData?.results || []).map(t => ({ ...t, media_type: 'tv' }));
 
-    const categoryRow = {
-        id: `genre-${cleanSlug}`,
-        name: categoryTitle,
-        movies: blendedList,
-        movieGenreId: genreConfig?.movie,
-        tvGenreId: genreConfig?.tv,
-    };
+            const blended = [];
+            const maxL = Math.max(mResults.length, tResults.length);
+            for (let i = 0; i < maxL; i++) {
+                if (mResults[i]) blended.push(mResults[i]);
+                if (tResults[i]) blended.push(tResults[i]);
+            }
+
+            const titleText = gConf.title[locale] || gConf.title.en || gKey.toUpperCase();
+
+            return {
+                id: `genre-${gKey}`,
+                name: titleText,
+                movies: blended,
+                movieGenreId: gConf.movie,
+                tvGenreId: gConf.tv,
+            };
+        })
+    );
+
+    const validCategories = allCategories.filter(Boolean);
+    const primaryCategory = validCategories[0] || { movies: [], name: cleanSlug };
+    const heroMovies = primaryCategory.movies.slice(0, 10);
+    const categoryTitle = targetGenreConfig?.title[locale] || targetGenreConfig?.title.en || cleanSlug.toUpperCase();
 
     const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
     const canonicalUrl = `${SITE_URL}/${locale}/genre/${cleanSlug}`;
@@ -124,7 +138,7 @@ export default async function LocalizedGenrePage(props) {
         'url': canonicalUrl,
         'mainEntity': {
             '@type': 'ItemList',
-            'itemListElement': blendedList.slice(0, 20).map((item, index) => ({
+            'itemListElement': primaryCategory.movies.slice(0, 20).map((item, index) => ({
                 '@type': 'ListItem',
                 'position': index + 1,
                 'name': item.title || item.name,
@@ -164,7 +178,7 @@ export default async function LocalizedGenrePage(props) {
             />
             <HomeClient
                 initialHeroMovies={heroMovies}
-                initialCategories={[categoryRow]}
+                initialCategories={validCategories}
                 contentType="all"
                 filterType="default"
                 locale={locale}
