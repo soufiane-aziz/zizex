@@ -2,6 +2,7 @@ import './globals.css';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
+import AdBlocker from '../components/AdBlocker';
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app'),
@@ -90,6 +91,7 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="https://vidlink.pro" />
       </head>
       <body>
+        <AdBlocker />
         {children}
         <Analytics />
         <SpeedInsights />

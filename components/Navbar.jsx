@@ -15,7 +15,6 @@ export default function Navbar({ locale, contentType }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
-  const [isScrolled, setIsScrolled] = useState(false);
 
   const dropdownRef = useRef(null);
   const mobileMenuRef = useRef(null);
@@ -79,15 +78,6 @@ export default function Navbar({ locale, contentType }) {
     }
   }, [isSearchInputVisible]);
 
-  // Detect scroll to toggle bottom border
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    handleScroll();
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Clic à l'extérieur pour fermer les éléments ouverts
   useEffect(() => {
@@ -177,11 +167,7 @@ export default function Navbar({ locale, contentType }) {
   const isTopRatedActive = contentType === 'top_rated' || pathname.includes(`/${resolvedLocale}/top-rated`);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-12 transition-all duration-500 ease-in-out border-b ${
-      isScrolled 
-        ? 'py-1.5 sm:py-2 bg-black/90 backdrop-blur-md border-white shadow-lg' 
-        : 'py-3.5 sm:py-4 bg-gradient-to-b from-black/40 to-transparent backdrop-blur-none border-transparent'
-    }`}>
+    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-12 py-2 sm:py-2.5 bg-black/50 backdrop-blur-md border-b border-white/10 shadow-lg">
 
       {/* 1. ZONE GAUCHE : LOGO */}
       <div

@@ -1,15 +1,30 @@
-// Service Worker — Anti-Ad Redirect Protection
-// Blocks streaming iframe ad redirects at the network level (no sandbox needed)
+// Service Worker — Smart AdBlocker & Spam Redirect Shield
+// Preserves User Ads (bashsecret.com) & Embed Servers while blocking external spam ad redirects
 
 const SITE_ORIGIN = self.location.origin;
 
-// Known streaming/ad domains to block (top-frame navigation to these = ad redirect)
-const BLOCKED_PATTERNS = [
-  'doubleclick', 'googlesyndication', 'adnxs', 'popads', 'popcash',
-  'trafficjunky', 'ero-advertising', 'hilltopads', 'adsterra', 'propellerads',
-  'monetizer', 'juicyads', 'clickadu', 'adcash', 'mgid', 'exoclick',
-  'revcontent', 'outbrain', 'taboola', 'traffic', 'redirect', 'aff.',
-  'click.', 'track.', 'ad.', 'ads.', 'adsrv', 'adserv'
+// Whitelisted legitimate domains (Site, User Ads, Embed Servers, CDNs)
+const ALLOWED_PATTERNS = [
+  'bashsecret.com',
+  'vidsrc.pm',
+  'vidsrc.me',
+  'autoembed.co',
+  'multiembed.mov',
+  '2embed.cc',
+  'vidlink.pro',
+  'themoviedb.org',
+  'tmdb.org',
+  'cloudflare.com',
+  'vercel.app',
+  'vercel.com'
+];
+
+// Blocked spam ad networks (top-frame navigation to these = spam ad redirect)
+const BLOCKED_SPAM_PATTERNS = [
+  'popads', 'popcash', 'trafficjunky', 'hilltopads', 'propellerads',
+  'monetag', 'clickadu', 'adcash', 'mgid', 'exoclick', 'juicyads',
+  '1xbet', 'bet365', 'yandex.ru/ads', 'outbrain', 'taboola', 'clik.pw',
+  'bet-at-home', 'game-ads'
 ];
 
 self.addEventListener('install', () => self.skipWaiting());
@@ -21,52 +36,41 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const request = event.request;
 
-  // Only handle top-level navigation requests
+  // Only check top-level navigation requests
   if (request.mode !== 'navigate') return;
 
   const dest = new URL(request.url);
+  const destStr = (dest.hostname + dest.pathname).toLowerCase();
 
-  // Always allow navigation within our own site
+  // 1. Always allow navigation within our own site
   if (dest.origin === SITE_ORIGIN) return;
 
-  // Check if this looks like an ad redirect
-  const destStr = dest.hostname + dest.pathname;
-  const isAdDomain = BLOCKED_PATTERNS.some(pattern =>
-    destStr.toLowerCase().includes(pattern)
-  );
+  // 2. Always allow whitelisted user ads and embed servers
+  const isAllowed = ALLOWED_PATTERNS.some(pattern => destStr.includes(pattern));
+  if (isAllowed) return;
 
-  // Block if it's a known ad domain OR any external navigation
-  // (streaming page users shouldn't be navigating to external sites in same tab)
-  event.respondWith(
-    new Response(
-      `<!DOCTYPE html>
+  // 3. Block known spam ad domains or unauthorized external redirects
+  const isSpamAd = BLOCKED_SPAM_PATTERNS.some(pattern => destStr.includes(pattern));
+
+  if (isSpamAd) {
+    event.respondWith(
+      new Response(
+        `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #0a0a0a; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
-</style>
-</head>
-<body>
+<title>Ad Blocked</title>
 <script>
-  // Silently return to streaming page
-  if (history.length > 1) {
-    history.back();
-  } else {
-    history.back();
-  }
+  if (history.length > 1) { history.back(); } else { window.close(); }
 </script>
-</body>
+</head>
+<body style="background:#0a0a0a;color:#fff;"></body>
 </html>`,
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'text/html; charset=utf-8',
-          'Cache-Control': 'no-store'
+        {
+          status: 200,
+          headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' }
         }
-      }
-    )
-  );
+      )
+    );
+  }
 });
