@@ -315,18 +315,53 @@ export default function Navbar({ locale }) {
 
           {/* Dropdown Menu Mobile Déroulant */}
           {isMobileMenuOpen && (
-            <div className="absolute right-0 top-full mt-4 w-48 bg-black/95 backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 py-1.5 flex flex-col text-sm uppercase tracking-wider font-bold animate-[fadeIn_0.2s_ease-out]">
-              <Link href={`${homeBase}`} onClick={() => setIsMobileMenuOpen(false)} className={`relative px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] text-white after:content-[''] after:absolute after:bottom-1 after:left-5 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isHomeActive ? 'font-black border-l-2 border-red-600 pl-4 bg-white/[0.03] after:w-[calc(100%-2.5rem)]' : 'font-bold after:w-0 hover:after:w-[calc(100%-2.5rem)]'}`}>
-                Home
+            <div className="absolute right-0 top-full mt-4 w-48 bg-black/95 backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 py-1.5 flex flex-col text-sm uppercase tracking-wider animate-[fadeIn_0.2s_ease-out]">
+              <Link
+                href={`${homeBase}`}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`px-5 py-3 text-left transition-all duration-200 flex items-center justify-between font-extrabold ${isHomeActive
+                  ? 'bg-gradient-to-r from-red-600/20 to-red-600/5 text-red-500 border-l-4 border-red-600'
+                  : 'text-gray-300 hover:text-white hover:bg-white/[0.06] border-l-4 border-transparent'
+                  }`}
+              >
+                <span>Home</span>
+                {isHomeActive && <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />}
               </Link>
-              <Link href={`${homeBase}/movies`} onClick={() => setIsMobileMenuOpen(false)} className={`relative px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] text-white after:content-[''] after:absolute after:bottom-1 after:left-5 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isMoviesActive ? 'font-black border-l-2 border-red-600 pl-4 bg-white/[0.03] after:w-[calc(100%-2.5rem)]' : 'font-bold after:w-0 hover:after:w-[calc(100%-2.5rem)]'}`}>
-                Movies
+
+              <Link
+                href={`${homeBase}/movies`}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`px-5 py-3 text-left transition-all duration-200 flex items-center justify-between font-extrabold ${isMoviesActive
+                  ? 'bg-gradient-to-r from-red-600/20 to-red-600/5 text-red-500 border-l-4 border-red-600'
+                  : 'text-gray-300 hover:text-white hover:bg-white/[0.06] border-l-4 border-transparent'
+                  }`}
+              >
+                <span>Movies</span>
+                {isMoviesActive && <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />}
               </Link>
-              <Link href={`${homeBase}/tv`} onClick={() => setIsMobileMenuOpen(false)} className={`relative px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] text-white after:content-[''] after:absolute after:bottom-1 after:left-5 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isTvActive ? 'font-black border-l-2 border-red-600 pl-4 bg-white/[0.03] after:w-[calc(100%-2.5rem)]' : 'font-bold after:w-0 hover:after:w-[calc(100%-2.5rem)]'}`}>
-                TV
+
+              <Link
+                href={`${homeBase}/tv`}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`px-5 py-3 text-left transition-all duration-200 flex items-center justify-between font-extrabold ${isTvActive
+                  ? 'bg-gradient-to-r from-red-600/20 to-red-600/5 text-red-500 border-l-4 border-red-600'
+                  : 'text-gray-300 hover:text-white hover:bg-white/[0.06] border-l-4 border-transparent'
+                  }`}
+              >
+                <span>TV</span>
+                {isTvActive && <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />}
               </Link>
-              <Link href={`${homeBase}/top-rated`} onClick={() => setIsMobileMenuOpen(false)} className={`relative px-5 py-3.5 text-left transition-all duration-300 hover:bg-white/[0.08] text-white after:content-[''] after:absolute after:bottom-1 after:left-5 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isTopRatedActive ? 'font-black border-l-2 border-red-600 pl-4 bg-white/[0.03] after:w-[calc(100%-2.5rem)]' : 'font-bold after:w-0 hover:after:w-[calc(100%-2.5rem)]'}`}>
-                Top Rated
+
+              <Link
+                href={`${homeBase}/top-rated`}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`px-5 py-3 text-left transition-all duration-200 flex items-center justify-between font-extrabold ${isTopRatedActive
+                  ? 'bg-gradient-to-r from-red-600/20 to-red-600/5 text-red-500 border-l-4 border-red-600'
+                  : 'text-gray-300 hover:text-white hover:bg-white/[0.06] border-l-4 border-transparent'
+                  }`}
+              >
+                <span>Top Rated</span>
+                {isTopRatedActive && <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />}
               </Link>
             </div>
           )}
