@@ -71,18 +71,12 @@ export default function RootLayout({ children }) {
 
 
 
-        {/* DNS / Preconnect — open TCP connections early for critical resources */}
+        {/* DNS / Preconnect — keep to max 2 critical origins to avoid socket contention on mobile */}
         <link rel="preconnect" href="https://image.tmdb.org" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.themoviedb.org" />
-        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
-        {/* Streaming players — preconnect so TCP/TLS is ready before iframe loads */}
-        <link rel="preconnect" href="https://vidsrc.pm" />
-        <link rel="preconnect" href="https://autoembed.co" />
-        <link rel="preconnect" href="https://multiembed.mov" />
-        <link rel="preconnect" href="https://vidsrc.me" />
-        <link rel="preconnect" href="https://vidlink.pro" />
         <link rel="dns-prefetch" href="https://image.tmdb.org" />
         <link rel="dns-prefetch" href="https://api.themoviedb.org" />
+        <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
         <link rel="dns-prefetch" href="https://vidsrc.pm" />
         <link rel="dns-prefetch" href="https://autoembed.co" />
         <link rel="dns-prefetch" href="https://multiembed.mov" />
