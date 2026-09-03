@@ -550,10 +550,10 @@ export default function HomeClient({
                         </div>
                     </div>
 
-                    <button onClick={() => setActiveHeroIndex((p) => (p === 0 ? heroMovies.length - 1 : p - 1))} className={`absolute top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center hover:bg-red-600 hover:border-red-600 hover:text-white transition-all backdrop-blur-md opacity-100 md:opacity-0 md:group-hover:opacity-100 cursor-pointer ${isAr ? 'right-2 sm:right-4 md:right-8' : 'left-2 sm:left-4 md:left-8'}`}>
+                    <button onClick={() => setActiveHeroIndex((p) => (p === 0 ? heroMovies.length - 1 : p - 1))} aria-label="Previous hero slide" className={`absolute top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center hover:bg-red-600 hover:border-red-600 hover:text-white transition-all backdrop-blur-md opacity-100 md:opacity-0 md:group-hover:opacity-100 cursor-pointer ${isAr ? 'right-2 sm:right-4 md:right-8' : 'left-2 sm:left-4 md:left-8'}`}>
                         <i className={`fa-solid ${isAr ? 'fa-chevron-right' : 'fa-chevron-left'} text-sm sm:text-xl md:text-2xl`}></i>
                     </button>
-                    <button onClick={() => setActiveHeroIndex((p) => (p + 1) % heroMovies.length)} className={`absolute top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center hover:bg-red-600 hover:border-red-600 hover:text-white transition-all backdrop-blur-md opacity-100 md:opacity-0 md:group-hover:opacity-100 cursor-pointer ${isAr ? 'left-2 sm:left-4 md:left-8' : 'right-2 sm:right-4 md:right-8'}`}>
+                    <button onClick={() => setActiveHeroIndex((p) => (p + 1) % heroMovies.length)} aria-label="Next hero slide" className={`absolute top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center hover:bg-red-600 hover:border-red-600 hover:text-white transition-all backdrop-blur-md opacity-100 md:opacity-0 md:group-hover:opacity-100 cursor-pointer ${isAr ? 'left-2 sm:left-4 md:left-8' : 'right-2 sm:right-4 md:right-8'}`}>
                         <i className={`fa-solid ${isAr ? 'fa-chevron-left' : 'fa-chevron-right'} text-sm sm:text-xl md:text-2xl`}></i>
                     </button>
 
