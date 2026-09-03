@@ -190,6 +190,7 @@ export default function Navbar({ locale, contentType }) {
       >
         <button
           onClick={() => handleNavigation('all', 'default')}
+          aria-label="ZizHub — Go to home"
           className="text-2xl md:text-3xl font-black tracking-wide cursor-pointer focus:outline-none"
         >
           <span className="text-red-600">Ziz</span>

@@ -2,10 +2,12 @@
 const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  compress: true,
   images: {
-    unoptimized: true,
     minimumCacheTTL: 31536000,
     formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [115, 145, 210, 240, 342],
     remotePatterns: [
       {
         protocol: 'https',
@@ -13,6 +15,9 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
+  },
+  experimental: {
+    optimizePackageImports: ['@vercel/analytics', '@vercel/speed-insights'],
   },
   async rewrites() {
     return [

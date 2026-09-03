@@ -219,6 +219,7 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
 
                 <button
                     onClick={() => onExpandToggle(!isExpanded)}
+                    aria-label={isExpanded ? closeText : viewAllText}
                     className={`group/btn flex items-center gap-1.5 sm:gap-2.5 text-xs sm:text-sm font-black tracking-wide uppercase transition-all duration-200 cursor-pointer ${isExpanded
                         ? 'px-3 sm:px-5 py-2 sm:py-2.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-black shadow-md'
                         : 'text-amber-500 hover:text-amber-400'
@@ -236,6 +237,7 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
                 <div className="group relative z-10">
                     <button
                         onClick={() => scroll('left')}
+                        aria-label="Scroll left"
                         className={`absolute left-1 sm:left-2 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-4 z-30 w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full bg-black/85 border border-white/10 text-white flex items-center justify-center transition-all hover:bg-amber-500 hover:border-amber-500 hover:text-black hover:scale-110 shadow-lg backdrop-blur-md cursor-pointer ${showLeftArrow ? 'opacity-100 md:opacity-0 md:group-hover:opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
                             }`}
                     >
@@ -263,6 +265,7 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
 
                     <button
                         onClick={() => scroll('right')}
+                        aria-label="Scroll right"
                         className="absolute right-1 sm:right-2 md:right-0 top-1/2 -translate-y-1/2 md:translate-x-4 z-30 w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full bg-black/85 border border-white/10 text-white flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all hover:bg-amber-500 hover:border-amber-500 hover:text-black hover:scale-110 shadow-lg backdrop-blur-md cursor-pointer"
                     >
                         <i className={`fa-solid ${isAr ? 'fa-chevron-left' : 'fa-chevron-right'} text-xs sm:text-sm md:text-base`}></i>
@@ -478,15 +481,22 @@ export default function HomeClient({
 
             {heroMovies.length > 0 && !expandedCategoryId && (
                 <section className="relative w-full h-[88vh] sm:h-screen bg-black overflow-hidden group">
-                    {heroMovies.map((movie, index) => (
+                    {heroMovies.map((movie, index) => {
+                        // Only render the active slide and the preloaded next slide.
+                        // All others are skipped entirely to avoid 10x image downloads on LCP.
+                        const isActive = index === activeHeroIndex;
+                        const isNext = index === (activeHeroIndex + 1) % heroMovies.length;
+                        if (!isActive && !isNext) return null;
+
+                        return (
                         <div
                             key={movie.id}
-                            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === activeHeroIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+                            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
                         >
                             <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent z-10"></div>
                             <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/65 via-transparent to-transparent z-10"></div>
 
-                            {/* Mobile Image: Vertical Poster for 100% sharp, un-cropped display on phones */}
+                            {/* Mobile Image: Vertical Poster */}
                             <Image
                                 src={movie.poster_path ? `${IMAGE_BASE_URL}/w780${movie.poster_path}` : movie.backdrop_path ? `${IMAGE_BASE_URL}/w780${movie.backdrop_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero poster'}
@@ -494,23 +504,24 @@ export default function HomeClient({
                                 priority={index === 0}
                                 fetchPriority={index === 0 ? "high" : "auto"}
                                 sizes="100vw"
-                                quality={65}
-                                className={`sm:hidden w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${index === activeHeroIndex ? 'scale-105' : 'scale-100'} object-center`}
+                                quality={70}
+                                className={`sm:hidden w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${isActive ? 'scale-105' : 'scale-100'} object-center`}
                             />
 
-                            {/* Desktop Image: Horizontal Backdrop for widescreen displays */}
+                            {/* Desktop Image: w1280 backdrop for sharp widescreen display */}
                             <Image
-                                src={movie.backdrop_path ? `${IMAGE_BASE_URL}/w780${movie.backdrop_path}` : movie.poster_path ? `${IMAGE_BASE_URL}/w780${movie.poster_path}` : '/no-poster.png'}
+                                src={movie.backdrop_path ? `${IMAGE_BASE_URL}/w1280${movie.backdrop_path}` : movie.poster_path ? `${IMAGE_BASE_URL}/w1280${movie.poster_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero backdrop'}
                                 fill
                                 priority={index === 0}
                                 fetchPriority={index === 0 ? "high" : "auto"}
                                 sizes="100vw"
-                                quality={65}
-                                className={`hidden sm:block w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${index === activeHeroIndex ? 'scale-110' : 'scale-100'} object-center`}
+                                quality={70}
+                                className={`hidden sm:block w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${isActive ? 'scale-110' : 'scale-100'} object-center`}
                             />
                         </div>
-                    ))}
+                        );
+                    })}
 
                     <div className="relative z-20 flex flex-col justify-end h-full max-w-7xl mx-auto px-4 sm:px-8 md:px-24 w-full pb-14 sm:pb-16 pt-24">
                         <div className={`max-w-xs sm:max-w-lg md:max-w-2xl landscape:max-w-2xl ${isAr ? 'text-right' : 'text-left'}`}>
@@ -550,10 +561,16 @@ export default function HomeClient({
                         </div>
                     </div>
 
-                    <button onClick={() => setActiveHeroIndex((p) => (p === 0 ? heroMovies.length - 1 : p - 1))} aria-label="Previous hero slide" className={`absolute top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center hover:bg-red-600 hover:border-red-600 hover:text-white transition-all backdrop-blur-md opacity-100 md:opacity-0 md:group-hover:opacity-100 cursor-pointer ${isAr ? 'right-2 sm:right-4 md:right-8' : 'left-2 sm:left-4 md:left-8'}`}>
+                    <button
+                        onClick={() => setActiveHeroIndex((p) => (p === 0 ? heroMovies.length - 1 : p - 1))}
+                        aria-label="Previous hero slide"
+                        className={`absolute top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center hover:bg-red-600 hover:border-red-600 hover:text-white transition-all backdrop-blur-md opacity-100 md:opacity-0 md:group-hover:opacity-100 cursor-pointer ${isAr ? 'right-2 sm:right-4 md:right-8' : 'left-2 sm:left-4 md:left-8'}`}>
                         <i className={`fa-solid ${isAr ? 'fa-chevron-right' : 'fa-chevron-left'} text-sm sm:text-xl md:text-2xl`}></i>
                     </button>
-                    <button onClick={() => setActiveHeroIndex((p) => (p + 1) % heroMovies.length)} aria-label="Next hero slide" className={`absolute top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center hover:bg-red-600 hover:border-red-600 hover:text-white transition-all backdrop-blur-md opacity-100 md:opacity-0 md:group-hover:opacity-100 cursor-pointer ${isAr ? 'left-2 sm:left-4 md:left-8' : 'right-2 sm:right-4 md:right-8'}`}>
+                    <button
+                        onClick={() => setActiveHeroIndex((p) => (p + 1) % heroMovies.length)}
+                        aria-label="Next hero slide"
+                        className={`absolute top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center hover:bg-red-600 hover:border-red-600 hover:text-white transition-all backdrop-blur-md opacity-100 md:opacity-0 md:group-hover:opacity-100 cursor-pointer ${isAr ? 'left-2 sm:left-4 md:left-8' : 'right-2 sm:right-4 md:right-8'}`}>
                         <i className={`fa-solid ${isAr ? 'fa-chevron-left' : 'fa-chevron-right'} text-sm sm:text-xl md:text-2xl`}></i>
                     </button>
 

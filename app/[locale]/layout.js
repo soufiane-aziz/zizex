@@ -1,13 +1,13 @@
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import InstallPWA from '../../components/InstallPWA';
 
+// Only load the 2 weights actually used. preload:true lets Next.js add <link rel="preload"> in <head>.
 const inter = Inter({
     subsets: ['latin'],
-    weight: ['300', '400', '500', '600', '700', '800'],
+    weight: ['400', '700'],
     display: 'swap',
-    preload: false,
+    preload: true,
     fallback: ['system-ui', 'arial'],
 });
 
@@ -61,7 +61,7 @@ export default async function LocaleLayout(props) {
             />
             {children}
             <InstallPWA locale={locale} />
-            <SpeedInsights />
+            {/* SpeedInsights is already loaded in app/layout.js — removed duplicate to reduce TBT */}
 
             {/* Script publicitaire Adsterra (Popunder / Social Bar) */}
             <Script
