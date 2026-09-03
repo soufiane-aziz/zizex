@@ -3,6 +3,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
 import AdBlocker from '../components/AdBlocker';
+import AntiAdBlock from '../components/AntiAdBlock';
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app'),
@@ -92,6 +93,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <AdBlocker />
+        <AntiAdBlock />
         {children}
         <Analytics />
         <SpeedInsights />
