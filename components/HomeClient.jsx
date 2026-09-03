@@ -158,12 +158,11 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
                     <div className="relative rounded-lg overflow-hidden aspect-[2/3] transform transition-all duration-300 ease-out hover:-translate-y-1 sm:hover:-translate-y-2.5 hover:shadow-[0_10px_20px_rgba(245,158,11,0.2)] sm:hover:shadow-[0_15px_30px_rgba(245,158,11,0.25)] group/card cursor-pointer border border-transparent hover:border-amber-500/60 bg-[#121212]">
 
                         <Image
-                            src={movie.poster_path ? `${IMAGE_BASE_URL}/w780${movie.poster_path}` : "/no-poster.png"}
+                            src={movie.poster_path ? `${IMAGE_BASE_URL}/w342${movie.poster_path}` : "/no-poster.png"}
                             alt={movie.title || movie.name || 'Poster'}
-                            width={780}
-                            height={1170}
+                            width={342}
+                            height={513}
                             sizes="(max-width: 640px) 150px, (max-width: 768px) 200px, (max-width: 1024px) 250px, 300px"
-                            unoptimized
                             className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover/card:scale-105"
                             loading={index < 6 ? "eager" : "lazy"}
                         />
@@ -299,6 +298,15 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
 
 // --- Production balanced ads ---
 const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoaded(true);
+        }, 800);
+        return () => clearTimeout(timer);
+    }, []);
+
     const srcDoc = `
     <!DOCTYPE html>
     <html>
@@ -333,15 +341,20 @@ const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
 
     return (
         <div className={`w-full flex justify-center items-center overflow-hidden ${wrapperClassName}`} style={{ minHeight: `${height}px` }}>
-            <iframe
-                srcDoc={srcDoc}
-                width={width}
-                height={height}
-                frameBorder="0"
-                scrolling="no"
-                title="Advertisement"
-                style={{ display: 'block', maxWidth: '100%', border: 'none', background: 'transparent' }}
-            ></iframe>
+            {isLoaded ? (
+                <iframe
+                    srcDoc={srcDoc}
+                    width={width}
+                    height={height}
+                    frameBorder="0"
+                    scrolling="no"
+                    title="Advertisement"
+                    loading="lazy"
+                    style={{ display: 'block', maxWidth: '100%', border: 'none', background: 'transparent' }}
+                ></iframe>
+            ) : (
+                <div style={{ width: `${width}px`, height: `${height}px`, maxWidth: '100%' }} />
+            )}
         </div>
     );
 };

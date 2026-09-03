@@ -9,6 +9,15 @@ import { createSlug } from '../lib/slug';
 
 // COMPOSANT PUBLICITAIRE ISOLÉ
 const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoaded(true);
+        }, 800);
+        return () => clearTimeout(timer);
+    }, []);
+
     const srcDoc = `
     <!DOCTYPE html>
     <html>
@@ -43,15 +52,20 @@ const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
 
     return (
         <div className={`w-full flex justify-center items-center overflow-hidden ${wrapperClassName}`} style={{ minHeight: `${height}px` }}>
-            <iframe
-                srcDoc={srcDoc}
-                width={width}
-                height={height}
-                frameBorder="0"
-                scrolling="no"
-                title="Advertisement"
-                style={{ display: 'block', maxWidth: '100%', border: 'none', background: 'transparent' }}
-            ></iframe>
+            {isLoaded ? (
+                <iframe
+                    srcDoc={srcDoc}
+                    width={width}
+                    height={height}
+                    frameBorder="0"
+                    scrolling="no"
+                    title="Advertisement"
+                    loading="lazy"
+                    style={{ display: 'block', maxWidth: '100%', border: 'none', background: 'transparent' }}
+                ></iframe>
+            ) : (
+                <div style={{ width: `${width}px`, height: `${height}px`, maxWidth: '100%' }} />
+            )}
         </div>
     );
 };
