@@ -171,10 +171,10 @@ export default function Navbar({ locale }) {
     router.push(dynamicHref);
   };
 
-  const isHomeActive = pathname === `/${resolvedLocale}` || pathname === `/${resolvedLocale}/`;
-  const isMoviesActive = pathname.includes(`/${resolvedLocale}/movies`);
-  const isTvActive = pathname.includes(`/${resolvedLocale}/tv`);
-  const isTopRatedActive = pathname.includes(`/${resolvedLocale}/top-rated`);
+  const isHomeActive = contentType === 'home' || pathname === `/${resolvedLocale}` || pathname === `/${resolvedLocale}/`;
+  const isMoviesActive = contentType === 'movie' || pathname.includes(`/${resolvedLocale}/movie`);
+  const isTvActive = contentType === 'tv' || pathname.includes(`/${resolvedLocale}/tv`);
+  const isTopRatedActive = contentType === 'top_rated' || pathname.includes(`/${resolvedLocale}/top-rated`);
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-12 transition-all duration-500 ease-in-out border-b ${
