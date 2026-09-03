@@ -3,7 +3,7 @@ export default function TVEpisodeLoading() {
     return (
         <div className="min-h-screen bg-zinc-950 text-white font-sans overflow-x-hidden pb-16">
 
-            <main className="pt-28 px-4 md:px-8 max-w-[1600px] mx-auto flex flex-col gap-10 mb-2">
+            <main className="pt-28 px-4 md:px-8 max-w-[1600px] mx-auto flex flex-col gap-6 mb-2">
 
                 {/* Ad bar */}
                 <div className="hidden sm:block skeleton w-full h-[90px] rounded-xl opacity-40" />
@@ -12,9 +12,6 @@ export default function TVEpisodeLoading() {
 
                     {/* Left Column */}
                     <div className="lg:col-span-2 flex flex-col gap-6">
-
-                        {/* Video Player — 16:9 */}
-                        <div className="skeleton w-full aspect-video rounded-xl opacity-80" />
 
                         {/* Server Selection */}
                         <div className="bg-zinc-900/40 border border-white/5 p-3 sm:p-4 rounded-xl flex flex-col sm:flex-row sm:items-center gap-3">
@@ -29,6 +26,9 @@ export default function TVEpisodeLoading() {
                                 ))}
                             </div>
                         </div>
+
+                        {/* Video Player — 16:9 */}
+                        <div className="skeleton w-full h-[calc(56.25vw+10px)] sm:h-auto sm:aspect-video rounded-xl opacity-80" />
 
                         {/* Metadata */}
                         <div className="p-1 flex flex-col gap-4">
