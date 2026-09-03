@@ -75,11 +75,19 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://image.tmdb.org" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.themoviedb.org" />
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
+        {/* Streaming players — preconnect so TCP/TLS is ready before iframe loads */}
+        <link rel="preconnect" href="https://vidsrc.pm" />
+        <link rel="preconnect" href="https://autoembed.co" />
+        <link rel="preconnect" href="https://multiembed.mov" />
+        <link rel="preconnect" href="https://vidsrc.me" />
+        <link rel="preconnect" href="https://vidlink.pro" />
         <link rel="dns-prefetch" href="https://image.tmdb.org" />
         <link rel="dns-prefetch" href="https://api.themoviedb.org" />
         <link rel="dns-prefetch" href="https://vidsrc.pm" />
         <link rel="dns-prefetch" href="https://autoembed.co" />
         <link rel="dns-prefetch" href="https://multiembed.mov" />
+        <link rel="dns-prefetch" href="https://vidsrc.me" />
+        <link rel="dns-prefetch" href="https://vidlink.pro" />
       </head>
       <body>
         {children}

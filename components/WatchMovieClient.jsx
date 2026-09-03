@@ -96,14 +96,24 @@ export default function WatchMovieClient({
         return () => clearTimeout(timer);
     }, []);
 
-    // Auto-hide server loading overlay after 1.0s max for instant ultra-fast player load
+    // Show loading overlay while the iframe loads.
+    // Auto-switch to next server after 15s if vidsrc.pm (or any server) stalls.
+    const autoSwitchTimerRef = useRef(null);
     useEffect(() => {
         setIsIframeLoading(true);
-        const maxLoadTimer = setTimeout(() => {
-            setIsIframeLoading(false);
-        }, 1000);
-        return () => clearTimeout(maxLoadTimer);
-    }, [activeServerId]);
+        clearTimeout(autoSwitchTimerRef.current);
+        autoSwitchTimerRef.current = setTimeout(() => {
+            // Server took too long — silently switch to next one
+            const currentIndex = servers.findIndex(s => s.id === activeServerId);
+            const nextIndex = (currentIndex + 1) % servers.length;
+            if (nextIndex !== currentIndex) {
+                setActiveServerId(servers[nextIndex].id);
+            } else {
+                setIsIframeLoading(false); // last resort: just hide spinner
+            }
+        }, 15000);
+        return () => clearTimeout(autoSwitchTimerRef.current);
+    }, [activeServerId]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const toggleScreenLock = (e) => {
         if (e) e.stopPropagation();
@@ -343,7 +353,10 @@ export default function WatchMovieClient({
                                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
                                 loading="eager"
                                 fetchPriority="high"
-                                onLoad={() => setIsIframeLoading(false)}
+                                onLoad={() => {
+                                    clearTimeout(autoSwitchTimerRef.current);
+                                    setIsIframeLoading(false);
+                                }}
                                 onError={handleServerError}
                             />
                         </div>

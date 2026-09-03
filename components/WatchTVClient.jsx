@@ -167,14 +167,23 @@ export default function WatchTVClient({
         setActiveServerId('server1');
     }, [currentSeason, currentEpisode]);
 
-    // Auto-hide server loading overlay after 1.0s max for instant ultra-fast player load
+    // Show loading overlay while the iframe loads.
+    // Auto-switch to next server after 15s if vidsrc.pm (or any server) stalls.
+    const autoSwitchTimerRef = useRef(null);
     useEffect(() => {
         setIsIframeLoading(true);
-        const maxLoadTimer = setTimeout(() => {
-            setIsIframeLoading(false);
-        }, 1000);
-        return () => clearTimeout(maxLoadTimer);
-    }, [activeServerId, currentSeason, currentEpisode]);
+        clearTimeout(autoSwitchTimerRef.current);
+        autoSwitchTimerRef.current = setTimeout(() => {
+            const currentIndex = servers.findIndex(s => s.id === activeServerId);
+            const nextIndex = (currentIndex + 1) % servers.length;
+            if (nextIndex !== currentIndex) {
+                setActiveServerId(servers[nextIndex].id);
+            } else {
+                setIsIframeLoading(false);
+            }
+        }, 15000);
+        return () => clearTimeout(autoSwitchTimerRef.current);
+    }, [activeServerId, currentSeason, currentEpisode]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
@@ -407,7 +416,10 @@ export default function WatchTVClient({
                                     allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
                                     loading="eager"
                                     fetchPriority="high"
-                                    onLoad={() => setIsIframeLoading(false)}
+                                    onLoad={() => {
+                                        clearTimeout(autoSwitchTimerRef.current);
+                                        setIsIframeLoading(false);
+                                    }}
                                     onError={handleServerError}
                                 />
                             </div>
