@@ -166,11 +166,11 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
                     <div className="relative rounded-lg overflow-hidden aspect-[2/3] transform transition-all duration-300 ease-out hover:-translate-y-1 sm:hover:-translate-y-2.5 hover:shadow-[0_10px_20px_rgba(245,158,11,0.2)] sm:hover:shadow-[0_15px_30px_rgba(245,158,11,0.25)] group/card cursor-pointer border border-transparent hover:border-amber-500/60 bg-[#121212]">
 
                         <Image
-                            src={movie.poster_path ? `${IMAGE_BASE_URL}/w185${movie.poster_path}` : "/no-poster.png"}
+                            src={movie.poster_path ? `${IMAGE_BASE_URL}/w342${movie.poster_path}` : "/no-poster.png"}
                             alt={movie.title || movie.name || 'Poster'}
-                            width={185}
-                            height={278}
-                            sizes="(max-width: 640px) 115px, 185px"
+                            width={342}
+                            height={513}
+                            sizes="(max-width: 640px) 150px, (max-width: 768px) 200px, (max-width: 1024px) 250px, 300px"
                             className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover/card:scale-105"
                             loading={index < 6 ? "eager" : "lazy"}
                         />
@@ -504,9 +504,9 @@ export default function HomeClient({
                             <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent z-10"></div>
                             <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/65 via-transparent to-transparent z-10"></div>
 
-                            {/* Mobile Image: Vertical Poster (w500 is optimal for fast mobile LCP & crisp retina display) */}
+                            {/* Mobile Image: Vertical Poster */}
                             <Image
-                                src={movie.poster_path ? `${IMAGE_BASE_URL}/w500${movie.poster_path}` : movie.backdrop_path ? `${IMAGE_BASE_URL}/w500${movie.backdrop_path}` : '/no-poster.png'}
+                                src={movie.poster_path ? `${IMAGE_BASE_URL}/w780${movie.poster_path}` : movie.backdrop_path ? `${IMAGE_BASE_URL}/w780${movie.backdrop_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero poster'}
                                 fill
                                 unoptimized
