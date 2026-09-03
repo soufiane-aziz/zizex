@@ -5,6 +5,9 @@ import { useEffect } from 'react';
 // Whitelisted domains (User's site, User's Adsterra/bashsecret ads, Embed Servers, CDNs)
 const ALLOWED_AD_DOMAINS = [
   'bashsecret.com',
+  'adsterra',
+  'as.net',
+  'exdynsrv',
   'vidsrc.pm',
   'vidsrc.me',
   'autoembed.co',
@@ -30,13 +33,13 @@ export default function AdBlocker() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    // 1. Intercept window.open to block unauthorized popups/popunders
+    // Intercept window.open to block unauthorized popups/popunders
     const originalWindowOpen = window.open;
     window.open = function (url, target, features) {
       if (!url) return null;
       const urlStr = String(url).toLowerCase();
 
-      // Always allow user's own site, relative links, and user's bashsecret ads
+      // Always allow user's own site, relative links, and user's Adsterra/bashsecret ads
       const isAllowed = ALLOWED_AD_DOMAINS.some(domain => urlStr.includes(domain)) ||
                         urlStr.startsWith('/') ||
                         urlStr.startsWith(window.location.origin);
@@ -51,29 +54,8 @@ export default function AdBlocker() {
       return null;
     };
 
-    // 2. MutationObserver: Block dynamically injected spam ad scripts
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === 1 && node.tagName === 'SCRIPT' && node.src) {
-            const src = node.src.toLowerCase();
-            const isUserAd = src.includes('bashsecret.com');
-            const isSpamScript = BLOCKED_SPAM_DOMAINS.some(domain => src.includes(domain));
-
-            if (isSpamScript && !isUserAd) {
-              console.warn('[ZizHub AdBlocker] Removed spam ad script:', src);
-              node.parentNode?.removeChild(node);
-            }
-          }
-        });
-      });
-    });
-
-    observer.observe(document.documentElement, { childList: true, subtree: true });
-
     return () => {
       window.open = originalWindowOpen;
-      observer.disconnect();
     };
   }, []);
 

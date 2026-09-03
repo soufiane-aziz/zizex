@@ -67,7 +67,7 @@ export default async function LocaleLayout(props) {
             {/* Adsterra SocialBar Ad Script */}
             <Script
                 src="https://bashsecret.com/20/6e/e9/206ee9fc8937e09edad8756e7612d82c.js"
-                strategy="lazyOnload"
+                strategy="afterInteractive"
             />
         </div>
     );

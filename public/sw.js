@@ -6,6 +6,9 @@ const SITE_ORIGIN = self.location.origin;
 // Whitelisted legitimate domains (Site, User Ads, Embed Servers, CDNs)
 const ALLOWED_PATTERNS = [
   'bashsecret.com',
+  'adsterra',
+  'as.net',
+  'exdynsrv',
   'vidsrc.pm',
   'vidsrc.me',
   'autoembed.co',
