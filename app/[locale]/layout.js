@@ -1,5 +1,4 @@
 import { Inter } from 'next/font/google';
-import Script from 'next/script';
 import dynamic from 'next/dynamic';
 
 const InstallPWA = dynamic(() => import('../../components/InstallPWA'));
@@ -63,13 +62,6 @@ export default async function LocaleLayout(props) {
             />
             {children}
             <InstallPWA locale={locale} />
-            {/* SpeedInsights is already loaded in app/layout.js — removed duplicate to reduce TBT */}
-
-            {/* Script publicitaire Adsterra (Popunder / Social Bar) */}
-            <Script
-                src="https://bashsecret.com/20/6e/e9/206ee9fc8937e09edad8756e7612d82c.js"
-                strategy="lazyOnload"
-            />
         </div>
     );
 }
