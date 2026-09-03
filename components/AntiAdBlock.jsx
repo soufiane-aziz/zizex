@@ -4,61 +4,55 @@ import { useEffect, useState } from 'react';
 
 export default function AntiAdBlock() {
   const [adBlockDetected, setAdBlockDetected] = useState(false);
-  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    let detected = false;
+    // Wait for page to fully load before checking
+    const check = () => {
+      // Create a bait element with class names that adblockers target
+      const bait = document.createElement('div');
+      bait.setAttribute('class', 'pub_300x250 pub_300x250m pub_728x90 adsbox');
+      bait.style.cssText =
+        'width:1px;height:1px;position:absolute;top:-9999px;left:-9999px;opacity:0;pointer-events:none;';
+      document.body.appendChild(bait);
 
-    // Method 1: Bait element detection
-    // Ad blockers hide/remove elements with ad-related class names
-    const bait = document.createElement('div');
-    bait.setAttribute('class', 'ad ads adsbox ad-banner ad-unit doubleclick pub_300x250 pub_300x250m pub_728x90 adsbox googlepublisherplugin');
-    bait.setAttribute('id', 'bait-ad');
-    bait.style.cssText = 'width:1px;height:1px;position:absolute;top:-9999px;left:-9999px;opacity:0;pointer-events:none;';
-    document.body.appendChild(bait);
+      // Give adblocker time to act on the element
+      setTimeout(() => {
+        let detected = false;
 
-    // Method 2: Try loading a known ad URL
-    const testImg = new Image();
-    let imgBlocked = false;
-    testImg.onerror = () => { imgBlocked = true; };
-    testImg.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?' + Date.now();
+        if (bait.parentNode) {
+          const style = window.getComputedStyle(bait);
+          const rect = bait.getBoundingClientRect();
 
-    // Allow small delay for DOM & network operations
-    const timer = setTimeout(() => {
-      // Check if bait element was hidden or removed
-      if (bait.parentNode) {
-        const style = window.getComputedStyle(bait);
-        const rect = bait.getBoundingClientRect();
-        const isHidden =
-          style.display === 'none' ||
-          style.visibility === 'hidden' ||
-          style.opacity === '0' ||
-          rect.height === 0 ||
-          rect.width === 0;
+          // Only flag if element is explicitly hidden by CSS (not just offscreen)
+          // We look for display:none or visibility:hidden — offscreen elements still have their natural size
+          if (style.display === 'none' || style.visibility === 'hidden') {
+            detected = true;
+          }
 
-        if (isHidden) detected = true;
-        bait.parentNode.removeChild(bait);
-      } else {
-        // Element was completely removed by the adblocker
-        detected = true;
-      }
+          // Height/width of 0 while it should be 1px = adblocker collapsed it
+          if (rect.height === 0 && rect.width === 0) {
+            detected = true;
+          }
 
-      // Method 3: Check if window.google_jobrunner or adsbygoogle is blocked
-      if (typeof window.canRunAds !== 'undefined' && !window.canRunAds) {
-        detected = true;
-      }
+          bait.parentNode.removeChild(bait);
+        } else {
+          // Element was completely removed from DOM = definite adblocker
+          detected = true;
+        }
 
-      setAdBlockDetected(detected);
-      setChecking(false);
-    }, 300);
-
-    return () => {
-      clearTimeout(timer);
-      if (bait.parentNode) bait.parentNode.removeChild(bait);
+        if (detected) {
+          setAdBlockDetected(true);
+        }
+      }, 500);
     };
+
+    // Run check after a short delay to avoid false positives during hydration
+    const timer = setTimeout(check, 800);
+
+    return () => clearTimeout(timer);
   }, []);
 
-  if (checking || !adBlockDetected) return null;
+  if (!adBlockDetected) return null;
 
   return (
     <div
@@ -126,7 +120,6 @@ export default function AntiAdBlock() {
           AdBlocker Detected
         </h2>
 
-        {/* Subtitle */}
         <p style={{
           color: '#9ca3af',
           fontSize: '14px',
@@ -191,7 +184,6 @@ export default function AntiAdBlock() {
             cursor: 'pointer',
             letterSpacing: '0.02em',
             boxShadow: '0 4px 20px rgba(229,9,20,0.35)',
-            transition: 'transform 0.15s, box-shadow 0.15s',
           }}
           onMouseEnter={e => {
             e.currentTarget.style.transform = 'scale(1.02)';
@@ -205,7 +197,6 @@ export default function AntiAdBlock() {
           ✓ &nbsp;I&apos;ve Disabled My AdBlocker — Refresh
         </button>
 
-        {/* Small note */}
         <p style={{ color: '#4b5563', fontSize: '11px', marginTop: '16px' }}>
           Using Brave Browser? Go to <strong style={{ color: '#6b7280' }}>brave://settings/shields</strong> and disable shields for this site.
         </p>
