@@ -488,25 +488,25 @@ export default function HomeClient({
 
                             {/* Mobile Image: Vertical Poster for 100% sharp, un-cropped display on phones */}
                             <Image
-                                src={movie.poster_path ? `${IMAGE_BASE_URL}/w780${movie.poster_path}` : movie.backdrop_path ? `${IMAGE_BASE_URL}/w1280${movie.backdrop_path}` : '/no-poster.png'}
+                                src={movie.poster_path ? `${IMAGE_BASE_URL}/w780${movie.poster_path}` : movie.backdrop_path ? `${IMAGE_BASE_URL}/w780${movie.backdrop_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero poster'}
                                 fill
                                 priority={index === 0}
                                 fetchPriority={index === 0 ? "high" : "auto"}
                                 sizes="100vw"
-                                quality={90}
+                                quality={65}
                                 className={`sm:hidden w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${index === activeHeroIndex ? 'scale-105' : 'scale-100'} object-center`}
                             />
 
                             {/* Desktop Image: Horizontal Backdrop for widescreen displays */}
                             <Image
-                                src={movie.backdrop_path ? `${IMAGE_BASE_URL}/w1280${movie.backdrop_path}` : movie.poster_path ? `${IMAGE_BASE_URL}/w780${movie.poster_path}` : '/no-poster.png'}
+                                src={movie.backdrop_path ? `${IMAGE_BASE_URL}/w780${movie.backdrop_path}` : movie.poster_path ? `${IMAGE_BASE_URL}/w780${movie.poster_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero backdrop'}
                                 fill
                                 priority={index === 0}
                                 fetchPriority={index === 0 ? "high" : "auto"}
                                 sizes="100vw"
-                                quality={90}
+                                quality={65}
                                 className={`hidden sm:block w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${index === activeHeroIndex ? 'scale-110' : 'scale-100'} object-center`}
                             />
                         </div>

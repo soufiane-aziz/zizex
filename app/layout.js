@@ -69,16 +69,13 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/icon-512.png" />
-        <link rel="preconnect" href="https://vidsrc.pm" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://vidsrc.pm" />
-        <link rel="preconnect" href="https://autoembed.co" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://autoembed.co" />
-        <link rel="preconnect" href="https://multiembed.mov" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://multiembed.mov" />
         <link rel="preconnect" href="https://image.tmdb.org" />
-        <link rel="dns-prefetch" href="https://image.tmdb.org" />
         <link rel="preconnect" href="https://api.themoviedb.org" />
+        <link rel="dns-prefetch" href="https://image.tmdb.org" />
         <link rel="dns-prefetch" href="https://api.themoviedb.org" />
+        <link rel="dns-prefetch" href="https://vidsrc.pm" />
+        <link rel="dns-prefetch" href="https://autoembed.co" />
+        <link rel="dns-prefetch" href="https://multiembed.mov" />
       </head>
       <body>
         {children}

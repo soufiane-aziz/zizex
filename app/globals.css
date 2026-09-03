@@ -1,5 +1,14 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'Font Awesome 6 Free';
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Font Awesome 6 Brands';
+  font-display: swap;
+}
+
 /* Tailwind v4 Configuration Setup */
 @theme {
   --color-crimson-50: #fff1f2;
