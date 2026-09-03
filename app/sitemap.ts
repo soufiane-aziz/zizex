@@ -116,6 +116,22 @@ const GENRE_SLUGS = [
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const sitemapEntries: MetadataRoute.Sitemap = [];
 
+    // 0. Root domain entry
+    sitemapEntries.push({
+        url: safeUrl(SITE_URL),
+        changeFrequency: 'daily',
+        priority: 1.0,
+        lastModified: new Date(),
+        alternates: {
+            languages: {
+                'en': safeUrl(`${SITE_URL}/en`),
+                'fr': safeUrl(`${SITE_URL}/fr`),
+                'ar': safeUrl(`${SITE_URL}/ar`),
+                'x-default': safeUrl(`${SITE_URL}/en`),
+            }
+        }
+    });
+
     // 1. Home & Genre paths for each locale
     LOCALES.forEach(locale => {
         const corePages = [
