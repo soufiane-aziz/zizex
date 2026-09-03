@@ -11,13 +11,13 @@ export const metadata = {
   keywords: ['zizhub', 'ZizHub', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies free', 'sci-fi series online', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch free tv shows', 'best movie streaming site', 'cinema streaming free', 'Netflix', 'watch Netflix movies free', 'HBO Max streaming', 'Disney Plus free', 'TopCinema', 'EgyBest alternative', 'MyCima', 'Cima4U', 'Shahid VIP free', 'WatchIt movies'],
   icons: {
     icon: [
-      { url: '/favicon.ico?v=3', sizes: 'any' },
-      { url: '/icon-192.png?v=3', sizes: '192x192', type: 'image/png' },
-      { url: '/icon-512.png?v=3', sizes: '512x512', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
-    shortcut: ['/favicon.ico?v=3'],
+    shortcut: '/favicon.ico',
     apple: [
-      { url: '/icon-512.png?v=3', sizes: '512x512', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
   },
   openGraph: {
@@ -66,6 +66,9 @@ export default function RootLayout({ children }) {
     <html lang="en" className="dark">
       <head>
         <meta name="google-site-verification" content="RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/icon-512.png" />
         <link rel="preconnect" href="https://vidsrc.pm" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://vidsrc.pm" />
         <link rel="preconnect" href="https://autoembed.co" crossOrigin="anonymous" />

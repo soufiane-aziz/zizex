@@ -45,15 +45,15 @@ export async function generateMetadata(props) {
     const genreTitle = genreConfig?.title[locale] || genreConfig?.title.en || cleanSlug.replace(/-/g, ' ');
 
     const title = isAr
-        ? `شاهد ${genreTitle} أونلاين مجاناً | ZizHub`
+        ? `ZizHub | شاهد ${genreTitle} أونلاين مجاناً HD`
         : isFr
             ? `Regarder ${genreTitle} en Streaming Gratuit | ZizHub`
             : `Watch ${genreTitle} Online | ZizHub`;
 
     const description = isAr
-        ? `استكشف أفضل ${genreTitle} بجودة عالية وبدون إعلانات مزعجة على ZizHub.`
+        ? `استكشف واشاهد أفضل ${genreTitle} على منصة ZizHub بجودة عالية HD وبدون إعلانات.`
         : isFr
-            ? `Découvrez les meilleurs ${genreTitle} en haute définition sur ZizHub.`
+            ? `Découvrez et regardez les meilleurs ${genreTitle} en streaming HD gratuit sur ZizHub.`
             : `Stream top ${genreTitle} in HD quality online for free on ZizHub.`;
 
     const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
