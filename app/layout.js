@@ -1,6 +1,7 @@
 import './globals.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
 
 export const metadata = {
@@ -79,6 +80,7 @@ export default function RootLayout({ children }) {
       <body>
         {children}
         <Analytics />
+        <SpeedInsights />
         {/* Service Worker: blocks unauthorized ad redirects from streaming iframes */}
         <Script
           id="sw-register"
