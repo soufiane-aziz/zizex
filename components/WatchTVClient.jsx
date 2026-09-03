@@ -89,6 +89,7 @@ export default function WatchTVClient({
     const [showServerNotice, setShowServerNotice] = useState(true);
     const [isScreenLocked, setIsScreenLocked] = useState(false);
     const [showUnlockButton, setShowUnlockButton] = useState(false);
+    const [showSlowHint, setShowSlowHint] = useState(false);
 
     const playerContainerRef = useRef(null);
     const unlockTimerRef = useRef(null);
@@ -168,11 +169,17 @@ export default function WatchTVClient({
     }, [currentSeason, currentEpisode]);
 
     // Show loading overlay while the iframe loads.
-    // Auto-switch to next server after 15s if vidsrc.pm (or any server) stalls.
+    // Auto-switch to next server after 8s if vidsrc.pm (or any server) stalls.
     const autoSwitchTimerRef = useRef(null);
+    const slowHintTimerRef = useRef(null);
     useEffect(() => {
         setIsIframeLoading(true);
+        setShowSlowHint(false);
         clearTimeout(autoSwitchTimerRef.current);
+        clearTimeout(slowHintTimerRef.current);
+        // Show "slow connection" hint after 5s
+        slowHintTimerRef.current = setTimeout(() => setShowSlowHint(true), 5000);
+        // Auto-switch server after 8s
         autoSwitchTimerRef.current = setTimeout(() => {
             const currentIndex = servers.findIndex(s => s.id === activeServerId);
             const nextIndex = (currentIndex + 1) % servers.length;
@@ -181,8 +188,11 @@ export default function WatchTVClient({
             } else {
                 setIsIframeLoading(false);
             }
-        }, 15000);
-        return () => clearTimeout(autoSwitchTimerRef.current);
+        }, 8000);
+        return () => {
+            clearTimeout(autoSwitchTimerRef.current);
+            clearTimeout(slowHintTimerRef.current);
+        };
     }, [activeServerId, currentSeason, currentEpisode]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
@@ -387,13 +397,29 @@ export default function WatchTVClient({
                                     </div>
                                 )}
 
-                                {/* Loading Indicator Overlay */}
+                                {/* Loading Indicator Overlay — shows TV show backdrop as background */}
                                 {isIframeLoading && (
-                                    <div className="absolute inset-0 z-20 bg-zinc-950/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3 pointer-events-none transition-opacity duration-300">
-                                        <div className="w-12 h-12 border-4 border-red-600/20 border-t-red-600 rounded-full animate-spin"></div>
-                                        <span className="text-xs font-bold text-gray-300 uppercase tracking-widest">
-                                            {isAr ? 'جاري تحميل السيرفر...' : isFr ? 'Chargement du serveur...' : 'Loading Server...'}
-                                        </span>
+                                    <div className="absolute inset-0 z-20 bg-zinc-950/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 pointer-events-none transition-opacity duration-300 overflow-hidden">
+                                        {/* Blurred backdrop in background for instant visual feedback */}
+                                        {showDetails?.backdrop_path && (
+                                            <img
+                                                src={`https://image.tmdb.org/t/p/w780${showDetails.backdrop_path}`}
+                                                alt=""
+                                                aria-hidden="true"
+                                                className="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm scale-105"
+                                            />
+                                        )}
+                                        <div className="relative z-10 flex flex-col items-center gap-3">
+                                            <div className="w-12 h-12 border-4 border-red-600/20 border-t-red-600 rounded-full animate-spin"></div>
+                                            <span className="text-xs font-bold text-gray-300 uppercase tracking-widest">
+                                                {isAr ? 'جاري تحميل السيرفر...' : isFr ? 'Chargement du serveur...' : 'Loading Server...'}
+                                            </span>
+                                            {showSlowHint && (
+                                                <span className="text-[11px] text-amber-400 font-semibold animate-pulse">
+                                                    {isAr ? 'بطيء؟ جرّب سيرفراً آخر ↓' : isFr ? 'Lent? Essayez un autre serveur ↓' : 'Slow? Try another server below ↓'}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                 )}
 
