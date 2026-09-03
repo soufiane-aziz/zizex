@@ -24,9 +24,41 @@ function CardSkeleton() {
     );
 }
 
-// --- Scroll Animation (Disabled for maximum mobile speed & instant rendering) ---
-function RevealOnScroll({ children }) {
-    return <div className="w-full">{children}</div>;
+// --- Scroll Animation ---
+function RevealOnScroll({ children, delay = 0, disable = false }) {
+    const [isVisible, setIsVisible] = useState(false);
+    const ref = useRef(null);
+
+    useEffect(() => {
+        if (disable) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.unobserve(entry.target);
+                }
+            },
+            { threshold: 0.1 }
+        );
+        if (ref.current) observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, [disable]);
+
+    if (disable) {
+        return <div className="w-full">{children}</div>;
+    }
+
+    return (
+        <div
+            ref={ref}
+            style={{ transitionDelay: `${delay}ms` }}
+            className={`transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
+                }`}
+        >
+            {children}
+        </div>
+    );
 }
 
 // --- Category Row Component ---
@@ -503,14 +535,14 @@ export default function HomeClient({
                         <div className={`max-w-xs sm:max-w-lg md:max-w-2xl landscape:max-w-2xl ${isAr ? 'text-right' : 'text-left'}`}>
                             <h1
                                 key={`title-${activeHeroIndex}`}
-                                className="text-3xl sm:text-5xl md:text-7xl font-black mb-1.5 sm:mb-2 text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] leading-tight landscape:text-4xl landscape:sm:text-5xl"
+                                className="text-3xl sm:text-5xl md:text-7xl font-black mb-1.5 sm:mb-2 text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] leading-tight opacity-0 animate-[fadeInUp_0.5s_ease-out_0.2s_forwards] landscape:text-4xl landscape:sm:text-5xl"
                             >
                                 {activeHero.title || activeHero.name}
                             </h1>
 
                             <div
                                 key={`meta-${activeHeroIndex}`}
-                                className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm font-bold text-gray-200 mb-3.5 sm:mb-4"
+                                className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm font-bold text-gray-200 mb-3.5 sm:mb-4 opacity-0 animate-[fadeInUp_0.5s_ease-out_0.4s_forwards]"
                             >
                                 <span className="flex items-center gap-1 sm:gap-1.5 text-amber-400 bg-black/60 px-2.5 py-1 rounded shadow-md sm:px-3 sm:py-1.5">
                                     <i className="fa-solid fa-star"></i>
@@ -522,13 +554,14 @@ export default function HomeClient({
                                 </span>
                             </div>
 
-                            <div>
+                            <div className="opacity-0 animate-[fadeInUp_0.5s_ease-out_0.6s_forwards]">
                                 <Link
                                     href={isHeroTv 
                                         ? `/${locale}/tv/${createSlug(activeHero.name || activeHero.title, activeHero.id, 'tv')}/season-1/episode-1` 
                                         : `/${locale}/movie/${createSlug(activeHero.title || activeHero.name, activeHero.id, 'movie')}`}
-                                    className="group relative inline-flex items-center gap-2 sm:gap-4 px-6 sm:px-10 py-3 sm:py-4 bg-red-600 rounded-sm font-bold text-sm sm:text-lg overflow-hidden transition-all hover:scale-105 active:scale-95 text-white cursor-pointer shadow-xl"
+                                    className="group relative inline-flex items-center gap-2 sm:gap-4 px-6 sm:px-10 py-3 sm:py-4 bg-red-600 rounded-sm font-bold text-sm sm:text-lg overflow-hidden transition-all hover:scale-105 active:scale-95 animate-pulse-glow text-white cursor-pointer shadow-xl"
                                 >
+                                    <div className="absolute inset-0 w-1/3 h-full bg-gradient-to-r from-transparent via-white/40 to-transparent animate-laser-sheen"></div>
                                     <i className="fa-solid fa-play text-white group-hover:scale-110 transition-transform relative z-10 text-xs sm:text-base"></i>
                                     <span className="tracking-wide relative z-10 font-extrabold">{watchNowText}</span>
                                 </Link>
