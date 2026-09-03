@@ -211,7 +211,7 @@ export default async function LocalizedHomePage(props) {
                     name: filterType === 'top_rated'
                         ? (locale === 'ar' ? `الأعلى تقييمًا: ${resolvedRowName}` : locale === 'fr' ? `Top Mieux Notés: ${resolvedRowName}` : `Top Rated ${resolvedRowName}`)
                         : resolvedRowName,
-                    movies: blendedList,
+                    movies: blendedList.slice(0, 12),
                     movieGenreId: genre.movieIds,
                     tvGenreId: genre.tvId,
                 };
@@ -240,7 +240,7 @@ export default async function LocalizedHomePage(props) {
                     name: filterType === 'top_rated'
                         ? (locale === 'ar' ? `أعلى تقييمًا: ${genre.name}` : locale === 'fr' ? `Top Mieux Noté: ${genre.name}` : `Top Rated ${genre.name}`)
                         : genre.name,
-                    movies: data?.results?.map(item => ({ ...item, media_type: contentType })) || [],
+                    movies: (data?.results?.map(item => ({ ...item, media_type: contentType })) || []).slice(0, 12),
                     contentType,
                     genreId: genre.id,
                 };
