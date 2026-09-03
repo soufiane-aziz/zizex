@@ -1,6 +1,8 @@
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
-import InstallPWA from '../../components/InstallPWA';
+import dynamic from 'next/dynamic';
+
+const InstallPWA = dynamic(() => import('../../components/InstallPWA'));
 
 // Only load the 2 weights actually used. preload:true lets Next.js add <link rel="preload"> in <head>.
 const inter = Inter({

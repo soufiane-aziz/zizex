@@ -132,15 +132,13 @@ select {
 @keyframes pulse-glow {
   0%,
   100% {
-    box-shadow:
-      0 0 10px rgba(220, 38, 38, 0.5),
-      0 0 20px rgba(220, 38, 38, 0.3);
+    opacity: 0.9;
+    filter: drop-shadow(0 0 8px rgba(220, 38, 38, 0.6));
   }
 
   50% {
-    box-shadow:
-      0 0 25px rgba(220, 38, 38, 0.8),
-      0 0 50px rgba(220, 38, 38, 0.5);
+    opacity: 1;
+    filter: drop-shadow(0 0 18px rgba(220, 38, 38, 0.9));
   }
 }
 

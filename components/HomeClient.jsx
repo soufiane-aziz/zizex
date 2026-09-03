@@ -3,9 +3,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import Navbar from './Navbar';
-import Footer from './Footer';
 import { createSlug } from '../lib/slug';
+
+const Footer = dynamic(() => import('./Footer'), { ssr: true });
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
@@ -123,15 +125,21 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
         return () => observer.disconnect();
     }, [isExpanded, page, hasMore, isFetching]);
 
+    const ticking = useRef(false);
     const handleScrollState = () => {
-        const row = rowRef.current;
-        if (!row) return;
-
-        setShowLeftArrow(row.scrollLeft > 10);
-
-        const { scrollLeft, clientWidth, scrollWidth } = row;
-        if (scrollLeft + clientWidth >= scrollWidth - 800) {
-            fetchNextPage();
+        if (!ticking.current) {
+            ticking.current = true;
+            requestAnimationFrame(() => {
+                const row = rowRef.current;
+                if (row) {
+                    setShowLeftArrow(row.scrollLeft > 10);
+                    const { scrollLeft, clientWidth, scrollWidth } = row;
+                    if (scrollLeft + clientWidth >= scrollWidth - 800) {
+                        fetchNextPage();
+                    }
+                }
+                ticking.current = false;
+            });
         }
     };
 
@@ -501,10 +509,10 @@ export default function HomeClient({
                                 src={movie.poster_path ? `${IMAGE_BASE_URL}/w780${movie.poster_path}` : movie.backdrop_path ? `${IMAGE_BASE_URL}/w780${movie.backdrop_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero poster'}
                                 fill
+                                unoptimized
                                 priority={index === 0}
                                 fetchPriority={index === 0 ? "high" : "auto"}
                                 sizes="100vw"
-                                quality={70}
                                 className={`sm:hidden w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${isActive ? 'scale-105' : 'scale-100'} object-center`}
                             />
 
@@ -513,10 +521,10 @@ export default function HomeClient({
                                 src={movie.backdrop_path ? `${IMAGE_BASE_URL}/w1280${movie.backdrop_path}` : movie.poster_path ? `${IMAGE_BASE_URL}/w1280${movie.poster_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero backdrop'}
                                 fill
+                                unoptimized
                                 priority={index === 0}
                                 fetchPriority={index === 0 ? "high" : "auto"}
                                 sizes="100vw"
-                                quality={70}
                                 className={`hidden sm:block w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${isActive ? 'scale-110' : 'scale-100'} object-center`}
                             />
                         </div>
