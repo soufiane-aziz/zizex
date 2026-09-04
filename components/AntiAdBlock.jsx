@@ -12,15 +12,12 @@ export default function AntiAdBlock() {
 
     const finalize = () => {
       checksCompleted++;
-      // Only show overlay once both checks have completed
       if (checksCompleted >= TOTAL_CHECKS && detected) {
         setAdBlockDetected(true);
       }
     };
 
     // ─── Method 1: Bait Element ───────────────────────────────────────────────
-    // Extension-based adblockers (uBlock, AdBlock Plus) hide or remove
-    // elements with these class names via cosmetic filter rules.
     const checkBaitElement = () => {
       const bait = document.createElement('div');
       bait.className = 'pub_300x250 pub_300x250m pub_728x90 adsbox doubleclick';
@@ -31,7 +28,6 @@ export default function AntiAdBlock() {
 
       setTimeout(() => {
         if (!bait.parentNode) {
-          // Element was completely removed from DOM
           detected = true;
         } else {
           const style = window.getComputedStyle(bait);
@@ -50,11 +46,6 @@ export default function AntiAdBlock() {
     };
 
     // ─── Method 2: Ad Script Load Test ───────────────────────────────────────
-    // DNS-level blockers (Pi-hole, NextDNS, Brave Shields, 1.1.1.1 families filter)
-    // prevent the DNS lookup from resolving, so the script's onerror fires.
-    // Extension-based blockers also intercept this request.
-    // NOTE: Unlike an Image test, a <script> tag's onload fires when the
-    //       server actually returns valid JS — so it does NOT false-positive.
     const checkAdScript = () => {
       const script = document.createElement('script');
       let settled = false;
@@ -67,22 +58,16 @@ export default function AntiAdBlock() {
         finalize();
       };
 
-      // onload → script fetched successfully → no blocker
       script.onload = () => done(false);
-      // onerror → DNS blocked, extension blocked, or request cancelled → blocker
       script.onerror = () => done(true);
-      // Cache-bust so browser doesn't serve a cached 204/error
       script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?' + Date.now();
       script.async = true;
 
-      // 6s safety timeout: if no response at all (extreme slow network),
-      // assume no blocker to avoid false positives on slow connections.
       setTimeout(() => done(false), 6000);
 
       document.head.appendChild(script);
     };
 
-    // Start both checks after 800ms so React hydration is stable
     const timer = setTimeout(() => {
       checkBaitElement();
       checkAdScript();
@@ -96,98 +81,56 @@ export default function AntiAdBlock() {
   return (
     <div
       id="anti-adblock-overlay"
+      className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl animate-fadeIn"
       style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 99999,
-        backgroundColor: 'rgba(0,0,0,0.95)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: 'Inter, system-ui, sans-serif',
-        padding: '16px',
+        fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
       }}
     >
-      <div
-        style={{
-          background: 'linear-gradient(135deg, #111111 0%, #1a1a1a 50%, #0f0f0f 100%)',
-          border: '1px solid rgba(229,9,20,0.4)',
-          borderRadius: '20px',
-          padding: '40px 32px',
-          maxWidth: '480px',
-          width: '100%',
-          textAlign: 'center',
-          boxShadow: '0 0 80px rgba(229,9,20,0.15), 0 25px 60px rgba(0,0,0,0.8)',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
-          background: 'linear-gradient(90deg, transparent, #e50914, transparent)',
-        }} />
+      <div className="relative w-full max-w-md p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-zinc-900/95 via-black/95 to-zinc-950 border border-red-500/30 shadow-[0_0_60px_rgba(229,9,20,0.25)] text-center overflow-hidden">
+        {/* Glowing Ambient Top Bar */}
+        <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent shadow-[0_0_15px_#e50914]" />
 
-        <div style={{
-          width: '72px', height: '72px', borderRadius: '50%',
-          background: 'rgba(229,9,20,0.12)', border: '2px solid rgba(229,9,20,0.4)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          margin: '0 auto 24px', fontSize: '32px',
-        }}>🚫</div>
+        {/* Red Glow Light Effect */}
+        <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-32 h-32 bg-red-600/20 rounded-full blur-2xl pointer-events-none" />
 
-        <h2 style={{ color: '#ffffff', fontSize: '22px', fontWeight: '800', marginBottom: '12px', letterSpacing: '-0.5px' }}>
-          AdBlocker Detected
-        </h2>
-
-        <p style={{ color: '#9ca3af', fontSize: '14px', lineHeight: '1.7', marginBottom: '28px' }}>
-          It looks like you&apos;re using an ad blocker or DNS filter.<br />
-          <span style={{ color: '#d1d5db' }}>ZizHub is 100% free</span> and ads help us keep it running.<br />
-          Please disable your ad blocker to continue watching.
-        </p>
-
-        <div style={{
-          background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: '12px', padding: '16px 20px', marginBottom: '28px', textAlign: 'left',
-        }}>
-          <p style={{ color: '#6b7280', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>
-            How to fix
-          </p>
-          {[
-            'Click the ad blocker icon in your browser toolbar',
-            'Select "Disable on this site" or "Whitelist zizhub.com"',
-            'Refresh the page',
-          ].map((step, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: i < 2 ? '8px' : 0 }}>
-              <span style={{
-                minWidth: '22px', height: '22px', borderRadius: '50%',
-                background: 'rgba(229,9,20,0.15)', border: '1px solid rgba(229,9,20,0.3)',
-                color: '#e50914', fontSize: '11px', fontWeight: '800',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>{i + 1}</span>
-              <span style={{ color: '#d1d5db', fontSize: '13px', lineHeight: '1.5' }}>{step}</span>
-            </div>
-          ))}
+        {/* Icon Badge */}
+        <div className="relative mx-auto mb-5 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-b from-red-950/60 to-red-900/20 border border-red-500/40 flex items-center justify-center shadow-[0_0_30px_rgba(229,9,20,0.3)]">
+          <svg
+            className="w-8 h-8 sm:w-10 sm:h-10 text-red-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
+          </svg>
         </div>
 
+        {/* Title */}
+        <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight mb-3">
+          AdBlocker or DNS Detected
+        </h2>
+
+        {/* Simplified Message (Turn off Adblocker or DNS) */}
+        <p className="text-sm sm:text-base text-gray-300 leading-relaxed mb-6 font-medium">
+          Please turn off your <span className="text-red-400 font-bold">AdBlocker</span> or <span className="text-red-400 font-bold">DNS Blocker</span> to continue using the site.
+        </p>
+
+        {/* Action Button */}
         <button
           onClick={() => window.location.reload()}
-          style={{
-            width: '100%', padding: '14px 24px',
-            background: 'linear-gradient(135deg, #e50914, #b00710)',
-            border: 'none', borderRadius: '12px', color: '#ffffff',
-            fontSize: '15px', fontWeight: '800', cursor: 'pointer',
-            letterSpacing: '0.02em', boxShadow: '0 4px 20px rgba(229,9,20,0.35)',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.02)'; }}
-          onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+          className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white font-extrabold text-sm sm:text-base tracking-wide shadow-[0_4px_25px_rgba(229,9,20,0.4)] transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
         >
-          ✓ &nbsp;I&apos;ve Disabled My AdBlocker — Refresh
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          I Turned It Off — Refresh Page
         </button>
-
-        <p style={{ color: '#4b5563', fontSize: '11px', marginTop: '16px' }}>
-          Using Brave Browser? Go to <strong style={{ color: '#6b7280' }}>brave://settings/shields</strong> and disable shields for this site.
-        </p>
       </div>
     </div>
   );
