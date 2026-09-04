@@ -89,6 +89,41 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="https://multiembed.mov" />
         <link rel="dns-prefetch" href="https://vidsrc.me" />
         <link rel="dns-prefetch" href="https://vidlink.pro" />
+
+        {/* JSON-LD Schema for Brand Ranking */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "WebSite",
+                  "@id": "https://zizhub.vercel.app/#website",
+                  "url": "https://zizhub.vercel.app/",
+                  "name": "ZizHub",
+                  "alternateName": ["Ziz Hub", "zizhub", "ZizHub Streaming"],
+                  "description": "Watch free movies and TV shows online in HD on ZizHub.",
+                  "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": {
+                      "@type": "EntryPoint",
+                      "urlTemplate": "https://zizhub.vercel.app/en/search?q={search_term_string}"
+                    },
+                    "query-input": "required name=search_term_string"
+                  }
+                },
+                {
+                  "@type": "Organization",
+                  "@id": "https://zizhub.vercel.app/#organization",
+                  "name": "ZizHub",
+                  "url": "https://zizhub.vercel.app/",
+                  "logo": "https://zizhub.vercel.app/icon-512.png"
+                }
+              ]
+            })
+          }}
+        />
       </head>
       <body>
         <AdBlocker />

@@ -169,7 +169,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             sitemapEntries.push({
                 url: safeUrl(`${SITE_URL}/${locale}${genrePath}`),
                 changeFrequency: 'weekly',
-                priority: 0.7,
+                priority: 0.5,
                 lastModified: new Date(),
                 alternates: { languages: alternates }
             });
