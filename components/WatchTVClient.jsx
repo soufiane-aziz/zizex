@@ -177,19 +177,14 @@ export default function WatchTVClient({
         setShowSlowHint(false);
         clearTimeout(autoSwitchTimerRef.current);
         clearTimeout(slowHintTimerRef.current);
-        // Show "slow connection" hint after 5s
-        slowHintTimerRef.current = setTimeout(() => setShowSlowHint(true), 5000);
-        // Auto-switch server after 8s
-        autoSwitchTimerRef.current = setTimeout(() => {
-            const currentIndex = servers.findIndex(s => s.id === activeServerId);
-            const nextIndex = (currentIndex + 1) % servers.length;
-            if (nextIndex !== currentIndex) {
-                setActiveServerId(servers[nextIndex].id);
-            } else {
-                setIsIframeLoading(false);
-            }
-        }, 8000);
+
+        // Fast 1.5s timer: dismiss spinner overlay so Server 1 is 100% visible & playable in under 2 seconds!
+        const hideSpinnerTimer = setTimeout(() => {
+            setIsIframeLoading(false);
+        }, 1500);
+
         return () => {
+            clearTimeout(hideSpinnerTimer);
             clearTimeout(autoSwitchTimerRef.current);
             clearTimeout(slowHintTimerRef.current);
         };
