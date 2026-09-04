@@ -16,6 +16,9 @@ const nextConfig = {
       },
     ],
   },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
+  },
   experimental: {
     optimizePackageImports: ['@vercel/analytics', '@vercel/speed-insights'],
   },

@@ -1,17 +1,10 @@
-import { Inter } from 'next/font/google';
 import Script from 'next/script';
 import dynamic from 'next/dynamic';
 
 const InstallPWA = dynamic(() => import('../../components/InstallPWA'));
 
 // Only load the 2 weights actually used. preload:true lets Next.js add <link rel="preload"> in <head>.
-const inter = Inter({
-    subsets: ['latin'],
-    weight: ['400', '700'],
-    display: 'swap',
-    preload: true,
-    fallback: ['system-ui', 'arial'],
-});
+const inter = { className: 'font-sans' };
 
 export const metadata = {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app'),
