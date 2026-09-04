@@ -25,8 +25,8 @@ export function proxy(req) {
         (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
     );
 
-    // If there's already a locale, proceed
-    if (pathnameHasLocale) {
+    // If there's already a locale or root homepage path '/', proceed directly without redirecting
+    if (pathnameHasLocale || pathname === '/') {
         return NextResponse.next();
     }
 
