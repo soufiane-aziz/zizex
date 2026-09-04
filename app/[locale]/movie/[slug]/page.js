@@ -283,11 +283,31 @@ export default async function LocalizedMoviePage(props) {
         ]
     };
 
+    const videoObjectLd = {
+        '@context': 'https://schema.org',
+        '@type': 'VideoObject',
+        'name': `${movieDetails.title} - Watch Full Movie`,
+        'description': movieDetails.overview || `Watch ${movieDetails.title} full movie online in HD on ZizHub.`,
+        'thumbnailUrl': [
+            movieDetails.backdrop_path
+                ? `${IMAGE_BASE_URL}/w780${movieDetails.backdrop_path}`
+                : movieDetails.poster_path
+                    ? `${IMAGE_BASE_URL}/w500${movieDetails.poster_path}`
+                    : `${SITE_URL}/icon-512.png`
+        ],
+        'uploadDate': movieDetails.release_date ? `${movieDetails.release_date}T00:00:00Z` : '2026-01-01T00:00:00Z',
+        'embedUrl': `https://vidsrc.pm/embed/movie/${movieId}`
+    };
+
     return (
         <>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(videoObjectLd) }}
             />
             <script
                 type="application/ld+json"
