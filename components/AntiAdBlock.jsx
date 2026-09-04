@@ -6,18 +6,22 @@ export default function AntiAdBlock() {
   const [adBlockDetected, setAdBlockDetected] = useState(false);
 
   useEffect(() => {
-    let detected = false;
+    let baitDetected = false;
+    let scriptDetected = false;
     let checksCompleted = 0;
-    const TOTAL_CHECKS = 2; // Both checks must finish before we decide
 
     const finalize = () => {
       checksCompleted++;
-      if (checksCompleted >= TOTAL_CHECKS && detected) {
-        setAdBlockDetected(true);
+      // Require both checks to complete. Trigger overlay only if at least one test positively identified a blocker.
+      if (checksCompleted >= 2) {
+        if (baitDetected || scriptDetected) {
+          setAdBlockDetected(true);
+        }
       }
     };
 
-    // ─── Method 1: Bait Element ───────────────────────────────────────────────
+    // ─── Method 1: Bait Element Inspection ──────────────────────────────────
+    // Extension adblockers (uBlock, AdBlock Plus) hide elements matching ad class names using CSS rules (display: none !important).
     const checkBaitElement = () => {
       const bait = document.createElement('div');
       bait.className = 'pub_300x250 pub_300x250m pub_728x90 adsbox doubleclick';
@@ -28,23 +32,23 @@ export default function AntiAdBlock() {
 
       setTimeout(() => {
         if (!bait.parentNode) {
-          detected = true;
+          baitDetected = true;
         } else {
           const style = window.getComputedStyle(bait);
-          if (
-            style.display === 'none' ||
-            style.visibility === 'hidden' ||
-            style.height === '0px'
-          ) {
-            detected = true;
+          if (style.display === 'none' || style.visibility === 'hidden') {
+            baitDetected = true;
           }
-          bait.parentNode.removeChild(bait);
+          if (bait.parentNode) {
+            bait.parentNode.removeChild(bait);
+          }
         }
         finalize();
-      }, 600);
+      }, 500);
     };
 
-    // ─── Method 2: Ad Script Load Test ───────────────────────────────────────
+    // ─── Method 2: Network Script Load Test ──────────────────────────────────
+    // DNS blockers (Pi-hole, NextDNS, Brave Shields) and network filters block requests to Google Ad domains, triggering script.onerror.
+    // Normal browsers receive a 200 OK JS response, triggering script.onload.
     const checkAdScript = () => {
       const script = document.createElement('script');
       let settled = false;
@@ -53,25 +57,29 @@ export default function AntiAdBlock() {
         if (settled) return;
         settled = true;
         if (script.parentNode) script.parentNode.removeChild(script);
-        if (wasBlocked) detected = true;
+        if (wasBlocked) {
+          scriptDetected = true;
+        }
         finalize();
       };
 
       script.onload = () => done(false);
       script.onerror = () => done(true);
-      // Use lightweight 0.5KB Google Ad endpoint to detect DNS/Network blocking without downloading 56KB adsbygoogle bundle
-      script.src = 'https://adservice.google.com/adsid/integrator.js?' + Date.now();
+      // Valid Google AdSense URL that returns 200 OK on normal browsers
+      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
       script.async = true;
 
-      setTimeout(() => done(false), 6000);
+      // 5s safety fallback: if network is extremely slow, treat as not blocked to prevent false positives
+      setTimeout(() => done(false), 5000);
 
       document.head.appendChild(script);
     };
 
+    // Delay start until 1000ms after page load so DOM & React hydration are fully settled
     const timer = setTimeout(() => {
       checkBaitElement();
       checkAdScript();
-    }, 800);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -116,7 +124,7 @@ export default function AntiAdBlock() {
           AdBlocker or DNS Detected
         </h2>
 
-        {/* Simplified Message (Turn off Adblocker or DNS) */}
+        {/* Simplified Message */}
         <p className="text-sm sm:text-base text-gray-300 leading-relaxed mb-6 font-medium">
           Please turn off your <span className="text-red-400 font-bold">AdBlocker</span> or <span className="text-red-400 font-bold">DNS Blocker</span> to continue using the site.
         </p>
