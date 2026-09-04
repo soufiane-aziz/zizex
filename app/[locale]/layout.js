@@ -57,12 +57,6 @@ export default async function LocaleLayout(props) {
             {children}
             <InstallPWA locale={locale} />
 
-            {/* Adsterra SocialBar Ad Script — direct body script for full mobile & desktop compatibility */}
-            <script
-                type="text/javascript"
-                src="https://bashsecret.com/20/6e/e9/206ee9fc8937e09edad8756e7612d82c.js"
-                async
-            />
         </div>
     );
 }

@@ -82,6 +82,7 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="https://image.tmdb.org" />
         <link rel="dns-prefetch" href="https://api.themoviedb.org" />
         <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+        <link rel="dns-prefetch" href="https://bashsecret.com" />
         <link rel="dns-prefetch" href="https://vidsrc.pm" />
         <link rel="dns-prefetch" href="https://autoembed.co" />
         <link rel="dns-prefetch" href="https://multiembed.mov" />
@@ -94,6 +95,12 @@ export default function RootLayout({ children }) {
         {children}
         <Analytics />
         <SpeedInsights />
+        {/* Adsterra SocialBar Ad Script */}
+        <Script
+          id="socialbar-ad"
+          src="https://bashsecret.com/20/6e/e9/206ee9fc8937e09edad8756e7612d82c.js"
+          strategy="afterInteractive"
+        />
         {/* Font Awesome — loaded via Script so it is 100% off the critical render path.
             React JSX ignores string onLoad="..." handlers on <link> elements;
             programmatic injection is the only reliable async CSS approach in Next.js. */}
