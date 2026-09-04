@@ -64,10 +64,10 @@ export default async function LocaleLayout(props) {
             {children}
             <InstallPWA locale={locale} />
 
-            {/* Adsterra SocialBar Ad Script */}
+            {/* Adsterra SocialBar Ad Script — loaded on idle to keep initial navigation critical path latency low */}
             <Script
                 src="https://bashsecret.com/20/6e/e9/206ee9fc8937e09edad8756e7612d82c.js"
-                strategy="afterInteractive"
+                strategy="lazyOnload"
             />
         </div>
     );

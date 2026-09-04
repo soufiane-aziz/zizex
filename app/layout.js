@@ -110,6 +110,9 @@ export default function RootLayout({ children }) {
                 l.referrerPolicy='no-referrer';
                 l.setAttribute('data-fa','1');
                 document.head.appendChild(l);
+                var s=document.createElement('style');
+                s.textContent='@font-face{font-family:"Font Awesome 6 Free";font-display:swap;}@font-face{font-family:"Font Awesome 6 Brands";font-display:swap;}';
+                document.head.appendChild(s);
               })();
             `,
           }}
