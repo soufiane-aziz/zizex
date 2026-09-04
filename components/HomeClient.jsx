@@ -134,11 +134,11 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
                     <div className="relative rounded-lg overflow-hidden aspect-[2/3] transform transition-all duration-300 ease-out hover:-translate-y-1 sm:hover:-translate-y-2.5 hover:shadow-[0_10px_20px_rgba(245,158,11,0.2)] sm:hover:shadow-[0_15px_30px_rgba(245,158,11,0.25)] group/card cursor-pointer border border-transparent hover:border-amber-500/60 bg-[#121212]">
 
                         <Image
-                            src={movie.poster_path ? `${IMAGE_BASE_URL}/w342${movie.poster_path}` : "/no-poster.png"}
+                            src={movie.poster_path ? `${IMAGE_BASE_URL}/w185${movie.poster_path}` : "/no-poster.png"}
                             alt={movie.title || movie.name || 'Poster'}
-                            width={342}
-                            height={513}
-                            sizes="(max-width: 640px) 150px, (max-width: 768px) 200px, (max-width: 1024px) 250px, 300px"
+                            width={185}
+                            height={278}
+                            sizes="(max-width: 640px) 115px, (max-width: 768px) 145px, 210px"
                             className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover/card:scale-105"
                             loading={index < 6 ? "eager" : "lazy"}
                         />
@@ -280,10 +280,14 @@ const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoaded(true);
-        }, 800);
-        return () => clearTimeout(timer);
+        const loadAds = () => setIsLoaded(true);
+        if ('requestIdleCallback' in window) {
+            const idleId = window.requestIdleCallback(loadAds, { timeout: 3000 });
+            return () => window.cancelIdleCallback(idleId);
+        } else {
+            const timer = setTimeout(loadAds, 2500);
+            return () => clearTimeout(timer);
+        }
     }, []);
 
     const srcDoc = `

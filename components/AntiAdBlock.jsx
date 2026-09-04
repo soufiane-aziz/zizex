@@ -34,8 +34,7 @@ export default function AntiAdBlock() {
           if (
             style.display === 'none' ||
             style.visibility === 'hidden' ||
-            bait.offsetHeight === 0 ||
-            bait.offsetWidth === 0
+            style.height === '0px'
           ) {
             detected = true;
           }
