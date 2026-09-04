@@ -102,7 +102,7 @@ export default function RootLayout({ children }) {
             programmatic injection is the only reliable async CSS approach in Next.js. */}
         <Script
           id="fa-loader"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
               (function(){
@@ -122,7 +122,7 @@ export default function RootLayout({ children }) {
         {/* Service Worker: blocks unauthorized ad redirects from streaming iframes */}
         <Script
           id="sw-register"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
               if ('serviceWorker' in navigator) {

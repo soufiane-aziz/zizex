@@ -60,7 +60,8 @@ export default function AntiAdBlock() {
 
       script.onload = () => done(false);
       script.onerror = () => done(true);
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?' + Date.now();
+      // Use lightweight 0.5KB Google Ad endpoint to detect DNS/Network blocking without downloading 56KB adsbygoogle bundle
+      script.src = 'https://adservice.google.com/adsid/integrator.js?' + Date.now();
       script.async = true;
 
       setTimeout(() => done(false), 6000);

@@ -104,7 +104,6 @@ export default function InstallPWA({ locale = 'en' }) {
               width={48}
               height={48}
               className="w-full h-full object-cover"
-              unoptimized
             />
           </div>
           <div className="min-w-0">
@@ -135,7 +134,7 @@ export default function InstallPWA({ locale = 'en' }) {
         <div className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="bg-neutral-900 border border-white/10 p-6 rounded-2xl max-w-sm w-full text-center shadow-2xl">
             <div className="w-16 h-16 mx-auto mb-4 rounded-2xl overflow-hidden border border-red-600/30">
-              <Image src="/icon-192.png?v=2" alt="ZizHub App" width={64} height={64} className="w-full h-full object-cover" unoptimized />
+              <Image src="/icon-192.png?v=2" alt="ZizHub App" width={64} height={64} className="w-full h-full object-cover" />
             </div>
             <h3 className="text-white font-black text-lg mb-2">Install ZizHub on iPhone</h3>
             <p className="text-gray-300 text-sm mb-5 leading-relaxed">

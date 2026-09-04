@@ -477,22 +477,20 @@ export default function HomeClient({
                                 src={movie.poster_path ? `${IMAGE_BASE_URL}/w780${movie.poster_path}` : movie.backdrop_path ? `${IMAGE_BASE_URL}/w780${movie.backdrop_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero poster'}
                                 fill
-                                unoptimized
                                 priority={index === 0}
                                 fetchPriority={index === 0 ? "high" : "auto"}
-                                sizes="100vw"
+                                sizes="(max-width: 640px) 100vw, 1px"
                                 className={`sm:hidden w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${isActive ? 'scale-105' : 'scale-100'} object-center`}
                             />
 
-                            {/* Desktop Image: w1280 backdrop for sharp widescreen display */}
+                            {/* Desktop Image: backdrop for sharp widescreen display */}
                             <Image
                                 src={movie.backdrop_path ? `${IMAGE_BASE_URL}/w1280${movie.backdrop_path}` : movie.poster_path ? `${IMAGE_BASE_URL}/w1280${movie.poster_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero backdrop'}
                                 fill
-                                unoptimized
                                 priority={index === 0}
                                 fetchPriority={index === 0 ? "high" : "auto"}
-                                sizes="100vw"
+                                sizes="(max-width: 640px) 1px, 100vw"
                                 className={`hidden sm:block w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${isActive ? 'scale-110' : 'scale-100'} object-center`}
                             />
                         </div>
