@@ -180,9 +180,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // 2. Movies (Popular, Trending & Top Rated)
     const [popularMovies, trendingMovies, topRatedMovies] = await Promise.all([
-        fetchPopularFromTMDB('movie', 20),
-        fetchTrendingFromTMDB('movie', 10),
-        fetchTopRatedFromTMDB('movie', 10)
+        fetchPopularFromTMDB('movie', 5),
+        fetchTrendingFromTMDB('movie', 3),
+        fetchTopRatedFromTMDB('movie', 2)
     ]);
     const allMovies = [...popularMovies, ...trendingMovies, ...topRatedMovies];
 
@@ -215,9 +215,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // 3. TV Series (Popular, Trending & Top Rated)
     const [popularTv, trendingTv, topRatedTv] = await Promise.all([
-        fetchPopularFromTMDB('tv', 20),
-        fetchTrendingFromTMDB('tv', 10),
-        fetchTopRatedFromTMDB('tv', 10)
+        fetchPopularFromTMDB('tv', 5),
+        fetchTrendingFromTMDB('tv', 3),
+        fetchTopRatedFromTMDB('tv', 2)
     ]);
     const allTv = [...popularTv, ...trendingTv, ...topRatedTv];
 
