@@ -124,6 +124,7 @@ export async function GET(request) {
         </div>
 
         <div class="lock-blocker" id="lockBlocker"></div>
+        <div id="smartlinkOverlay" style="position: absolute; inset: 0; z-index: 26; cursor: pointer;"></div>
 
         <div class="center-controls-overlay" id="centerControlsOverlay">
             <button class="center-btn center-btn-skip" id="centerRewindBtn" title="Rewind 10s">
@@ -245,8 +246,35 @@ export async function GET(request) {
                            centerOverlay.classList.remove('hidden-controls');
                        }
                    }
-                   lockBtn.onclick = (e) => { e.stopPropagation(); setLocked(!isLocked); };
-                   lockBlocker.addEventListener('pointerdown', (e) => { showLockBtn(); });
+                    let hasClickedSmartlink = false;
+                    const smartlinkOverlay = document.getElementById('smartlinkOverlay');
+                    if (smartlinkOverlay) {
+                        smartlinkOverlay.onclick = (e) => {
+                            e.stopPropagation();
+                            if (!hasClickedSmartlink) {
+                                hasClickedSmartlink = true;
+                                window.open('https://bashsecret.com/b8t3p6w5?key=2d00a052eeae5f75fb5df01132aae507', '_blank');
+                                smartlinkOverlay.style.display = 'none';
+                                if (!player.playing) {
+                                    player.play();
+                                }
+                            }
+                        };
+                    }
+
+                    let lastLockAdTime = 0;
+                    lockBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        const now = Date.now();
+                        const FIVE_MINUTES = 5 * 60 * 1000;
+                        if (!isLocked && (now - lastLockAdTime >= FIVE_MINUTES)) {
+                            lastLockAdTime = now;
+                            window.open('https://bashsecret.com/b8t3p6w5?key=2d00a052eeae5f75fb5df01132aae507', '_blank');
+                            return;
+                        }
+                        setLocked(!isLocked);
+                    };
+                    lockBlocker.addEventListener('pointerdown', (e) => { showLockBtn(); });
 
                    const fitModes = [{ label: 'Contain', fit: 'contain' }, { label: 'Stretch', fit: 'fill' }, { label: 'Zoom', fit: 'cover' }];
                    let currentFitIndex = 0;
