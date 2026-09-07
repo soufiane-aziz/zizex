@@ -1,0 +1,121 @@
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
+import fs from 'fs';
+import path from 'path';
+import { TelegramClient } from 'teleproto';
+import { StringSession } from 'teleproto/sessions';
+
+let clientInstance = null;
+
+async function getTelegramClient() {
+    if (clientInstance && clientInstance.connected) {
+        return clientInstance;
+    }
+
+    const configPath = path.join(process.cwd(), 'telegram.config.json');
+    const sessionPath = path.join(process.cwd(), 'telegram-session.txt');
+
+    if (!fs.existsSync(configPath) || !fs.existsSync(sessionPath)) {
+        throw new Error('Telegram config or session file missing');
+    }
+
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    const sessionStr = fs.readFileSync(sessionPath, 'utf8').trim();
+
+    const client = new TelegramClient(new StringSession(sessionStr), Number(config.apiId), config.apiHash, {
+        connectionRetries: 5,
+    });
+
+    await client.connect();
+    clientInstance = client;
+    return client;
+}
+
+const messageCache = new Map();
+
+async function getCachedMessage(client, channelId, msgId) {
+    const key = `${channelId}:${msgId}`;
+    if (messageCache.has(key)) {
+        return messageCache.get(key);
+    }
+    const entity = await client.getEntity(channelId);
+    const [message] = await client.getMessages(entity, { ids: [Number(msgId)] });
+    if (message && message.media) {
+        messageCache.set(key, message);
+        setTimeout(() => messageCache.delete(key), 3600 * 1000); // 1 hour cache
+    }
+    return message;
+}
+
+export async function GET(request) {
+    try {
+        const { searchParams } = new URL(request.url);
+        const msgId = searchParams.get('msgId');
+
+        if (!msgId) {
+            return new Response('Missing msgId', { status: 400 });
+        }
+
+        const configPath = path.join(process.cwd(), 'telegram.config.json');
+        const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+
+        const client = await getTelegramClient();
+        const message = await getCachedMessage(client, config.channelId, msgId);
+
+        if (!message || !message.media) {
+            return new Response('Media not found', { status: 404 });
+        }
+
+        const fileSize = message.media.document ? message.media.document.size : 0;
+        const rangeHeader = request.headers.get('range');
+
+        let start = 0;
+        let end = fileSize > 0 ? fileSize - 1 : 0;
+
+        if (rangeHeader && fileSize > 0) {
+            const parts = rangeHeader.replace(/bytes=/, '').split('-');
+            start = parseInt(parts[0], 10);
+            end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+        }
+
+        const chunkSize = end - start + 1;
+
+        const stream = new ReadableStream({
+            async start(controller) {
+                try {
+                    const iter = client.iterDownload(message, {
+                        requestSize: 1024 * 1024, // 1MB chunks for fast streaming
+                        offset: start,
+                        limit: chunkSize > 0 ? chunkSize : undefined,
+                    });
+
+                    for await (const chunk of iter) {
+                        controller.enqueue(chunk);
+                    }
+                    controller.close();
+                } catch (err) {
+                    controller.error(err);
+                }
+            }
+        });
+
+        const headers = {
+            'Content-Type': 'video/mp4',
+            'Accept-Ranges': 'bytes',
+            'Access-Control-Allow-Origin': '*',
+        };
+
+        if (rangeHeader && fileSize > 0) {
+            headers['Content-Range'] = `bytes ${start}-${end}/${fileSize}`;
+            headers['Content-Length'] = String(chunkSize);
+            return new Response(stream, { status: 206, headers });
+        } else {
+            if (fileSize > 0) headers['Content-Length'] = String(fileSize);
+            return new Response(stream, { status: 200, headers });
+        }
+
+    } catch (err) {
+        return new Response('Stream error: ' + err.message, { status: 500 });
+    }
+}

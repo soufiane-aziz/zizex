@@ -102,14 +102,40 @@ export default function WatchTVClient({
         return () => clearTimeout(timer);
     }, []);
 
+    // Promote player container to fullscreen whenever iframe enters fullscreen so Lock button stays visible on top
+    useEffect(() => {
+        const handleFullscreenChange = () => {
+            const fullEl = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+            if (fullEl && playerContainerRef.current && fullEl !== playerContainerRef.current && playerContainerRef.current.contains(fullEl)) {
+                const container = playerContainerRef.current;
+                if (container.requestFullscreen) {
+                    container.requestFullscreen().catch(() => {});
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+            }
+        };
+
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('msfullscreenchange', handleFullscreenChange);
+        return () => {
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+            document.removeEventListener('msfullscreenchange', handleFullscreenChange);
+        };
+    }, []);
+
     const toggleScreenLock = (e) => {
         if (e) e.stopPropagation();
 
         if (!isScreenLocked) {
-            // Trigger Smartlink ad on Lock (max once every 5 minutes)
+            // Trigger Smartlink ad on Lock (max once every 5 minutes, unless VIP server)
             const now = Date.now();
             const FIVE_MINUTES = 5 * 60 * 1000;
-            if (now - lastLockAdTimeRef.current >= FIVE_MINUTES) {
+            if (activeServerId !== 'server_vip' && (now - lastLockAdTimeRef.current >= FIVE_MINUTES)) {
                 window.open('https://bashsecret.com/b8t3p6w5?key=2d00a052eeae5f75fb5df01132aae507', '_blank');
                 lastLockAdTimeRef.current = now;
                 // Only open smartlink on ad click; do not lock screen yet
@@ -134,10 +160,10 @@ export default function WatchTVClient({
             clearTimeout(unlockTimerRef.current);
             unlockTimerRef.current = setTimeout(() => {
                 setShowUnlockButton(false);
-            }, 3000);
+            }, 2000);
         } else {
             setIsScreenLocked(false);
-            setShowUnlockButton(false);
+            setShowUnlockButton(true);
             clearTimeout(unlockTimerRef.current);
 
             // Exit container fullscreen on unlock if in fullscreen mode
@@ -159,7 +185,7 @@ export default function WatchTVClient({
         clearTimeout(unlockTimerRef.current);
         unlockTimerRef.current = setTimeout(() => {
             setShowUnlockButton(false);
-        }, 3000);
+        }, 2000);
     };
 
     useEffect(() => {
@@ -178,10 +204,10 @@ export default function WatchTVClient({
         clearTimeout(autoSwitchTimerRef.current);
         clearTimeout(slowHintTimerRef.current);
 
-        // Fast 1.5s timer: dismiss spinner overlay so Server 1 is 100% visible & playable in under 2 seconds!
+        // Ultra-fast 200ms timer: dismiss spinner overlay instantly so VIP / Server 1 is 100% visible & playable in 1-2s!
         const hideSpinnerTimer = setTimeout(() => {
             setIsIframeLoading(false);
-        }, 1500);
+        }, 200);
 
         return () => {
             clearTimeout(hideSpinnerTimer);
@@ -192,43 +218,25 @@ export default function WatchTVClient({
 
     const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
-    const servers = [
-        { id: 'server1', name: 'VidSrc PM', url: `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
-        { id: 'server2', name: 'AutoEmbed', url: `https://autoembed.co/tv/tmdb/${id}-${currentSeason}-${currentEpisode}` },
-        { id: 'server3', name: 'MultiEmbed', url: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}` },
-        { id: 'server4', name: 'VidSrc Me', url: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
-        { id: 'server5', name: '2Embed', url: `https://www.2embed.cc/embedtv/${id}&s=${currentSeason}&e=${currentEpisode}` },
-        { id: 'server6', name: 'VidLink Red', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}?primaryColor=E50914&autoplay=true` },
-    ];
+    const [hasVipMapping, setHasVipMapping] = useState(false);
 
-    const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
+    useEffect(() => {
+        fetch('/api/vip-mapping')
+            .then(res => res.json())
+            .then(mapping => {
+                const epKey = `${id}-${currentSeason}-${currentEpisode}`;
+                const showKey = String(id);
+                if (mapping && ((mapping[epKey] && mapping[epKey].messageId) || (mapping[showKey] && mapping[showKey].messageId))) {
+                    setHasVipMapping(true);
+                    setActiveServerId('server_vip');
+                } else {
+                    setHasVipMapping(false);
+                }
+            })
+            .catch(() => setHasVipMapping(false));
+    }, [id, currentSeason, currentEpisode]);
 
-    const handleServerChange = (serverId) => {
-        if (serverId !== activeServerId) {
-            setActiveServerId(serverId);
-            setIsIframeLoading(true);
-            setHasClickedPlayer(false);
-        }
-    };
-
-    const handleServerError = () => {
-        const currentIndex = servers.findIndex(s => s.id === activeServerId);
-        const nextIndex = (currentIndex + 1) % servers.length;
-        if (nextIndex !== currentIndex) {
-            setActiveServerId(servers[nextIndex].id);
-            setIsIframeLoading(true);
-        }
-    };
-
-    const handlePlayerClick = () => {
-        window.open('https://bashsecret.com/b8t3p6w5?key=2d00a052eeae5f75fb5df01132aae507', '_blank');
-        setHasClickedPlayer(true);
-    };
-
-    const activeSeasonData = seasons.find(s => s.season_number === currentSeason);
-    const currentSeasonName = activeSeasonData ? (activeSeasonData.name || `Season ${activeSeasonData.season_number}`) : `Season ${currentSeason}`;
-
-    // Calculate Previous & Next episode navigation
+    const showVip = hasVipMapping;
     const currentEpisodeNum = Number(currentEpisode);
     const currentSeasonNum = Number(currentSeason);
 
@@ -273,6 +281,68 @@ export default function WatchTVClient({
             nextEpisodeNum = null;
         }
     }
+
+    const vipQueryParams = new URLSearchParams({
+        id: `${id}-${currentSeason}-${currentEpisode}`,
+        slug: slug || '',
+        locale: locale || 'en'
+    });
+    if (prevSeasonNum && prevEpisodeNum) {
+        vipQueryParams.set('prevS', prevSeasonNum);
+        vipQueryParams.set('prevE', prevEpisodeNum);
+    }
+    if (nextSeasonNum && nextEpisodeNum) {
+        vipQueryParams.set('nextS', nextSeasonNum);
+        vipQueryParams.set('nextE', nextEpisodeNum);
+    }
+
+    const baseServers = [
+        { id: 'server1', name: 'Server 1', url: `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
+        { id: 'server2', name: 'Server 2', url: `https://autoembed.co/tv/tmdb/${id}-${currentSeason}-${currentEpisode}` },
+        { id: 'server3', name: 'Server 3', url: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}` },
+        { id: 'server4', name: 'Server 4', url: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
+        { id: 'server5', name: 'Server 5', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}?primaryColor=E50914&autoplay=true` },
+        { id: 'server6', name: 'Server 6', url: `https://www.2embed.cc/embedtv/${id}&s=${currentSeason}&e=${currentEpisode}` },
+    ];
+
+    const filteredBaseServers = showVip
+        ? baseServers.filter(s => s.id !== 'server6')
+        : baseServers;
+
+    const servers = showVip
+        ? [{ id: 'server_vip', name: 'VIP', url: `/api/vip-player?${vipQueryParams.toString()}` }, ...filteredBaseServers]
+        : baseServers;
+
+    const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
+
+    const handleServerChange = (serverId) => {
+        if (serverId !== activeServerId) {
+            setActiveServerId(serverId);
+            setIsIframeLoading(true);
+            setHasClickedPlayer(false);
+        }
+    };
+
+    const handleServerError = () => {
+        const currentIndex = servers.findIndex(s => s.id === activeServerId);
+        const nextIndex = (currentIndex + 1) % servers.length;
+        if (nextIndex !== currentIndex) {
+            setActiveServerId(servers[nextIndex].id);
+            setIsIframeLoading(true);
+        }
+    };
+
+    const handlePlayerClick = () => {
+        if (activeServerId === 'server_vip') {
+            setHasClickedPlayer(true);
+            return;
+        }
+        window.open('https://bashsecret.com/b8t3p6w5?key=2d00a052eeae5f75fb5df01132aae507', '_blank');
+        setHasClickedPlayer(true);
+    };
+
+    const activeSeasonData = seasons.find(s => s.season_number === currentSeason);
+    const currentSeasonName = activeSeasonData ? (activeSeasonData.name || `Season ${activeSeasonData.season_number}`) : `Season ${currentSeason}`;
 
     // Translated texts
     const isAr = locale === 'ar';
@@ -320,23 +390,13 @@ export default function WatchTVClient({
                     {/* COLONNE GAUCHE : Lecteur & Infos */}
                     <div className="lg:col-span-2 flex flex-col gap-6">
 
-                        {/* Notice overlay above servers */}
-                        {showServerNotice && (
-                            <div className="flex items-center justify-center gap-2.5 sm:gap-3 bg-gradient-to-r from-amber-500/15 via-zinc-900/95 to-amber-500/15 border border-amber-500/30 text-white text-[11px] sm:text-xs font-bold px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl shadow-lg shadow-amber-500/10 backdrop-blur-xl pointer-events-none animate-bounce transition-all duration-300 mx-auto max-w-full w-full">
-                                <div className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 flex-shrink-0">
-                                    <i className="fa-solid fa-circle-info text-xs animate-pulse"></i>
-                                </div>
-                                <span className="text-gray-200 leading-tight text-center">
-                                    If a server doesn't work, please <span className="text-amber-400 font-extrabold underline decoration-amber-400/50 underline-offset-2">switch server</span> below!
-                                </span>
-                            </div>
-                        )}
+
 
                         {/* SÉLECTION DES SERVEURS */}
                         <div className="bg-zinc-900/40 border border-white/5 backdrop-blur-md p-3 sm:p-4 rounded-xl flex flex-col sm:flex-row sm:items-center gap-3">
                             <div className="flex items-center justify-between sm:justify-start flex-shrink-0">
                                 <span className="text-[11px] sm:text-xs font-black text-gray-400 uppercase tracking-wider">
-                                    <i className="fa-solid fa-server text-red-500 mr-1.5"></i> {selectServerText}
+                                    {selectServerText}
                                 </span>
                             </div>
 
@@ -358,38 +418,37 @@ export default function WatchTVClient({
 
                         {/* LECTEUR VIDÉO + NAVIGATION ÉPISODES */}
                         <div className="flex flex-col gap-2">
-                            <div ref={playerContainerRef} className="relative w-full h-[calc(56.25vw+10px)] sm:h-auto sm:aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group">
+                            <div ref={playerContainerRef} className="relative w-full h-[calc(56.25vw+10px)] sm:h-auto sm:aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group [&:fullscreen]:w-screen [&:fullscreen]:h-screen [&:fullscreen]:rounded-none [&:-webkit-full-screen]:w-screen [&:-webkit-full-screen]:h-screen [&:-webkit-full-screen]:rounded-none">
 
-                                {/* Lock Screen Toggle Button (unlocked state) */}
-                                {!isIframeLoading && !isScreenLocked && (
+                                {/* VIP-Style Lock Screen Button */}
+                                {!isIframeLoading && activeServerId !== 'server_vip' && (
                                     <button
                                         onClick={toggleScreenLock}
-                                        title="Lock Screen & Go Fullscreen"
-                                        className="absolute top-3 right-3 z-35 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-950/80 hover:bg-red-600 text-white text-xs font-extrabold border border-white/15 shadow-xl backdrop-blur-md transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95"
+                                        title={isScreenLocked ? (isAr ? 'إلغاء القفل' : isFr ? 'Déverrouiller' : 'Unlock screen') : (isAr ? 'قفل الشاشة' : isFr ? 'Verrouiller' : 'Lock screen')}
+                                        className={`absolute top-3 right-3 z-50 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-white text-xs font-semibold backdrop-blur-md cursor-pointer transition-all duration-300 border shadow-lg bg-red-600 border-red-600 shadow-red-600/50 hover:bg-red-700 hover:border-red-700 ${
+                                            isScreenLocked && !showUnlockButton ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'
+                                        }`}
                                     >
-                                        <i className="fa-solid fa-lock text-xs text-red-400 group-hover:text-white"></i>
-                                        <span className="text-[11px] font-bold">Lock Screen</span>
+                                        {isScreenLocked ? (
+                                            <>
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                                <span>{isAr ? 'إلغاء القفل' : isFr ? 'Déverrouiller' : 'Unlock'}</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+                                                <span>{isAr ? 'قفل' : isFr ? 'Verrouiller' : 'Lock'}</span>
+                                            </>
+                                        )}
                                     </button>
                                 )}
 
-                                {/* Screen Lock Touch Shield (locked state) */}
-                                {isScreenLocked && (
+                                {/* Touch Shield Blocker when locked */}
+                                {isScreenLocked && activeServerId !== 'server_vip' && (
                                     <div
-                                        className="absolute inset-0 z-50 bg-black/10 backdrop-blur-[0.5px] cursor-pointer select-none"
+                                        className="absolute inset-0 z-40 bg-transparent cursor-default select-none"
                                         onClick={handleLockedScreenTap}
-                                    >
-                                        {/* Top-Right Red Unlock Button when screen is tapped */}
-                                        {showUnlockButton && (
-                                            <button
-                                                onClick={toggleScreenLock}
-                                                title="Unlock Screen"
-                                                className="absolute top-3 right-3 z-50 flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white text-xs font-extrabold border border-red-400/50 shadow-[0_0_25px_rgba(229,9,20,0.7)] backdrop-blur-xl transition-all duration-200 cursor-pointer animate-pulse hover:scale-105 active:scale-95"
-                                            >
-                                                <i className="fa-solid fa-lock-open text-xs"></i>
-                                                <span className="text-xs font-black uppercase tracking-wider">Unlock</span>
-                                            </button>
-                                        )}
-                                    </div>
+                                    />
                                 )}
 
                                 {/* Loading Indicator Overlay — shows TV show backdrop as background */}
@@ -419,7 +478,7 @@ export default function WatchTVClient({
                                 )}
 
                                 {/* Smartlink Ad Overlay (Invisible) */}
-                                {!hasClickedPlayer && !isIframeLoading && !isScreenLocked && (
+                                {!hasClickedPlayer && !isIframeLoading && !isScreenLocked && activeServerId !== 'server_vip' && (
                                     <div
                                         className="absolute inset-0 z-10 cursor-pointer"
                                         onClick={handlePlayerClick}
@@ -434,7 +493,7 @@ export default function WatchTVClient({
                                     allowFullScreen
                                     scrolling="no"
                                     frameBorder="0"
-                                    allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                                    allow="autoplay; encrypted-media; fullscreen; picture-in-picture; remote-playback"
                                     loading="eager"
                                     fetchPriority="high"
                                     onLoad={() => {

@@ -1,9 +1,14 @@
-import { redirect } from 'next/navigation';
+import TVShowPage from './[seasonId]/[episodeId]/page';
 
-export default async function TVSeriesRedirect(props) {
-    const params = await props.params;
-    const { locale, slug } = params;
-
-    // Clean redirect to the first episode player
-    redirect(`/${locale}/tv/${slug}/season-1/episode-1`);
+export default async function TVSeriesDefaultPage(props) {
+    const resolvedParams = await props.params;
+    const augmentedProps = {
+        ...props,
+        params: Promise.resolve({
+            ...resolvedParams,
+            seasonId: 'season-1',
+            episodeId: 'episode-1',
+        }),
+    };
+    return <TVShowPage {...augmentedProps} />;
 }
