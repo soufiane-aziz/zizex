@@ -176,11 +176,11 @@ export default function Navbar({ locale, contentType }) {
       >
         <button
           onClick={() => handleNavigation('all', 'default')}
-          aria-label="ZizHub — Go to home"
-          className="text-2xl md:text-3xl font-black tracking-wide cursor-pointer focus:outline-none"
+          aria-label="Filmoxa — Go to home"
+          className="text-2xl md:text-3xl font-black tracking-wide cursor-pointer focus:outline-none flex items-center gap-2"
         >
-          <span className="text-red-600">Ziz</span>
-          <span className="text-white">Hub</span>
+          <span className="text-red-600">Film</span>
+          <span className="text-white">oxa</span>
         </button>
       </div>
 

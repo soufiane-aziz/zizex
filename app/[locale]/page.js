@@ -42,22 +42,22 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const title = isAr
-        ? 'ZizHub - شاهد أفلام ومسلسلات أونلاين مجاناً'
+        ? 'Filmoxa - شاهد أفلام ومسلسلات أونلاين مجاناً'
         : isFr
-            ? 'ZizHub - Regarder Films et Séries en Streaming Gratuit'
-            : 'ZizHub - Watch Movies & TV Shows Online Free';
+            ? 'Filmoxa - Regarder Films et Séries en Streaming Gratuit'
+            : 'Filmoxa - Watch Movies & TV Shows Online Free';
 
     const description = isAr
-        ? 'استمتع بأفضل الأفلام والمسلسلات مجاناً وبجودة عالية على ZizHub.'
+        ? 'استمتع بأفضل الأفلام والمسلسلات مجاناً وبجودة عالية على Filmoxa.'
         : isFr
-            ? 'Regardez gratuitement les meilleurs films et séries sur ZizHub.'
-            : 'Stream the best movies and TV shows for free on ZizHub.';
+            ? 'Regardez gratuitement les meilleurs films et séries sur Filmoxa.'
+            : 'Stream the best movies and TV shows for free on Filmoxa.';
 
     const keywords = isAr
-        ? ['موقع zizhub', 'مشاهدة افلام اونلاين', 'افلام ومسلسلات مجانا', 'موقع سيما', 'افلام مترجمة اونلاين', 'مسلسلات رمضان 2026', 'تحميل افلام مجانا', 'موقع مشاهدة افلام', 'افلام اكشن مترجمة', 'مسلسلات اجنبية مترجمة', 'موقع برستيج', 'ايجي بست البديل', 'السينما للجميع', 'افلام اون لاين hd', 'موقع سيما فور يو', 'مشاهدة مسلسلات اونلاين', 'افلام رعب مترجمة', 'موقع ماي سيما', 'افلام هندية مترجمة', 'تحميل مسلسلات مجانا', 'نتفليكس', 'موقع نتفليكس مجانا', 'ايجي بست', 'ماي سيما الاصلي', 'سيما فور يو', 'برستيج مسلسلات', 'شاهد افضل الافلام', 'عرب سيد', 'فاصل اعلاني', 'اكوام', 'توك توك سيما']
+        ? ['موقع filmoxa', 'مشاهدة افلام اونلاين', 'افلام ومسلسلات مجانا', 'موقع سيما', 'افلام مترجمة اونلاين', 'مسلسلات رمضان 2026', 'تحميل افلام مجانا', 'موقع مشاهدة افلام', 'افلام اكشن مترجمة', 'مسلسلات اجنبية مترجمة', 'موقع برستيج', 'ايجي بست البديل', 'السينما للجميع', 'افلام اون لاين hd', 'موقع سيما فور يو', 'مشاهدة مسلسلات اونلاين', 'افلام رعب مترجمة', 'موقع ماي سيما', 'افلام هندية مترجمة', 'تحميل مسلسلات مجانا', 'نتفليكس', 'موقع نتفليكس مجانا', 'ايجي بست', 'ماي سيما الاصلي', 'سيما فور يو', 'برستيج مسلسلات', 'شاهد افضل الافلام', 'عرب سيد', 'فاصل اعلاني', 'اكوام', 'توك توك سيما']
         : isFr
-            ? ['zizhub streaming', 'regarder films gratuits', 'streaming vf', 'film streaming gratuit', 'site de streaming film', 'series tv streaming', 'cinema en ligne', 'voir film gratuit', 'top film streaming', 'streaming hd gratuit', 'films complets vf', 'series streaming gratuit', 'platforme de streaming', 'cinema streaming gratuit', 'nouveautes films streaming', 'voir series en streaming', 'streaming gratuit sans inscription', 'films streaming vf et vostfr', 'meilleur site streaming', 'film d action streaming', 'Netflix gratuit', 'TopCinema streaming', 'Cima4U streaming', 'MyCima vf', 'Wawacity streaming', 'Frenchstream alternative', 'Zone-Telechargement', 'Cpasbien film']
-            : ['zizhub', 'ZizHub', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies free', 'sci-fi series online', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch free tv shows', 'best movie streaming site', 'cinema streaming free', 'Netflix', 'watch Netflix movies free', 'HBO Max streaming', 'Disney Plus free', 'TopCinema', 'EgyBest alternative', 'MyCima', 'Cima4U', 'Shahid VIP free', 'WatchIt movies'];
+            ? ['filmoxa streaming', 'regarder films gratuits', 'streaming vf', 'film streaming gratuit', 'site de streaming film', 'series tv streaming', 'cinema en ligne', 'voir film gratuit', 'top film streaming', 'streaming hd gratuit', 'films complets vf', 'series streaming gratuit', 'platforme de streaming', 'cinema streaming gratuit', 'nouveautes films streaming', 'voir series en streaming', 'streaming gratuit sans inscription', 'films streaming vf et vostfr', 'meilleur site streaming', 'film d action streaming', 'Netflix gratuit', 'TopCinema streaming', 'Cima4U streaming', 'MyCima vf', 'Wawacity streaming', 'Frenchstream alternative', 'Zone-Telechargement', 'Cpasbien film']
+            : ['filmoxa', 'Filmoxa', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies free', 'sci-fi series online', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch free tv shows', 'best movie streaming site', 'cinema streaming free', 'Netflix', 'watch Netflix movies free', 'HBO Max streaming', 'Disney Plus free', 'TopCinema', 'EgyBest alternative', 'MyCima', 'Cima4U', 'Shahid VIP free', 'WatchIt movies'];
 
     return {
         title,
@@ -76,13 +76,13 @@ export async function generateMetadata(props) {
             title,
             description,
             url: `${SITE_URL}/${locale}`,
-            siteName: 'ZizHub',
+            siteName: 'Filmoxa',
             images: [
                 {
                     url: `${SITE_URL}/og-image.png?v=6`,
                     width: 1200,
                     height: 630,
-                    alt: 'ZizHub - Watch Movies & TV Shows For Free',
+                    alt: 'Filmoxa - Watch Movies & TV Shows For Free',
                 }
             ],
             type: 'website',

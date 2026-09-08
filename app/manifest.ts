@@ -1,7 +1,7 @@
 export default function manifest() {
     return {
-        name: 'ZizHub',
-        short_name: 'ZizHub',
+        name: 'Filmoxa',
+        short_name: 'Filmoxa',
         description: 'Watch your favorite movies and TV shows for free in HD',
         start_url: '/',
         display: 'standalone',

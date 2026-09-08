@@ -40,10 +40,10 @@ export default function Footer() {
           {/* Brand & Description */}
           <div className="col-span-2 flex flex-col gap-4">
             <Link href="/" className="font-black text-3xl tracking-wide text-white focus:outline-none w-max">
-              <span className="text-red-600">Ziz</span>Hub
+              <span className="text-red-600">Film</span>oxa
             </Link>
             <p className="text-sm text-zinc-500 max-w-sm leading-relaxed">
-              Stream your favorite movies and TV shows for free in HD on ZizHub. The ultimate destination for movie lovers.
+              Stream your favorite movies and TV shows for free in HD on Filmoxa. The ultimate destination for movie lovers.
             </p>
           </div>
 
@@ -126,7 +126,7 @@ export default function Footer() {
         <div className="border-t border-zinc-800/60 pt-8 flex flex-col lg:flex-row justify-between items-center gap-4 md:gap-6">
           <div className="text-xs text-zinc-500 text-center lg:text-left">
             <p className="font-medium text-zinc-400">
-              &copy; {new Date().getFullYear()} ZizHub. All rights reserved.
+              &copy; {new Date().getFullYear()} Filmoxa. All rights reserved.
             </p>
           </div>
           

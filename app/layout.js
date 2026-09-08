@@ -9,9 +9,9 @@ const AntiAdBlock = dynamic(() => import('../components/AntiAdBlock'));
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app'),
-  title: 'ZizHub - Streaming Platform',
-  description: 'Watch your favorite movies and TV shows free on ZizHub.',
-  keywords: ['zizhub', 'ZizHub', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies free', 'sci-fi series online', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch free tv shows', 'best movie streaming site', 'cinema streaming free', 'Netflix', 'watch Netflix movies free', 'HBO Max streaming', 'Disney Plus free', 'TopCinema', 'EgyBest alternative', 'MyCima', 'Cima4U', 'Shahid VIP free', 'WatchIt movies'],
+  title: 'Filmoxa - Streaming Platform',
+  description: 'Watch your favorite movies and TV shows free on Filmoxa.',
+  keywords: ['filmoxa', 'Filmoxa', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies free', 'sci-fi series online', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch free tv shows', 'best movie streaming site', 'cinema streaming free', 'Netflix', 'watch Netflix movies free', 'HBO Max streaming', 'Disney Plus free', 'TopCinema', 'EgyBest alternative', 'MyCima', 'Cima4U', 'Shahid VIP free', 'WatchIt movies'],
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -24,9 +24,9 @@ export const metadata = {
     ],
   },
   openGraph: {
-    siteName: 'ZizHub',
-    title: 'ZizHub - Free Movies & TV Shows Streaming Platform',
-    description: 'Stream thousands of top movies and TV series free on ZizHub.',
+    siteName: 'Filmoxa',
+    title: 'Filmoxa - Free Movies & TV Shows Streaming Platform',
+    description: 'Stream thousands of top movies and TV series free on Filmoxa.',
     url: 'https://zizhub.vercel.app',
     type: 'website',
     images: [
@@ -34,14 +34,14 @@ export const metadata = {
         url: '/og-image.png?v=6',
         width: 1200,
         height: 630,
-        alt: 'ZizHub - Watch Movies & TV Shows For Free',
+        alt: 'Filmoxa - Watch Movies & TV Shows For Free',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ZizHub - Free Movies & TV Shows Streaming',
-    description: 'Stream thousands of top movies and TV series free on ZizHub.',
+    title: 'Filmoxa - Free Movies & TV Shows Streaming',
+    description: 'Stream thousands of top movies and TV series free on Filmoxa.',
     images: ['/og-image.png?v=6'],
   },
   verification: {
@@ -101,9 +101,9 @@ export default function RootLayout({ children }) {
                   "@type": "WebSite",
                   "@id": "https://zizhub.vercel.app/#website",
                   "url": "https://zizhub.vercel.app/",
-                  "name": "ZizHub",
-                  "alternateName": ["Ziz Hub", "zizhub", "ZizHub Streaming"],
-                  "description": "Watch free movies and TV shows online in HD on ZizHub.",
+                  "name": "Filmoxa",
+                  "alternateName": ["Filmoxa", "filmoxa", "Filmoxa Streaming"],
+                  "description": "Watch free movies and TV shows online in HD on Filmoxa.",
                   "potentialAction": {
                     "@type": "SearchAction",
                     "target": {
@@ -116,7 +116,7 @@ export default function RootLayout({ children }) {
                 {
                   "@type": "Organization",
                   "@id": "https://zizhub.vercel.app/#organization",
-                  "name": "ZizHub",
+                  "name": "Filmoxa",
                   "url": "https://zizhub.vercel.app/",
                   "logo": "https://zizhub.vercel.app/icon-512.png"
                 }
