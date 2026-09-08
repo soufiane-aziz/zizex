@@ -83,12 +83,31 @@ export async function GET(request) {
             } else {
                 end = Math.min(start + MAX_CHUNK_SIZE - 1, fileSize - 1);
             }
-            if (end - start + 1 > MAX_CHUNK_SIZE) {
-                end = start + MAX_CHUNK_SIZE - 1;
-            }
+        } else if (fileSize > 0) {
+            start = 0;
+            end = Math.min(MAX_CHUNK_SIZE - 1, fileSize - 1);
+        }
+
+        if (fileSize > 0 && (end - start + 1 > MAX_CHUNK_SIZE)) {
+            end = start + MAX_CHUNK_SIZE - 1;
         }
 
         const chunkSize = end - start + 1;
+
+        const headers = {
+            'Content-Type': 'video/mp4',
+            'Accept-Ranges': 'bytes',
+            'Access-Control-Allow-Origin': '*',
+            'Content-Length': String(chunkSize),
+        };
+
+        if (fileSize > 0) {
+            headers['Content-Range'] = `bytes ${start}-${end}/${fileSize}`;
+        }
+
+        if (request.method === 'HEAD') {
+            return new Response(null, { status: 206, headers });
+        }
 
         const stream = new ReadableStream({
             async start(controller) {
@@ -109,22 +128,13 @@ export async function GET(request) {
             }
         });
 
-        const headers = {
-            'Content-Type': 'video/mp4',
-            'Accept-Ranges': 'bytes',
-            'Access-Control-Allow-Origin': '*',
-        };
-
-        if (rangeHeader && fileSize > 0) {
-            headers['Content-Range'] = `bytes ${start}-${end}/${fileSize}`;
-            headers['Content-Length'] = String(chunkSize);
-            return new Response(stream, { status: 206, headers });
-        } else {
-            if (fileSize > 0) headers['Content-Length'] = String(fileSize);
-            return new Response(stream, { status: 200, headers });
-        }
+        return new Response(stream, { status: 206, headers });
 
     } catch (err) {
         return new Response('Stream error: ' + err.message, { status: 500 });
     }
+}
+
+export async function HEAD(request) {
+    return GET(request);
 }

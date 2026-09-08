@@ -697,25 +697,32 @@ async function main() {
                     } else {
                         end = Math.min(start + MAX_CHUNK_SIZE - 1, fileSize - 1);
                     }
-                    if (end - start + 1 > MAX_CHUNK_SIZE) {
-                        end = start + MAX_CHUNK_SIZE - 1;
-                    }
-                    const chunkSize = end - start + 1;
+                } else if (fileSize > 0) {
+                    start = 0;
+                    end = Math.min(MAX_CHUNK_SIZE - 1, fileSize - 1);
+                }
 
-                    res.writeHead(206, {
-                        'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-                        'Accept-Ranges': 'bytes',
-                        'Content-Length': chunkSize,
-                        'Content-Type': 'video/mp4',
-                        'Access-Control-Allow-Origin': '*',
-                    });
-                } else {
-                    res.writeHead(200, {
-                        'Content-Type': 'video/mp4',
-                        'Accept-Ranges': 'bytes',
-                        'Content-Length': fileSize || undefined,
-                        'Access-Control-Allow-Origin': '*',
-                    });
+                if (fileSize > 0 && (end - start + 1 > MAX_CHUNK_SIZE)) {
+                    end = start + MAX_CHUNK_SIZE - 1;
+                }
+
+                const chunkSize = end - start + 1;
+
+                const responseHeaders = {
+                    'Accept-Ranges': 'bytes',
+                    'Content-Length': chunkSize,
+                    'Content-Type': 'video/mp4',
+                    'Access-Control-Allow-Origin': '*',
+                };
+                if (fileSize > 0) {
+                    responseHeaders['Content-Range'] = `bytes ${start}-${end}/${fileSize}`;
+                }
+
+                res.writeHead(206, responseHeaders);
+
+                if (req.method === 'HEAD') {
+                    res.end();
+                    return;
                 }
 
                 // Stream the file in 1MB chunks using GramJS / teleproto iterDownload
