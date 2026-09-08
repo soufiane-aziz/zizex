@@ -69,22 +69,25 @@ export async function GET(request) {
             return new Response('Missing msgId', { status: 400 });
         }
 
-        // Support external persistent MTProto server proxy (e.g. VPS / Render / Railway) for instant load on Vercel
+        const mediaId = searchParams.get('id');
+        let mappings = {};
+        try {
+            const mappingPath = path.join(process.cwd(), 'telegram-mapping.json');
+            if (fs.existsSync(mappingPath)) {
+                mappings = JSON.parse(fs.readFileSync(mappingPath, 'utf8'));
+            }
+        } catch (e) {}
+
+        const entry = mediaId && mappings[mediaId];
+        if (entry && entry.directUrl) {
+            return Response.redirect(entry.directUrl, 302);
+        }
+
+        // Support external persistent MTProto server redirect (e.g. VPS / Render / Railway / Localtunnel) for instant 1s load on Vercel
         const remoteServerUrl = process.env.MTPROTO_SERVER_URL;
         if (remoteServerUrl) {
             const targetUrl = `${remoteServerUrl.replace(/\/$/, '')}/stream?${searchParams.toString()}`;
-            const reqHeaders = {};
-            if (request.headers.get('range')) {
-                reqHeaders['Range'] = request.headers.get('range');
-            }
-            const remoteRes = await fetch(targetUrl, {
-                method: request.method,
-                headers: reqHeaders,
-            });
-            return new Response(remoteRes.body, {
-                status: remoteRes.status,
-                headers: remoteRes.headers,
-            });
+            return Response.redirect(targetUrl, 302);
         }
 
         const configPath = path.join(process.cwd(), 'telegram.config.json');
