@@ -685,13 +685,21 @@ async function main() {
                     : (message.media.photo ? 0 : 0);
 
                 const rangeHeader = req.headers.range;
+                const MAX_CHUNK_SIZE = 5 * 1024 * 1024; // 5MB max per range response
                 let start = 0;
-                let end = fileSize - 1;
+                let end = fileSize > 0 ? fileSize - 1 : 0;
 
                 if (rangeHeader && fileSize > 0) {
                     const parts = rangeHeader.replace(/bytes=/, '').split('-');
-                    start = parseInt(parts[0], 10);
-                    end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+                    start = parseInt(parts[0], 10) || 0;
+                    if (parts[1]) {
+                        end = parseInt(parts[1], 10);
+                    } else {
+                        end = Math.min(start + MAX_CHUNK_SIZE - 1, fileSize - 1);
+                    }
+                    if (end - start + 1 > MAX_CHUNK_SIZE) {
+                        end = start + MAX_CHUNK_SIZE - 1;
+                    }
                     const chunkSize = end - start + 1;
 
                     res.writeHead(206, {
