@@ -79,23 +79,26 @@ export async function GET(request) {
             start = parseInt(parts[0], 10) || 0;
         }
 
-        const maxChunk = (start === 0) ? (256 * 1024) : (1024 * 1024); // 256KB initial probe, 1MB playback
+        const DEFAULT_CHUNK = 2 * 1024 * 1024; // 2MB chunk to guarantee full moov metadata (1.61MB)
         let end = fileSize > 0 ? fileSize - 1 : 0;
 
         if (rangeHeader && fileSize > 0) {
             const parts = rangeHeader.replace(/bytes=/, '').split('-');
             if (parts[1]) {
                 end = parseInt(parts[1], 10);
+                if (start === 0 && end < DEFAULT_CHUNK - 1) {
+                    end = Math.min(DEFAULT_CHUNK - 1, fileSize - 1);
+                }
             } else {
-                end = Math.min(start + maxChunk - 1, fileSize - 1);
+                end = Math.min(start + DEFAULT_CHUNK - 1, fileSize - 1);
             }
         } else if (fileSize > 0) {
             start = 0;
-            end = Math.min(maxChunk - 1, fileSize - 1);
+            end = Math.min(DEFAULT_CHUNK - 1, fileSize - 1);
         }
 
-        if (fileSize > 0 && (end - start + 1 > maxChunk)) {
-            end = start + maxChunk - 1;
+        if (fileSize > 0 && (end - start + 1 > DEFAULT_CHUNK)) {
+            end = start + DEFAULT_CHUNK - 1;
         }
 
         const chunkSize = end - start + 1;
