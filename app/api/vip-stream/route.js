@@ -8,7 +8,7 @@ import { TelegramClient } from 'teleproto';
 import { StringSession } from 'teleproto/sessions';
 import bigInt from 'big-integer';
 
-let clientInstance = null;
+let clientInstance = global._telegramClient || null;
 
 async function getTelegramClient() {
     if (clientInstance && clientInstance.connected) {
@@ -26,26 +26,36 @@ async function getTelegramClient() {
     const sessionStr = fs.readFileSync(sessionPath, 'utf8').trim();
 
     const client = new TelegramClient(new StringSession(sessionStr), Number(config.apiId), config.apiHash, {
-        connectionRetries: 5,
+        connectionRetries: 3,
+        timeout: 10,
     });
 
     await client.connect();
     clientInstance = client;
+    global._telegramClient = client;
     return client;
 }
 
-const messageCache = new Map();
+const messageCache = global._messageCache || new Map();
+global._messageCache = messageCache;
 
 async function getCachedMessage(client, channelId, msgId) {
     const key = `${channelId}:${msgId}`;
     if (messageCache.has(key)) {
         return messageCache.get(key);
     }
-    const entity = await client.getEntity(channelId);
-    const [message] = await client.getMessages(entity, { ids: [Number(msgId)] });
+    let message = null;
+    try {
+        const [msg] = await client.getMessages(channelId, { ids: [Number(msgId)] });
+        message = msg;
+    } catch (e) {
+        const entity = await client.getEntity(channelId);
+        const [msg] = await client.getMessages(entity, { ids: [Number(msgId)] });
+        message = msg;
+    }
+
     if (message && message.media) {
         messageCache.set(key, message);
-        setTimeout(() => messageCache.delete(key), 3600 * 1000); // 1 hour cache
     }
     return message;
 }
@@ -57,6 +67,24 @@ export async function GET(request) {
 
         if (!msgId) {
             return new Response('Missing msgId', { status: 400 });
+        }
+
+        // Support external persistent MTProto server proxy (e.g. VPS / Render / Railway) for instant load on Vercel
+        const remoteServerUrl = process.env.MTPROTO_SERVER_URL;
+        if (remoteServerUrl) {
+            const targetUrl = `${remoteServerUrl.replace(/\/$/, '')}/stream?${searchParams.toString()}`;
+            const reqHeaders = {};
+            if (request.headers.get('range')) {
+                reqHeaders['Range'] = request.headers.get('range');
+            }
+            const remoteRes = await fetch(targetUrl, {
+                method: request.method,
+                headers: reqHeaders,
+            });
+            return new Response(remoteRes.body, {
+                status: remoteRes.status,
+                headers: remoteRes.headers,
+            });
         }
 
         const configPath = path.join(process.cwd(), 'telegram.config.json');
