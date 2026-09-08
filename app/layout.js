@@ -14,14 +14,10 @@ export const metadata = {
   keywords: ['filmoxa', 'Filmoxa', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies free', 'sci-fi series online', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch free tv shows', 'best movie streaming site', 'cinema streaming free', 'Netflix', 'watch Netflix movies free', 'HBO Max streaming', 'Disney Plus free', 'TopCinema', 'EgyBest alternative', 'MyCima', 'Cima4U', 'Shahid VIP free', 'WatchIt movies'],
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+      { url: '/logo.png', sizes: 'any', type: 'image/png' },
     ],
-    shortcut: '/favicon.ico',
-    apple: [
-      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
-    ],
+    shortcut: '/logo.png',
+    apple: '/logo.png',
   },
   openGraph: {
     siteName: 'Filmoxa',
@@ -31,7 +27,7 @@ export const metadata = {
     type: 'website',
     images: [
       {
-        url: '/og-image.png?v=6',
+        url: '/logo.png',
         width: 1200,
         height: 630,
         alt: 'Filmoxa - Watch Movies & TV Shows For Free',
@@ -42,7 +38,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Filmoxa - Free Movies & TV Shows Streaming',
     description: 'Stream thousands of top movies and TV series free on Filmoxa.',
-    images: ['/og-image.png?v=6'],
+    images: ['/logo.png'],
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM',
@@ -69,9 +65,9 @@ export default function RootLayout({ children }) {
     <html lang="en" className="dark">
       <head>
         {/* Favicon */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/icon-512.png" />
+        <link rel="icon" href="/logo.png" type="image/png" />
+        <link rel="shortcut icon" href="/logo.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
 
 
 
@@ -118,7 +114,7 @@ export default function RootLayout({ children }) {
                   "@id": "https://filmoxa.vercel.app/#organization",
                   "name": "Filmoxa",
                   "url": "https://filmoxa.vercel.app/",
-                  "logo": "https://filmoxa.vercel.app/icon-512.png"
+                  "logo": "https://filmoxa.vercel.app/logo.png"
                 }
               ]
             })

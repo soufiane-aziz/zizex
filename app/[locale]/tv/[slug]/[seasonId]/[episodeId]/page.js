@@ -106,7 +106,7 @@ export async function generateMetadata(props) {
         ? `${IMAGE_BASE_URL}/w780${epData.still_path}`
         : showDetails.backdrop_path
             ? `${IMAGE_BASE_URL}/w780${showDetails.backdrop_path}`
-            : `${SITE_URL}/icon-512.png`;
+            : `${SITE_URL}/logo.png`;
 
     const path = `/tv/${seoTvSlug}/season-${seasonNum}/episode-${episodeNum}`;
     const alternates = {
@@ -232,7 +232,7 @@ export default async function LocalizedEpisodePage(props) {
         ? `${IMAGE_BASE_URL}/w500${currentEpisodeDetails.still_path}`
         : showDetails.poster_path
             ? `${IMAGE_BASE_URL}/w500${showDetails.poster_path}`
-            : `${SITE_URL}/icon-512.png`;
+            : `${SITE_URL}/logo.png`;
 
     // Embed URL for schema
     const schemaEmbedUrl = `https://multiembed.mov/?video_id=${showId}&tmdb=1&s=${seasonNum}&e=${episodeNum}`;

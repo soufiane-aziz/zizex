@@ -41,7 +41,7 @@ export default async function LocaleLayout(props) {
         '@type': 'Organization',
         'name': 'Filmoxa',
         'url': `${SITE_URL}/${locale}`,
-        'logo': `${SITE_URL}/icon-512.png`
+        'logo': `${SITE_URL}/logo.png`
     };
 
     return (

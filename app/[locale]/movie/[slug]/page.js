@@ -75,7 +75,7 @@ export async function generateMetadata(props) {
         ? `${IMAGE_BASE_URL}/w780${movieDetails.backdrop_path}`
         : movieDetails.poster_path
             ? `${IMAGE_BASE_URL}/w500${movieDetails.poster_path}`
-            : `${SITE_URL}/icon-512.png`;
+            : `${SITE_URL}/logo.png`;
 
     const seoSlug = createSlug(movieDetails.title, movieId, 'movie');
     const path = `/movie/${seoSlug}`;
@@ -293,7 +293,7 @@ export default async function LocalizedMoviePage(props) {
                 ? `${IMAGE_BASE_URL}/w780${movieDetails.backdrop_path}`
                 : movieDetails.poster_path
                     ? `${IMAGE_BASE_URL}/w500${movieDetails.poster_path}`
-                    : `${SITE_URL}/icon-512.png`
+                    : `${SITE_URL}/logo.png`
         ],
         'uploadDate': movieDetails.release_date ? `${movieDetails.release_date}T00:00:00Z` : '2026-01-01T00:00:00Z',
         'embedUrl': `https://vidsrc.pm/embed/movie/${movieId}`
