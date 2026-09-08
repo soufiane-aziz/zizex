@@ -6,6 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import { TelegramClient } from 'teleproto';
 import { StringSession } from 'teleproto/sessions';
+import bigInt from 'big-integer';
 
 let clientInstance = null;
 
@@ -113,8 +114,8 @@ export async function GET(request) {
             async start(controller) {
                 try {
                     const iter = client.iterDownload(message, {
-                        requestSize: 1024 * 1024, // 1MB chunks for fast streaming
-                        offset: start,
+                        requestSize: 512 * 1024,
+                        offset: bigInt(start),
                         limit: chunkSize > 0 ? chunkSize : undefined,
                     });
 

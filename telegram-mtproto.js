@@ -17,6 +17,7 @@ const fs = require('fs');
 const path = require('path');
 const { TelegramClient } = require('teleproto');
 const { StringSession } = require('teleproto/sessions');
+const bigInt = require('big-integer');
 
 const PORT = process.env.MTPROTO_PORT || 5001;
 const CONFIG_FILE = path.join(__dirname, 'telegram.config.json');
@@ -725,10 +726,10 @@ async function main() {
                     return;
                 }
 
-                // Stream the file in 1MB chunks using GramJS / teleproto iterDownload
+                // Stream the file in 512KB chunks using GramJS / teleproto iterDownload
                 const iter = client.iterDownload(message, {
-                    requestSize: 1024 * 1024, // 1MB chunks for ultra-fast streaming
-                    offset: start,
+                    requestSize: 512 * 1024,
+                    offset: bigInt(start),
                     limit: (end - start + 1 > 0) ? (end - start + 1) : undefined,
                 });
 
