@@ -653,18 +653,25 @@ async function main() {
             return;
         }
 
+function parseMsgId(input) {
+    if (!input) return null;
+    const str = String(input).trim();
+    if (/^\d+$/.test(str)) return parseInt(str, 10);
+    const match = str.match(/\/(\d+)\/?$/);
+    return match ? parseInt(match[1], 10) : null;
+}
+
         // Stream endpoint - stream from Telegram using MTProto
         if (pathname === '/stream') {
             const mappings = getMappings();
             const entry = mediaId && mappings[mediaId];
-            const msgIdToUse = messageId
-                ? parseInt(messageId)
-                : (entry && entry.messageId ? parseInt(entry.messageId) : null);
+            const rawMsgId = messageId || (entry ? (entry.messageId || entry.telegramUrl) : null);
+            const msgIdToUse = parseMsgId(rawMsgId);
             const channelId = config.channelId;
 
             if (!msgIdToUse || !channelId) {
                 res.writeHead(400, { 'Content-Type': 'text/plain' });
-                res.end('Missing messageId or channelId');
+                res.end('Missing or invalid messageId or channelId');
                 return;
             }
 

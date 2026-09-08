@@ -60,16 +60,20 @@ async function getCachedMessage(client, channelId, msgId) {
     return message;
 }
 
+function parseMsgId(input) {
+    if (!input) return null;
+    const str = String(input).trim();
+    if (/^\d+$/.test(str)) return parseInt(str, 10);
+    const match = str.match(/\/(\d+)\/?$/);
+    return match ? parseInt(match[1], 10) : null;
+}
+
 export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url);
-        const msgId = searchParams.get('msgId');
-
-        if (!msgId) {
-            return new Response('Missing msgId', { status: 400 });
-        }
-
+        const rawMsgIdParam = searchParams.get('msgId');
         const mediaId = searchParams.get('id');
+
         let mappings = {};
         try {
             const mappingPath = path.join(process.cwd(), 'telegram-mapping.json');
@@ -79,6 +83,13 @@ export async function GET(request) {
         } catch (e) {}
 
         const entry = mediaId && mappings[mediaId];
+        const rawMsgId = rawMsgIdParam || (entry ? (entry.messageId || entry.telegramUrl) : null);
+        const parsedMsgId = parseMsgId(rawMsgId);
+
+        if (!parsedMsgId) {
+            return new Response('Missing or invalid msgId', { status: 400 });
+        }
+
         if (entry && entry.directUrl) {
             return Response.redirect(entry.directUrl, 302);
         }

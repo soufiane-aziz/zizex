@@ -18,9 +18,18 @@ export async function GET(request) {
         }
     } catch (e) {}
 
+    function parseMsgId(input) {
+        if (!input) return null;
+        const str = String(input).trim();
+        if (/^\d+$/.test(str)) return parseInt(str, 10);
+        const match = str.match(/\/(\d+)\/?$/);
+        return match ? parseInt(match[1], 10) : null;
+    }
+
     const entry = mediaId && mappings[mediaId];
     const title = entry ? entry.title : `VIP Stream ${mediaId}`;
-    const msgIdToUse = messageId || (entry ? entry.messageId : null);
+    const rawMsgId = messageId || (entry ? (entry.messageId || entry.telegramUrl) : null);
+    const msgIdToUse = parseMsgId(rawMsgId);
 
     const prevS = searchParams.get('prevS');
     const prevE = searchParams.get('prevE');
