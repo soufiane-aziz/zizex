@@ -72,25 +72,30 @@ export async function GET(request) {
         const fileSize = message.media.document ? message.media.document.size : 0;
         const rangeHeader = request.headers.get('range');
 
-        const MAX_CHUNK_SIZE = 5 * 1024 * 1024; // 5MB max per range response
+        // Fast-start optimization: 256KB for initial metadata probe (start=0), 1MB for playback
         let start = 0;
+        if (rangeHeader && fileSize > 0) {
+            const parts = rangeHeader.replace(/bytes=/, '').split('-');
+            start = parseInt(parts[0], 10) || 0;
+        }
+
+        const maxChunk = (start === 0) ? (256 * 1024) : (1024 * 1024); // 256KB initial probe, 1MB playback
         let end = fileSize > 0 ? fileSize - 1 : 0;
 
         if (rangeHeader && fileSize > 0) {
             const parts = rangeHeader.replace(/bytes=/, '').split('-');
-            start = parseInt(parts[0], 10) || 0;
             if (parts[1]) {
                 end = parseInt(parts[1], 10);
             } else {
-                end = Math.min(start + MAX_CHUNK_SIZE - 1, fileSize - 1);
+                end = Math.min(start + maxChunk - 1, fileSize - 1);
             }
         } else if (fileSize > 0) {
             start = 0;
-            end = Math.min(MAX_CHUNK_SIZE - 1, fileSize - 1);
+            end = Math.min(maxChunk - 1, fileSize - 1);
         }
 
-        if (fileSize > 0 && (end - start + 1 > MAX_CHUNK_SIZE)) {
-            end = start + MAX_CHUNK_SIZE - 1;
+        if (fileSize > 0 && (end - start + 1 > maxChunk)) {
+            end = start + maxChunk - 1;
         }
 
         const chunkSize = end - start + 1;
