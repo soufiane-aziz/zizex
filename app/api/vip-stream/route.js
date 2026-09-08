@@ -94,11 +94,20 @@ export async function GET(request) {
             return Response.redirect(entry.directUrl, 302);
         }
 
-        // Support external persistent MTProto server redirect (e.g. VPS / Render / Railway / Localtunnel) for instant 1s load on Vercel
+        // Proxy external persistent MTProto server (e.g. localtunnel/VPS/Railway) with bypass header for instant 1s load on Vercel
         const remoteServerUrl = process.env.MTPROTO_SERVER_URL;
         if (remoteServerUrl) {
             const targetUrl = `${remoteServerUrl.replace(/\/$/, '')}/stream?${searchParams.toString()}`;
-            return Response.redirect(targetUrl, 302);
+            const proxyHeaders = { 'Bypass-Tunnel-Remainder': 'true' };
+            const rangeHeader = request.headers.get('range');
+            if (rangeHeader) proxyHeaders['Range'] = rangeHeader;
+            const upstream = await fetch(targetUrl, { method: request.method, headers: proxyHeaders });
+            const responseHeaders = new Headers(upstream.headers);
+            responseHeaders.set('Access-Control-Allow-Origin', '*');
+            return new Response(request.method === 'HEAD' ? null : upstream.body, {
+                status: upstream.status,
+                headers: responseHeaders,
+            });
         }
 
         const configPath = path.join(process.cwd(), 'telegram.config.json');
