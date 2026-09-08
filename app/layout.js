@@ -8,7 +8,7 @@ const AdBlocker = dynamic(() => import('../components/AdBlocker'));
 const AntiAdBlock = dynamic(() => import('../components/AntiAdBlock'));
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app'),
   title: 'Filmoxa - Streaming Platform',
   description: 'Watch your favorite movies and TV shows free on Filmoxa.',
   keywords: ['filmoxa', 'Filmoxa', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies free', 'sci-fi series online', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch free tv shows', 'best movie streaming site', 'cinema streaming free', 'Netflix', 'watch Netflix movies free', 'HBO Max streaming', 'Disney Plus free', 'TopCinema', 'EgyBest alternative', 'MyCima', 'Cima4U', 'Shahid VIP free', 'WatchIt movies'],
@@ -27,7 +27,7 @@ export const metadata = {
     siteName: 'Filmoxa',
     title: 'Filmoxa - Free Movies & TV Shows Streaming Platform',
     description: 'Stream thousands of top movies and TV series free on Filmoxa.',
-    url: 'https://zizhub.vercel.app',
+    url: 'https://filmoxa.vercel.app',
     type: 'website',
     images: [
       {
@@ -99,8 +99,8 @@ export default function RootLayout({ children }) {
               "@graph": [
                 {
                   "@type": "WebSite",
-                  "@id": "https://zizhub.vercel.app/#website",
-                  "url": "https://zizhub.vercel.app/",
+                  "@id": "https://filmoxa.vercel.app/#website",
+                  "url": "https://filmoxa.vercel.app/",
                   "name": "Filmoxa",
                   "alternateName": ["Filmoxa", "filmoxa", "Filmoxa Streaming"],
                   "description": "Watch free movies and TV shows online in HD on Filmoxa.",
@@ -108,17 +108,17 @@ export default function RootLayout({ children }) {
                     "@type": "SearchAction",
                     "target": {
                       "@type": "EntryPoint",
-                      "urlTemplate": "https://zizhub.vercel.app/en/search?q={search_term_string}"
+                      "urlTemplate": "https://filmoxa.vercel.app/en/search?q={search_term_string}"
                     },
                     "query-input": "required name=search_term_string"
                   }
                 },
                 {
                   "@type": "Organization",
-                  "@id": "https://zizhub.vercel.app/#organization",
+                  "@id": "https://filmoxa.vercel.app/#organization",
                   "name": "Filmoxa",
-                  "url": "https://zizhub.vercel.app/",
-                  "logo": "https://zizhub.vercel.app/icon-512.png"
+                  "url": "https://filmoxa.vercel.app/",
+                  "logo": "https://filmoxa.vercel.app/icon-512.png"
                 }
               ]
             })

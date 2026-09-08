@@ -67,7 +67,7 @@ export async function generateMetadata(props) {
 
     if (!showId) {
         return {
-            title: 'ZizHub - Search and Watch TV Series',
+            title: 'Filmoxa - Search and Watch TV Series',
             description: 'Stream series metadata seamlessly.'
         };
     }
@@ -76,7 +76,7 @@ export async function generateMetadata(props) {
     const showDetails = await fetchFromTMDB(`/tv/${showId}`, `&language=${tmdbLang}`);
 
     if (!showDetails) {
-        return { title: 'ZizHub - Streaming Platform' };
+        return { title: 'Filmoxa - Streaming Platform' };
     }
 
     const showName = showDetails.name;
@@ -91,16 +91,16 @@ export async function generateMetadata(props) {
     }
 
     const docTitle = isAr
-        ? `ZizHub | شاهد مسلسل ${showName} الموسم ${seasonNum} الحلقة ${episodeNum} أونلاين`
+        ? `Filmoxa | شاهد مسلسل ${showName} الموسم ${seasonNum} الحلقة ${episodeNum} أونلاين`
         : isFr
-            ? `ZizHub | Regarder ${showName} Saison ${seasonNum} Épisode ${episodeNum} en Streaming`
-            : `ZizHub | Watch ${showName} Season ${seasonNum} Episode ${episodeNum} Online`;
+            ? `Filmoxa | Regarder ${showName} Saison ${seasonNum} Épisode ${episodeNum} en Streaming`
+            : `Filmoxa | Watch ${showName} Season ${seasonNum} Episode ${episodeNum} Online`;
 
     const docDesc = epData && epData.overview
         ? epData.overview.substring(0, 160)
-        : `Stream ${showName} Season ${seasonNum} Episode ${episodeNum} ("${episodeTitle}") on ZizHub.`;
+        : `Stream ${showName} Season ${seasonNum} Episode ${episodeNum} ("${episodeTitle}") on Filmoxa.`;
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
     const seoTvSlug = createSlug(showDetails.name, showId, 'tv');
     const ogImage = epData && epData.still_path
         ? `${IMAGE_BASE_URL}/w780${epData.still_path}`
@@ -226,7 +226,7 @@ export default async function LocalizedEpisodePage(props) {
     // Fetch current episode specific details for JSON-LD VideoObject and TVEpisode schemas
     const currentEpisodeDetails = episodes.find(e => e.episode_number === episodeNum) || {};
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
     const episodeName = currentEpisodeDetails.name || `Episode ${episodeNum}`;
     const episodeStill = currentEpisodeDetails.still_path
         ? `${IMAGE_BASE_URL}/w500${currentEpisodeDetails.still_path}`

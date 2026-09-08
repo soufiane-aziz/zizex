@@ -18,7 +18,7 @@ const fetchFromTMDB = cache(async (path, queryParams = '') => {
     }
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
 
 export async function generateMetadata(props) {
     const params = await props.params;
@@ -28,16 +28,16 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const title = isAr
-        ? 'مسلسلات أجنبية وعربية مترجمة - ZizHub'
+        ? 'مسلسلات أجنبية وعربية مترجمة - Filmoxa'
         : isFr
-            ? 'Séries TV en Streaming Gratuit - ZizHub'
-            : 'Watch TV Shows Online Free - ZizHub';
+            ? 'Séries TV en Streaming Gratuit - Filmoxa'
+            : 'Watch TV Shows Online Free - Filmoxa';
 
     const description = isAr
-        ? 'شاهد أحدث المسلسلات الأجنبية، التركية، والكورية مترجمة بجودة عالية HD على ZizHub. مسلسلات كاملة مجاناً.'
+        ? 'شاهد أحدث المسلسلات الأجنبية، التركية، والكورية مترجمة بجودة عالية HD على Filmoxa. مسلسلات كاملة مجاناً.'
         : isFr
-            ? 'Regardez les meilleures séries TV en streaming gratuit HD sur ZizHub. Séries complètes, toutes les saisons sans inscription.'
-            : 'Stream the best and most popular TV shows for free in HD on ZizHub. Watch full seasons and episodes online.';
+            ? 'Regardez les meilleures séries TV en streaming gratuit HD sur Filmoxa. Séries complètes, toutes les saisons sans inscription.'
+            : 'Stream the best and most popular TV shows for free in HD on Filmoxa. Watch full seasons and episodes online.';
 
     const keywords = isAr
         ? ['مسلسلات', 'مسلسلات مترجمة', 'مسلسلات اجنبية', 'مسلسلات تركية', 'مسلسل', 'تحميل مسلسلات', 'حلقات مسلسلات']
@@ -56,13 +56,13 @@ export async function generateMetadata(props) {
             title,
             description,
             url: `${SITE_URL}/${locale}/tv`,
-            siteName: 'ZizHub',
+            siteName: 'Filmoxa',
             images: [
                 {
                     url: `${SITE_URL}/og-image.png`,
                     width: 1200,
                     height: 630,
-                    alt: 'ZizHub TV Shows',
+                    alt: 'Filmoxa TV Shows',
                 }
             ],
             type: 'website',

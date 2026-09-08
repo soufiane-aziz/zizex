@@ -6,7 +6,7 @@ export const revalidate = 604800; // 7 days CDN cache for sitemap generation
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'f82feeca535cc0132d1ab38948a70405';
 const BASE_URL = "https://api.themoviedb.org/3";
 const LOCALES = ['en', 'fr', 'ar'];
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
 
 async function fetchPopularFromTMDB(type: string, pages = 20) {
     if (!API_KEY) {

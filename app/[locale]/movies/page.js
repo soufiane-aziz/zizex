@@ -18,7 +18,7 @@ const fetchFromTMDB = cache(async (path, queryParams = '') => {
     }
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
 
 export async function generateMetadata(props) {
     const params = await props.params;
@@ -28,16 +28,16 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const title = isAr
-        ? 'أفلام مترجمة اونلاين - ZizHub'
+        ? 'أفلام مترجمة اونلاين - Filmoxa'
         : isFr
-            ? 'Films en Streaming Gratuit - ZizHub'
-            : 'Watch Movies Online Free - ZizHub';
+            ? 'Films en Streaming Gratuit - Filmoxa'
+            : 'Watch Movies Online Free - Filmoxa';
 
     const description = isAr
-        ? 'مشاهدة أحدث الأفلام الأجنبية والعربية مترجمة وبجودة عالية HD على ZizHub. أفلام أكشن، رعب، دراما، والمزيد مجاناً.'
+        ? 'مشاهدة أحدث الأفلام الأجنبية والعربية مترجمة وبجودة عالية HD على Filmoxa. أفلام أكشن، رعب، دراما، والمزيد مجاناً.'
         : isFr
-            ? 'Regardez les derniers films en streaming gratuit HD sur ZizHub. Films d\'action, comédie, horreur et bien plus sans inscription.'
-            : 'Stream the latest and greatest movies for free in HD on ZizHub. Action, comedy, horror, and more.';
+            ? 'Regardez les derniers films en streaming gratuit HD sur Filmoxa. Films d\'action, comédie, horreur et bien plus sans inscription.'
+            : 'Stream the latest and greatest movies for free in HD on Filmoxa. Action, comedy, horror, and more.';
 
     const keywords = isAr
         ? ['مشاهدة افلام', 'افلام مترجمة', 'افلام اكشن', 'افلام رعب', 'فيلم', 'تحميل افلام', 'افلام 2026']
@@ -56,13 +56,13 @@ export async function generateMetadata(props) {
             title,
             description,
             url: `${SITE_URL}/${locale}/movies`,
-            siteName: 'ZizHub',
+            siteName: 'Filmoxa',
             images: [
                 {
                     url: `${SITE_URL}/og-image.png`,
                     width: 1200,
                     height: 630,
-                    alt: 'ZizHub Movies',
+                    alt: 'Filmoxa Movies',
                 }
             ],
             type: 'website',

@@ -45,18 +45,18 @@ export async function generateMetadata(props) {
     const genreTitle = genreConfig?.title[locale] || genreConfig?.title.en || cleanSlug.replace(/-/g, ' ');
 
     const title = isAr
-        ? `ZizHub | شاهد ${genreTitle} أونلاين مجاناً HD`
+        ? `Filmoxa | شاهد ${genreTitle} أونلاين مجاناً HD`
         : isFr
-            ? `Regarder ${genreTitle} en Streaming Gratuit | ZizHub`
-            : `Watch ${genreTitle} Online | ZizHub`;
+            ? `Regarder ${genreTitle} en Streaming Gratuit | Filmoxa`
+            : `Watch ${genreTitle} Online | Filmoxa`;
 
     const description = isAr
-        ? `استكشف واشاهد أفضل ${genreTitle} على منصة ZizHub بجودة عالية HD وبدون إعلانات.`
+        ? `استكشف واشاهد أفضل ${genreTitle} على منصة Filmoxa بجودة عالية HD وبدون إعلانات.`
         : isFr
-            ? `Découvrez et regardez les meilleurs ${genreTitle} en streaming HD gratuit sur ZizHub.`
-            : `Stream top ${genreTitle} in HD quality online for free on ZizHub.`;
+            ? `Découvrez et regardez les meilleurs ${genreTitle} en streaming HD gratuit sur Filmoxa.`
+            : `Stream top ${genreTitle} in HD quality online for free on Filmoxa.`;
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
     const path = `/genre/${cleanSlug}`;
 
     return {
@@ -127,14 +127,14 @@ export default async function LocalizedGenrePage(props) {
     const heroMovies = primaryCategory.movies.slice(0, 10);
     const categoryTitle = targetGenreConfig?.title[locale] || targetGenreConfig?.title.en || cleanSlug.toUpperCase();
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
     const canonicalUrl = `${SITE_URL}/${locale}/genre/${cleanSlug}`;
 
     const collectionLd = {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
-        'name': `${categoryTitle} Movies & TV Shows - ZizHub`,
-        'description': `Explore top ${categoryTitle} movies and TV shows streaming on ZizHub. Free full HD stream without ads limits.`,
+        'name': `${categoryTitle} Movies & TV Shows - Filmoxa`,
+        'description': `Explore top ${categoryTitle} movies and TV shows streaming on Filmoxa. Free full HD stream without ads limits.`,
         'url': canonicalUrl,
         'mainEntity': {
             '@type': 'ItemList',

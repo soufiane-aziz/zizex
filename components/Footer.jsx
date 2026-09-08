@@ -13,20 +13,20 @@ export default function Footer() {
 
   const faqItems = [
     {
-      q: "What exactly is ZizHub?",
-      a: "ZizHub is an advanced, high-performance media discovery platform engineered to help cinephiles browse, track, and locate content across global streaming architectures. We synthesize metadata to deliver a fluid browsing experience."
+      q: "What exactly is Filmoxa?",
+      a: "Filmoxa is an advanced, high-performance media discovery platform engineered to help cinephiles browse, track, and locate content across global streaming architectures. We synthesize metadata to deliver a fluid browsing experience."
     },
     {
-      q: "Can I stream or watch movies directly on ZizHub?",
-      a: "No. ZizHub is strictly a metadata aggregator, discovery engine, and cataloging tool. We do not host, stream, or redistribute any copyrighted digital media files. Instead, we direct you to official legal streaming platforms."
+      q: "Can I stream or watch movies directly on Filmoxa?",
+      a: "No. Filmoxa is strictly a metadata aggregator, discovery engine, and cataloging tool. We do not host, stream, or redistribute any copyrighted digital media files. Instead, we direct you to official legal streaming platforms."
     },
     {
       q: "Where does the movie and TV data come from?",
       a: "Our entire structural ecosystem is driven dynamically by the public TMDB API. This ensures real-time updates for trending global charts, dynamic synopsis architectures, cast directories, and high-resolution cover artwork."
     },
     {
-      q: "Is ZizHub free to use?",
-      a: "Yes. ZizHub is a non-commercial, open web application built for optimization, personal portfolio demonstration, and community media discovery."
+      q: "Is Filmoxa free to use?",
+      a: "Yes. Filmoxa is a non-commercial, open web application built for optimization, personal portfolio demonstration, and community media discovery."
     }
   ];
 
@@ -172,16 +172,16 @@ export default function Footer() {
               <>
                 <div className="mb-6 pr-8">
                   <h3 className="text-2xl font-bold text-white tracking-tight">
-                    About <span className="text-red-600">Ziz</span>Hub
+                    About <span className="text-red-600">Film</span>oxa
                   </h3>
                   <div className="h-[2px] w-12 bg-red-600 mt-2.5 rounded"></div>
                 </div>
                 <div className="space-y-5 text-sm text-zinc-400 leading-relaxed">
                   <p>
-                    Welcome to <strong className="text-zinc-100">ZizHub</strong>, an advanced data-driven media tracking index and exploration architecture built explicitly for digital cinema enthusiasts.
+                    Welcome to <strong className="text-zinc-100">Filmoxa</strong>, an advanced data-driven media tracking index and exploration architecture built explicitly for digital cinema enthusiasts.
                   </p>
                   <p>
-                    Our mission is to eliminate the systematic friction of discovering content across highly fragmented digital networks. By parsing scalable public data infrastructure arrays, ZizHub provides responsive filtering, comprehensive cast mapping, real-time community media discovery, and historical television tracking matrices inside a unified, high-end dashboard.
+                    Our mission is to eliminate the systematic friction of discovering content across highly fragmented digital networks. By parsing scalable public data infrastructure arrays, Filmoxa provides responsive filtering, comprehensive cast mapping, real-time community media discovery, and historical television tracking matrices inside a unified, high-end dashboard.
                   </p>
                   <p className="text-xs text-zinc-500 pt-2 border-t border-zinc-900 italic">
                     Disclaimer: This deployment operates entirely on client-side routing and external dynamic pipelines. No copyrighted stream components or storage paradigms exist within our internal cluster schemas.
@@ -230,7 +230,7 @@ export default function Footer() {
                 <div className="space-y-4 text-sm text-zinc-400 leading-relaxed">
                   <p className="text-xs text-zinc-500">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
                   <p>
-                    By accessing and using <strong className="text-zinc-100">ZizHub</strong>, you automatically agree to abide by these Terms of Service. This platform functions purely as an open search directory and dynamic user interface layout.
+                    By accessing and using <strong className="text-zinc-100">Filmoxa</strong>, you automatically agree to abide by these Terms of Service. This platform functions purely as an open search directory and dynamic user interface layout.
                   </p>
                   <h4 className="text-white font-medium text-base pt-2">1. Use of Service</h4>
                   <p>
@@ -238,7 +238,7 @@ export default function Footer() {
                   </p>
                   <h4 className="text-white font-medium text-base pt-2">2. Limitation of Liability</h4>
                   <p>
-                    ZizHub aggregates external metadata and imagery dynamically. We do not warrant or guarantee the complete absolute accuracy, timestamp completeness, or persistent online availability of data fields fetched via public communication wrappers.
+                    Filmoxa aggregates external metadata and imagery dynamically. We do not warrant or guarantee the complete absolute accuracy, timestamp completeness, or persistent online availability of data fields fetched via public communication wrappers.
                   </p>
                 </div>
               </>
@@ -256,11 +256,11 @@ export default function Footer() {
                 <div className="space-y-4 text-sm text-zinc-400 leading-relaxed">
                   <p className="text-xs text-zinc-500">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
                   <p>
-                    At <strong className="text-zinc-100">ZizHub</strong>, we respect user privacy. This privacy policy highlights our commitment to data transparency.
+                    At <strong className="text-zinc-100">Filmoxa</strong>, we respect user privacy. This privacy policy highlights our commitment to data transparency.
                   </p>
                   <h4 className="text-white font-medium text-base pt-2">Data Collection & Cookies</h4>
                   <p>
-                    ZizHub does not require profile configurations, billing information, or backend record-keeping. We do not collect, track, store, or trade any personal user analytics. 
+                    Filmoxa does not require profile configurations, billing information, or backend record-keeping. We do not collect, track, store, or trade any personal user analytics. 
                   </p>
                   <p>
                     We may utilize minimal client-side browser storage (such as LocalStorage or basic session tokens) simply to retain interface configurations and user visual settings. Third-party data services (like TMDB) handle network queries under their own distinct analytical policies.
@@ -280,7 +280,7 @@ export default function Footer() {
                 </div>
                 <div className="space-y-4 text-sm text-zinc-400 leading-relaxed">
                   <p>
-                    <strong className="text-zinc-100">ZizHub</strong> takes copyright security and DMCA guidelines very seriously. 
+                    <strong className="text-zinc-100">Filmoxa</strong> takes copyright security and DMCA guidelines very seriously. 
                   </p>
                   <h4 className="text-white font-medium text-base pt-2">No Hosting Statement</h4>
                   <p>

@@ -32,7 +32,7 @@ const fetchFromTMDB = cache(async (path, queryParams = '') => {
     }
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
 
 export async function generateMetadata(props) {
     const params = await props.params;
@@ -42,16 +42,16 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const title = isAr
-        ? 'أفلام ومسلسلات الأعلى تقييماً - ZizHub'
+        ? 'أفلام ومسلسلات الأعلى تقييماً - Filmoxa'
         : isFr
-            ? 'Films et Séries Mieux Notés - ZizHub'
-            : 'Top Rated Movies & TV Shows - ZizHub';
+            ? 'Films et Séries Mieux Notés - Filmoxa'
+            : 'Top Rated Movies & TV Shows - Filmoxa';
 
     const description = isAr
-        ? 'اكتشف أعلى الأفلام والمسلسلات تقييماً في التاريخ. شاهد الأعمال الأكثر شهرة واعجاباً من قبل الجمهور مجاناً على ZizHub.'
+        ? 'اكتشف أعلى الأفلام والمسلسلات تقييماً في التاريخ. شاهد الأعمال الأكثر شهرة واعجاباً من قبل الجمهور مجاناً على Filmoxa.'
         : isFr
-            ? 'Découvrez les films et séries les mieux notés de tous les temps. Regardez les chefs-d\'œuvre du cinéma gratuitement sur ZizHub.'
-            : 'Discover the highest-rated movies and TV shows of all time. Stream critically acclaimed masterpieces for free on ZizHub.';
+            ? 'Découvrez les films et séries les mieux notés de tous les temps. Regardez les chefs-d\'œuvre du cinéma gratuitement sur Filmoxa.'
+            : 'Discover the highest-rated movies and TV shows of all time. Stream critically acclaimed masterpieces for free on Filmoxa.';
 
     const keywords = isAr
         ? ['اعلى تقييم', 'افلام اسطورية', 'افلام عظيمة', 'مسلسلات اعلى تقييم', 'مشاهدة افلام', 'افلام imdb']
@@ -70,13 +70,13 @@ export async function generateMetadata(props) {
             title,
             description,
             url: `${SITE_URL}/${locale}/top-rated`,
-            siteName: 'ZizHub',
+            siteName: 'Filmoxa',
             images: [
                 {
                     url: `${SITE_URL}/og-image.png`,
                     width: 1200,
                     height: 630,
-                    alt: 'ZizHub Top Rated',
+                    alt: 'Filmoxa Top Rated',
                 }
             ],
             type: 'website',

@@ -7,7 +7,7 @@ const InstallPWA = dynamic(() => import('../../components/InstallPWA'));
 const inter = { className: 'font-sans' };
 
 export const metadata = {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app'),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app'),
     verification: {
         google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM',
     },
@@ -20,11 +20,11 @@ export default async function LocaleLayout(props) {
 
     const isRtl = locale === 'ar';
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
     const websiteJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
-        'name': 'ZizHub',
+        'name': 'Filmoxa',
         'url': `${SITE_URL}/${locale}`,
         'potentialAction': {
             '@type': 'SearchAction',
@@ -39,7 +39,7 @@ export default async function LocaleLayout(props) {
     const organizationJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'Organization',
-        'name': 'ZizHub',
+        'name': 'Filmoxa',
         'url': `${SITE_URL}/${locale}`,
         'logo': `${SITE_URL}/icon-512.png`
     };

@@ -1,5 +1,5 @@
-# fly.toml app configuration file for zizhub-mtproto
-app = "zizhub-mtproto"
+# fly.toml app configuration file for filmoxa-mtproto
+app = "filmoxa-mtproto"
 primary_region = "cdg"
 
 [build]

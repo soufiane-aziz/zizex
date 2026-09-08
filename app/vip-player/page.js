@@ -45,7 +45,7 @@ export default async function VipPlayerPage({ searchParams }) {
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>${title} - ZizHub VIP Player</title>
+        <title>${title} - Filmoxa VIP Player</title>
         <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
         <style>
             * { box-sizing: border-box; touch-action: manipulation; }

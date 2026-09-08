@@ -42,7 +42,7 @@ export async function generateMetadata(props) {
 
     if (!movieId) {
         return {
-            title: 'ZizHub - Watch Movies Online',
+            title: 'Filmoxa - Watch Movies Online',
             description: 'Stream movie databases seamlessly.'
         };
     }
@@ -52,7 +52,7 @@ export async function generateMetadata(props) {
 
     if (!movieDetails) {
         return {
-            title: 'ZizHub - Watch Movies Online'
+            title: 'Filmoxa - Watch Movies Online'
         };
     }
 
@@ -61,16 +61,16 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const docTitle = isAr
-        ? `ZizHub | شاهد ${movieTitle} أونلاين مجاناً`
+        ? `Filmoxa | شاهد ${movieTitle} أونلاين مجاناً`
         : isFr
-            ? `ZizHub | Regarder ${movieTitle} en Streaming Gratuit`
-            : `ZizHub | Watch ${movieTitle} Online Free`;
+            ? `Filmoxa | Regarder ${movieTitle} en Streaming Gratuit`
+            : `Filmoxa | Watch ${movieTitle} Online Free`;
 
     const docDesc = movieDetails.overview
         ? movieDetails.overview.substring(0, 160)
-        : `Stream ${movieTitle} online on ZizHub.`;
+        : `Stream ${movieTitle} online on Filmoxa.`;
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
     const ogImage = movieDetails.backdrop_path
         ? `${IMAGE_BASE_URL}/w780${movieDetails.backdrop_path}`
         : movieDetails.poster_path
@@ -194,7 +194,7 @@ export default async function LocalizedMoviePage(props) {
     const remainingOffset = Math.max(0, paddingNeeded);
     const finalBottomItems = uniqueSuggestions.slice(remainingOffset, remainingOffset + 32);
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizhub.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
     const seoMovieSlug = createSlug(movieDetails.title, movieId, 'movie');
 
     // Fetch movie credits (director + main cast) — cached, runs in parallel
@@ -287,7 +287,7 @@ export default async function LocalizedMoviePage(props) {
         '@context': 'https://schema.org',
         '@type': 'VideoObject',
         'name': `${movieDetails.title} - Watch Full Movie`,
-        'description': movieDetails.overview || `Watch ${movieDetails.title} full movie online in HD on ZizHub.`,
+        'description': movieDetails.overview || `Watch ${movieDetails.title} full movie online in HD on Filmoxa.`,
         'thumbnailUrl': [
             movieDetails.backdrop_path
                 ? `${IMAGE_BASE_URL}/w780${movieDetails.backdrop_path}`

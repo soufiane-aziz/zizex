@@ -15,7 +15,7 @@ export default function InstallPWA({ locale = 'en' }) {
     if (isStandalone) return;
 
     // Check if already shown today
-    const lastShown = localStorage.getItem('zizhub_pwa_banner_last_shown');
+    const lastShown = localStorage.getItem('filmoxa_pwa_banner_last_shown');
     const today = new Date().toDateString();
     if (lastShown === today) {
       return;
@@ -54,7 +54,7 @@ export default function InstallPWA({ locale = 'en' }) {
 
   useEffect(() => {
     if (showBanner) {
-      localStorage.setItem('zizhub_pwa_banner_last_shown', new Date().toDateString());
+      localStorage.setItem('filmoxa_pwa_banner_last_shown', new Date().toDateString());
     }
   }, [showBanner]);
 
