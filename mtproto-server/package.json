@@ -1,0 +1,14 @@
+{
+  "name": "zizhub-mtproto-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone Telegram MTProto Video Streaming Server",
+  "main": "telegram-mtproto.js",
+  "scripts": {
+    "start": "node telegram-mtproto.js"
+  },
+  "dependencies": {
+    "teleproto": "^1.229.0",
+    "big-integer": "^1.6.52"
+  }
+}

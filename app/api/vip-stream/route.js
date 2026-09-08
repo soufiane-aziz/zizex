@@ -60,20 +60,16 @@ async function getCachedMessage(client, channelId, msgId) {
     return message;
 }
 
-function parseMsgId(input) {
-    if (!input) return null;
-    const str = String(input).trim();
-    if (/^\d+$/.test(str)) return parseInt(str, 10);
-    const match = str.match(/\/(\d+)\/?$/);
-    return match ? parseInt(match[1], 10) : null;
-}
-
 export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url);
-        const rawMsgIdParam = searchParams.get('msgId');
-        const mediaId = searchParams.get('id');
+        const msgId = searchParams.get('msgId');
 
+        if (!msgId) {
+            return new Response('Missing msgId', { status: 400 });
+        }
+
+        const mediaId = searchParams.get('id');
         let mappings = {};
         try {
             const mappingPath = path.join(process.cwd(), 'telegram-mapping.json');
@@ -83,31 +79,15 @@ export async function GET(request) {
         } catch (e) {}
 
         const entry = mediaId && mappings[mediaId];
-        const rawMsgId = rawMsgIdParam || (entry ? (entry.messageId || entry.telegramUrl) : null);
-        const parsedMsgId = parseMsgId(rawMsgId);
-
-        if (!parsedMsgId) {
-            return new Response('Missing or invalid msgId', { status: 400 });
-        }
-
         if (entry && entry.directUrl) {
             return Response.redirect(entry.directUrl, 302);
         }
 
-        // Proxy external persistent MTProto server (e.g. localtunnel/VPS/Railway) with bypass header for instant 1s load on Vercel
+        // Support external persistent MTProto server redirect (e.g. VPS / Render / Railway / Localtunnel) for instant 1s load on Vercel
         const remoteServerUrl = process.env.MTPROTO_SERVER_URL;
         if (remoteServerUrl) {
             const targetUrl = `${remoteServerUrl.replace(/\/$/, '')}/stream?${searchParams.toString()}`;
-            const proxyHeaders = { 'Bypass-Tunnel-Remainder': 'true' };
-            const rangeHeader = request.headers.get('range');
-            if (rangeHeader) proxyHeaders['Range'] = rangeHeader;
-            const upstream = await fetch(targetUrl, { method: request.method, headers: proxyHeaders });
-            const responseHeaders = new Headers(upstream.headers);
-            responseHeaders.set('Access-Control-Allow-Origin', '*');
-            return new Response(request.method === 'HEAD' ? null : upstream.body, {
-                status: upstream.status,
-                headers: responseHeaders,
-            });
+            return Response.redirect(targetUrl, 302);
         }
 
         const configPath = path.join(process.cwd(), 'telegram.config.json');

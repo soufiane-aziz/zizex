@@ -19,7 +19,7 @@ const { TelegramClient } = require('teleproto');
 const { StringSession } = require('teleproto/sessions');
 const bigInt = require('big-integer');
 
-const PORT = process.env.MTPROTO_PORT || 5001;
+const PORT = process.env.PORT || process.env.MTPROTO_PORT || 5001;
 const CONFIG_FILE = path.join(__dirname, 'telegram.config.json');
 const MAPPING_FILE = path.join(__dirname, 'telegram-mapping.json');
 const SESSION_FILE = path.join(__dirname, 'telegram-session.txt');
@@ -71,9 +71,8 @@ async function getCachedMessage(client, channelId, msgId) {
 
 function setCors(res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Range, Bypass-Tunnel-Remainder');
-    res.setHeader('Access-Control-Expose-Headers', 'Content-Range, Content-Length, Accept-Ranges');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Range');
 }
 
 // --- Main ---
@@ -654,25 +653,18 @@ async function main() {
             return;
         }
 
-function parseMsgId(input) {
-    if (!input) return null;
-    const str = String(input).trim();
-    if (/^\d+$/.test(str)) return parseInt(str, 10);
-    const match = str.match(/\/(\d+)\/?$/);
-    return match ? parseInt(match[1], 10) : null;
-}
-
         // Stream endpoint - stream from Telegram using MTProto
         if (pathname === '/stream') {
             const mappings = getMappings();
             const entry = mediaId && mappings[mediaId];
-            const rawMsgId = messageId || (entry ? (entry.messageId || entry.telegramUrl) : null);
-            const msgIdToUse = parseMsgId(rawMsgId);
+            const msgIdToUse = messageId
+                ? parseInt(messageId)
+                : (entry && entry.messageId ? parseInt(entry.messageId) : null);
             const channelId = config.channelId;
 
             if (!msgIdToUse || !channelId) {
                 res.writeHead(400, { 'Content-Type': 'text/plain' });
-                res.end('Missing or invalid messageId or channelId');
+                res.end('Missing messageId or channelId');
                 return;
             }
 
