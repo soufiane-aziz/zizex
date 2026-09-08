@@ -284,6 +284,60 @@ export async function GET(request) {
                        videoEl.style.objectFit = mode.fit;
                        fitLabel.textContent = mode.label;
                    };
+
+                   // --- Swipe Controls: Volume (right) & Brightness (left) ---
+                   const hudOverlay = document.getElementById('hudOverlay');
+                   const hudTitle = document.getElementById('hudTitle');
+                   const hudBarFill = document.getElementById('hudBarFill');
+                   const hudValueText = document.getElementById('hudValueText');
+                   let currentBrightness = 100;
+                   let currentVolume = 100;
+                   let isDragging = false;
+                   let startY = 0;
+                   let startVal = 0;
+                   let dragSide = 'right';
+                   let hudTimer;
+
+                   function updateHUD(type, val) {
+                       if (type === 'brightness') {
+                           hudTitle.innerHTML = 'BRIGHTNESS';
+                           hudBarFill.style.width = Math.min(100, Math.max(0, (val / 200) * 100)) + '%';
+                           hudValueText.textContent = Math.round(val) + '%';
+                       } else {
+                           hudTitle.innerHTML = 'VOLUME';
+                           hudBarFill.style.width = Math.min(100, Math.max(0, val)) + '%';
+                           hudValueText.textContent = Math.round(val) + '%';
+                       }
+                       hudOverlay.classList.add('show');
+                       clearTimeout(hudTimer);
+                       hudTimer = setTimeout(() => hudOverlay.classList.remove('show'), 1200);
+                   }
+
+                   container.addEventListener('pointerdown', (e) => {
+                       if (e.target.closest('.top-bar') || e.target.closest('.plyr__controls') || e.target.closest('#smartlinkOverlay')) return;
+                       const rect = container.getBoundingClientRect();
+                       dragSide = (e.clientX - rect.left) < (rect.width / 2) ? 'left' : 'right';
+                       startY = e.clientY;
+                       startVal = dragSide === 'left' ? currentBrightness : currentVolume;
+                       isDragging = true;
+                   });
+
+                   window.addEventListener('pointermove', (e) => {
+                       if (!isDragging) return;
+                       const deltaY = startY - e.clientY;
+                       const sensitivity = 0.5;
+                       if (dragSide === 'left') {
+                           currentBrightness = Math.min(200, Math.max(20, startVal + deltaY * sensitivity));
+                           videoEl.style.filter = 'brightness(' + (currentBrightness / 100) + ')';
+                           updateHUD('brightness', currentBrightness);
+                       } else {
+                           currentVolume = Math.min(100, Math.max(0, startVal + deltaY * sensitivity));
+                           player.volume = currentVolume / 100;
+                           updateHUD('volume', currentVolume);
+                       }
+                   });
+
+                   window.addEventListener('pointerup', () => { isDragging = false; });
                </script>`
             : `<div class="no-video">Movie or episode not found in mapping.</div>`
         }
