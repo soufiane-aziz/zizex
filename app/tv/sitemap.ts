@@ -1,4 +1,4 @@
-import type { MetadataRoute } from 'next';
+﻿import type { MetadataRoute } from 'next';
 
 function createSlug(title: string, id: number | string): string {
   if (!id) return '';
@@ -13,7 +13,7 @@ function createSlug(title: string, id: number | string): string {
   return clean ? `watch-${clean}-${id}` : `watch-${id}`;
 }
 
-// ─── Cache: 7-day CDN revalidation ───────────────────────────────────────────
+// â”€â”€â”€ Cache: 7-day CDN revalidation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const revalidate = 604800;
 
 const API_KEY =
@@ -25,7 +25,7 @@ const LOCALES = ['en', 'fr', 'ar'];
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
 
-// ─── Fetchers ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Fetchers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function fetchPages(endpoint: string, pages: number): Promise<any[]> {
   if (!API_KEY) return [];
   const nums = Array.from({ length: pages }, (_, i) => i + 1);
@@ -106,7 +106,7 @@ function buildAlternates(path: string): Record<string, string> {
   return alt;
 }
 
-// ─── generateSitemaps ─────────────────────────────────────────────────────────
+// â”€â”€â”€ generateSitemaps â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // id 0 = popular TV shows    (pages 1-20)
 // id 1 = trending TV shows   (pages 1-10)
 // id 2 = top-rated TV shows  (pages 1-10)
@@ -114,7 +114,7 @@ export async function generateSitemaps() {
   return [{ id: '0' }, { id: '1' }, { id: '2' }];
 }
 
-// ─── Sitemap: TV Shows ────────────────────────────────────────────────────────
+// â”€â”€â”€ Sitemap: TV Shows â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Served at: /tv/sitemap/0.xml  /tv/sitemap/1.xml  /tv/sitemap/2.xml
 // Submitted to GSC as: /tv/sitemap.xml (index)
 export default async function sitemap(props: {
@@ -149,11 +149,11 @@ export default async function sitemap(props: {
   const entries: MetadataRoute.Sitemap = [];
 
   uniqueShows.forEach(show => {
-    const slug       = createSlug(show.name, show.id, 'tv');
+    const slug       = createSlug(show.name, show.id);
     const airDate    = safeDate(show.first_air_date);
     const numSeasons = tvSeasonMap.get(show.id) ?? 3;
 
-    // Season 1 / Episode 1 — primary canonical per locale (priority 0.85)
+    // Season 1 / Episode 1 â€” primary canonical per locale (priority 0.85)
     LOCALES.forEach(locale => {
       const path = `/tv/${slug}/season-1/episode-1`;
       entries.push({
@@ -165,7 +165,7 @@ export default async function sitemap(props: {
       });
     });
 
-    // Seasons 2 → N — drives Googlebot crawl depth (priority 0.65)
+    // Seasons 2 â†’ N â€” drives Googlebot crawl depth (priority 0.65)
     for (let s = 2; s <= numSeasons; s++) {
       LOCALES.forEach(locale => {
         const path = `/tv/${slug}/season-${s}/episode-1`;

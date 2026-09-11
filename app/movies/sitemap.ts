@@ -127,7 +127,7 @@ export default async function sitemap(props: {
     if (seen.has(key)) return;
     seen.add(key);
 
-    const slug    = createSlug(movie.title, movie.id, 'movie');
+    const slug    = createSlug(movie.title, movie.id);
     const path    = `/movie/${slug}`;
     const lastMod = safeDate(movie.release_date);
 
