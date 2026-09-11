@@ -59,7 +59,7 @@ export async function generateMetadata(props) {
             siteName: 'Filmoxa',
             images: [
                 {
-                    url: `${SITE_URL}/logo.png?v=2`,
+                    url: `${SITE_URL}/og-image.png?v=3`,
                     width: 1024,
                     height: 1024,
                     alt: 'Filmoxa TV Shows',
@@ -72,7 +72,7 @@ export async function generateMetadata(props) {
             card: 'summary',
             title,
             description,
-            images: [`${SITE_URL}/logo.png?v=2`],
+            images: [`${SITE_URL}/og-image.png?v=3`],
         },
     };
 }

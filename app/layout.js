@@ -27,7 +27,7 @@ export const metadata = {
     type: 'website',
     images: [
       {
-        url: '/logo.png?v=2',
+        url: '/og-image.png?v=3',
         width: 1024,
         height: 1024,
         alt: 'Filmoxa - Watch Movies & TV Shows For Free',
@@ -38,7 +38,7 @@ export const metadata = {
     card: 'summary',
     title: 'Filmoxa - Free Movies & TV Shows Streaming',
     description: 'Stream thousands of top movies and TV series free on Filmoxa.',
-    images: ['/logo.png?v=2'],
+    images: ['/og-image.png?v=3'],
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM',
