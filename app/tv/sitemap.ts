@@ -1,5 +1,17 @@
-﻿import type { MetadataRoute } from 'next';
-import { createSlug } from '../../lib/slug';
+import type { MetadataRoute } from 'next';
+
+function createSlug(title: string, id: number | string): string {
+  if (!id) return '';
+  if (!title) return String(id);
+  const clean = String(title)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+  return clean ? `watch-${clean}-${id}` : `watch-${id}`;
+}
 
 // ─── Cache: 7-day CDN revalidation ───────────────────────────────────────────
 export const revalidate = 604800;
