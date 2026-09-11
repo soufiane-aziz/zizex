@@ -11,7 +11,7 @@ export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app'),
   title: 'Filmoxa - Streaming Platform',
   description: 'Watch your favorite movies and TV shows free on Filmoxa.',
-  keywords: ['filmoxa', 'Filmoxa', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies free', 'sci-fi series online', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch free tv shows', 'best movie streaming site', 'cinema streaming free', 'Netflix', 'watch Netflix movies free', 'HBO Max streaming', 'Disney Plus free', 'TopCinema', 'EgyBest alternative', 'MyCima', 'Cima4U', 'Shahid VIP free', 'WatchIt movies'],
+  keywords: ['filmoxa', 'Filmoxa', 'watch movies online', 'streaming platform', 'HD movies streaming', 'TV series online', 'top rated movies', 'latest cinema releases', 'watch series', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies', 'sci-fi series', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch tv shows', 'movie streaming site', 'cinema streaming'],
   icons: {
     icon: [
       { url: '/logo.png?v=2', sizes: 'any', type: 'image/png' },
