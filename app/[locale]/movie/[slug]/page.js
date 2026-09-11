@@ -75,7 +75,7 @@ export async function generateMetadata(props) {
         ? `${IMAGE_BASE_URL}/w780${movieDetails.backdrop_path}`
         : movieDetails.poster_path
             ? `${IMAGE_BASE_URL}/w500${movieDetails.poster_path}`
-            : `${SITE_URL}/logo.png`;
+            : `${SITE_URL}/logo.png?v=2`;
 
     const seoSlug = createSlug(movieDetails.title, movieId, 'movie');
     const path = `/movie/${seoSlug}`;

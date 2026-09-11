@@ -99,7 +99,7 @@ export default function InstallPWA({ locale = 'en' }) {
         <div className="flex items-center gap-3 min-w-0">
           <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 border border-white/10 shadow-md">
             <Image
-              src="/logo.png"
+              src="/logo.png?v=2"
               alt="Filmoxa Icon"
               width={48}
               height={48}
@@ -134,7 +134,7 @@ export default function InstallPWA({ locale = 'en' }) {
         <div className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="bg-neutral-900 border border-white/10 p-6 rounded-2xl max-w-sm w-full text-center shadow-2xl">
             <div className="w-16 h-16 mx-auto mb-4 rounded-2xl overflow-hidden border border-red-600/30">
-              <Image src="/logo.png" alt="Filmoxa App" width={64} height={64} className="w-full h-full object-cover" />
+              <Image src="/logo.png?v=2" alt="Filmoxa App" width={64} height={64} className="w-full h-full object-cover" />
             </div>
             <h3 className="text-white font-black text-lg mb-2">Install Filmoxa on iPhone</h3>
             <p className="text-gray-300 text-sm mb-5 leading-relaxed">
