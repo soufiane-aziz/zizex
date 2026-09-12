@@ -3,6 +3,7 @@ import WatchMovieClient from '../../../../components/WatchMovieClient';
 import { createSlug, extractIdFromSlug } from '../../../../lib/slug';
 
 export const revalidate = 604800; // 7 days caching on Edge CDN
+export const dynamicParams = true;
 
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'f82feeca535cc0132d1ab38948a70405';
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -324,7 +325,3 @@ export default async function LocalizedMoviePage(props) {
     );
 }
 
-// Enable dynamic paths statically built on demand
-export async function generateStaticParams() {
-    return [];
-}
