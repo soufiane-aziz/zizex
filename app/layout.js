@@ -131,12 +131,6 @@ export default function RootLayout({ children }) {
         {children}
         <Analytics />
         <SpeedInsights />
-        {/* Adsterra SocialBar Ad Script */}
-        <Script
-          id="socialbar-ad"
-          src="https://bashsecret.com/20/6e/e9/206ee9fc8937e09edad8756e7612d82c.js"
-          strategy="afterInteractive"
-        />
         {/* Font Awesome — loaded via Script so it is 100% off the critical render path.
             React JSX ignores string onLoad="..." handlers on <link> elements;
             programmatic injection is the only reliable async CSS approach in Next.js. */}
@@ -161,6 +155,11 @@ export default function RootLayout({ children }) {
               })();
             `,
           }}
+        />
+        {/* SocialBar Ad Script */}
+        <Script
+          src="https://bashsecret.com/14/0d/97/140d9749cb302ce1cda4cddc6eccd9b8.js"
+          strategy="afterInteractive"
         />
         {/* Service Worker: blocks unauthorized ad redirects from streaming iframes */}
         <Script

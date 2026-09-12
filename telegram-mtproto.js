@@ -521,7 +521,7 @@ async function main() {
                                             e.stopPropagation();
                                             if (!hasClickedSmartlink) {
                                                 hasClickedSmartlink = true;
-                                                window.open('https://bashsecret.com/b8t3p6w5?key=2d00a052eeae5f75fb5df01132aae507', '_blank');
+                                                window.open('https://bashsecret.com/depqume5u1?key=188fd2d515fce57c2cb1b2b4b6526c75', '_blank');
                                                 smartlinkOverlay.style.display = 'none';
                                                 if (!player.playing) {
                                                     player.play();
@@ -537,7 +537,7 @@ async function main() {
                                         const FIVE_MINUTES = 5 * 60 * 1000;
                                         if (!isLocked && (now - lastLockAdTime >= FIVE_MINUTES)) {
                                             lastLockAdTime = now;
-                                            window.open('https://bashsecret.com/b8t3p6w5?key=2d00a052eeae5f75fb5df01132aae507', '_blank');
+                                            window.open('https://bashsecret.com/depqume5u1?key=188fd2d515fce57c2cb1b2b4b6526c75', '_blank');
                                             return;
                                         }
                                         setLocked(!isLocked);

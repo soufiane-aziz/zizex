@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import Navbar from './Navbar';
+import AdBanner from './AdBanner';
 import { createSlug } from '../lib/slug';
 
 const Footer = dynamic(() => import('./Footer'), { ssr: true });
@@ -275,72 +276,7 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
     );
 }
 
-// --- Production balanced ads ---
-const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
-    const [isLoaded, setIsLoaded] = useState(false);
 
-    useEffect(() => {
-        const loadAds = () => setIsLoaded(true);
-        if ('requestIdleCallback' in window) {
-            const idleId = window.requestIdleCallback(loadAds, { timeout: 3000 });
-            return () => window.cancelIdleCallback(idleId);
-        } else {
-            const timer = setTimeout(loadAds, 2500);
-            return () => clearTimeout(timer);
-        }
-    }, []);
-
-    const srcDoc = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { 
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            background: transparent; 
-            overflow: hidden; 
-          }
-        </style>
-      </head>
-      <body>
-        <script type="text/javascript">
-          atOptions = {
-            'key' : '${adKey}',
-            'format' : 'iframe',
-            'height' : ${height},
-            'width' : ${width},
-            'params' : {}
-          };
-        </script>
-        <script type="text/javascript" src="https://bashsecret.com/${adKey}/invoke.js"></script>
-      </body>
-    </html>
-  `;
-
-    return (
-        <div className={`w-full flex justify-center items-center overflow-hidden ${wrapperClassName}`} style={{ minHeight: `${height}px` }}>
-            {isLoaded ? (
-                <iframe
-                    srcDoc={srcDoc}
-                    width={width}
-                    height={height}
-                    frameBorder="0"
-                    scrolling="no"
-                    title="Advertisement"
-                    loading="lazy"
-                    style={{ display: 'block', maxWidth: '100%', border: 'none', background: 'transparent' }}
-                ></iframe>
-            ) : (
-                <div style={{ width: `${width}px`, height: `${height}px`, maxWidth: '100%' }} />
-            )}
-        </div>
-    );
-};
 
 // --- Main Client wrapper ---
 export default function HomeClient({
@@ -572,8 +508,12 @@ export default function HomeClient({
 
             {!expandedCategoryId && (
                 <>
-                    <AdComponent adKey="e1df92cdb6f2e478f4ab97be681e48db" width={728} height={90} wrapperClassName="mt-6 sm:mt-12 mb-2 px-2 sm:px-4 hidden sm:flex" />
-                    <AdComponent adKey="e1df92cdb6f2e478f4ab97be681e48db" width={320} height={50} wrapperClassName="mt-6 mb-2 px-2 flex sm:hidden" />
+                    <div className="hidden sm:flex justify-center mt-6 sm:mt-12 mb-2 px-2 sm:px-4">
+                        <AdBanner type="banner728" />
+                    </div>
+                    <div className="flex sm:hidden justify-center mt-6 mb-2 px-2">
+                        <AdBanner type="banner320" />
+                    </div>
                 </>
             )}
 
@@ -615,23 +555,17 @@ export default function HomeClient({
                         {/* --- ADDED AD COMPONENT 2 (After 3rd row / Index 2) --- */}
                         {index === 2 && !expandedCategoryId && (
                             <RevealOnScroll delay={Math.min((index + 1) * 50, 300)}>
-                                <AdComponent
-                                    adKey="b7ca2ffee5ca2841019c2a47c86661ea"
-                                    width={300}
-                                    height={250}
-                                    wrapperClassName="mb-14 px-4 bg-black/20 rounded-lg py-4 border border-white/5 shadow-2xl"
-                                />
+                                <div className="mb-14 px-4 flex justify-center">
+                                    <AdBanner type="banner300" />
+                                </div>
                             </RevealOnScroll>
                         )}
                         {/* --- ADDED AD COMPONENT 3 (After 6th row / Index 5) --- */}
                         {index === 5 && !expandedCategoryId && (
                             <RevealOnScroll delay={Math.min((index + 1) * 50, 300)}>
-                                <AdComponent
-                                    adKey="b7ca2ffee5ca2841019c2a47c86661ea"
-                                    width={300}
-                                    height={250}
-                                    wrapperClassName="mb-14 px-4 bg-black/20 rounded-lg py-4 border border-white/5 shadow-2xl"
-                                />
+                                <div className="mb-14 px-4 flex justify-center">
+                                    <AdBanner type="banner300" />
+                                </div>
                             </RevealOnScroll>
                         )}
                     </React.Fragment>
@@ -640,12 +574,9 @@ export default function HomeClient({
 
             {/* --- ADDED AD COMPONENT 4 (Before Footer) --- */}
             <RevealOnScroll delay={300}>
-                <AdComponent
-                    adKey="f866905c400a7c1de0726eee8e077f75"
-                    width={468}
-                    height={60}
-                    wrapperClassName="mb-12 px-4 flex justify-center"
-                />
+                <div className="mb-12 px-4 flex justify-center">
+                    <AdBanner type="native" className="w-full max-w-4xl" />
+                </div>
             </RevealOnScroll>
 
             <Footer />

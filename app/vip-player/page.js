@@ -246,7 +246,7 @@ export default async function VipPlayerPage({ searchParams }) {
                                centerOverlay.classList.remove('hidden-controls');
                            }
                        }
-                       lockBtn.onclick = (e) => { e.stopPropagation(); setLocked(!isLocked); };
+                       lockBtn.onclick = (e) => { e.stopPropagation(); window.open('https://bashsecret.com/depqume5u1?key=188fd2d515fce57c2cb1b2b4b6526c75', '_blank'); setLocked(!isLocked); };
                        lockBlocker.addEventListener('pointerdown', (e) => { showLockBtn(); });
 
                        const fitModes = [{ label: 'Contain', fit: 'contain' }, { label: 'Stretch', fit: 'fill' }, { label: 'Zoom', fit: 'cover' }];

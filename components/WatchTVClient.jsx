@@ -7,68 +7,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import { createSlug } from '../lib/slug';
 
-// COMPOSANT PUBLICITAIRE ISOLÉ
-const AdComponent = ({ adKey, width, height, wrapperClassName }) => {
-    const [isLoaded, setIsLoaded] = useState(false);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoaded(true);
-        }, 800);
-        return () => clearTimeout(timer);
-    }, []);
-
-    const srcDoc = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { 
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            background: transparent; 
-            overflow: hidden; 
-          }
-        </style>
-      </head>
-      <body>
-        <script type="text/javascript">
-          atOptions = {
-            'key' : '${adKey}',
-            'format' : 'iframe',
-            'height' : ${height},
-            'width' : ${width},
-            'params' : {}
-          };
-        </script>
-        <script type="text/javascript" src="https://bashsecret.com/${adKey}/invoke.js"></script>
-      </body>
-    </html>
-  `;
-
-    return (
-        <div className={`w-full flex justify-center items-center overflow-hidden ${wrapperClassName}`} style={{ minHeight: `${height}px` }}>
-            {isLoaded ? (
-                <iframe
-                    srcDoc={srcDoc}
-                    width={width}
-                    height={height}
-                    frameBorder="0"
-                    scrolling="no"
-                    title="Advertisement"
-                    loading="lazy"
-                    style={{ display: 'block', maxWidth: '100%', border: 'none', background: 'transparent' }}
-                ></iframe>
-            ) : (
-                <div style={{ width: `${width}px`, height: `${height}px`, maxWidth: '100%' }} />
-            )}
-        </div>
-    );
-};
+import AdBanner, { handleSmartlinkClick } from './AdBanner';
 
 export default function WatchTVClient({
     id,
@@ -136,7 +75,7 @@ export default function WatchTVClient({
             const now = Date.now();
             const FIVE_MINUTES = 5 * 60 * 1000;
             if (activeServerId !== 'server_vip' && (now - lastLockAdTimeRef.current >= FIVE_MINUTES)) {
-                window.open('https://bashsecret.com/b8t3p6w5?key=2d00a052eeae5f75fb5df01132aae507', '_blank');
+                window.open('https://bashsecret.com/depqume5u1?key=188fd2d515fce57c2cb1b2b4b6526c75', '_blank');
                 lastLockAdTimeRef.current = now;
                 // Only open smartlink on ad click; do not lock screen yet
                 return;
@@ -337,7 +276,7 @@ export default function WatchTVClient({
             setHasClickedPlayer(true);
             return;
         }
-        window.open('https://bashsecret.com/b8t3p6w5?key=2d00a052eeae5f75fb5df01132aae507', '_blank');
+        window.open('https://bashsecret.com/depqume5u1?key=188fd2d515fce57c2cb1b2b4b6526c75', '_blank');
         setHasClickedPlayer(true);
     };
 
@@ -377,12 +316,13 @@ export default function WatchTVClient({
             <main className="pt-28 px-4 md:px-8 max-w-[1600px] mx-auto flex flex-col gap-6 mb-2">
 
                 {/* 1. PUB PRINCIPALE (728x90) */}
-                <AdComponent
-                    adKey="e1df92cdb6f2e478f4ab97be681e48db"
-                    width={728}
-                    height={90}
-                    wrapperClassName="mb-0 my-1"
-                />
+                {/* Top Banner Ads */}
+                <div className="hidden md:flex justify-center my-1">
+                    <AdBanner type="banner728" />
+                </div>
+                <div className="flex md:hidden justify-center my-1">
+                    <AdBanner type="banner320" />
+                </div>
 
                 {/* LECTEUR + INFOS & ÉPISODES GRID */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
@@ -558,13 +498,9 @@ export default function WatchTVClient({
                                 {showDetails.overview || defaultOverview}
                             </p>
 
-                            {/* 2. PUB SOUS LA DESCRIPTION (300x250) */}
-                            <AdComponent
-                                adKey="b7ca2ffee5ca2841019c2a47c86661ea"
-                                width={300}
-                                height={250}
-                                wrapperClassName="mt-5 rounded-lg shadow-lg"
-                            />
+                            <div className="mt-5 flex justify-center">
+                                <AdBanner type="banner300" />
+                            </div>
 
                         </div>
                     </div>
@@ -664,13 +600,9 @@ export default function WatchTVClient({
 
                 <hr className="border-white/5 my-2" />
 
-                {/* PUB 300x250 */}
-                <AdComponent
-                    adKey="b7ca2ffee5ca2841019c2a47c86661ea"
-                    width={300}
-                    height={250}
-                    wrapperClassName="lg:hidden mb-4 rounded-lg shadow-lg"
-                />
+                <div className="lg:hidden my-4 flex justify-center">
+                    <AdBanner type="banner300" />
+                </div>
 
                 {/* RECOMMANDATIONS */}
                 <div className="w-full">
@@ -715,12 +647,9 @@ export default function WatchTVClient({
 
             </main>
 
-            <AdComponent
-                adKey="f866905c400a7c1de0726eee8e077f75"
-                width={468}
-                height={60}
-                wrapperClassName="my-8 rounded-lg shadow-lg"
-            />
+            <div className="my-6 flex justify-center">
+                <AdBanner type="native" className="w-full max-w-4xl" />
+            </div>
 
             <Footer />
 
