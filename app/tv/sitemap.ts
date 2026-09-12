@@ -1,4 +1,4 @@
-﻿import type { MetadataRoute } from 'next';
+import type { MetadataRoute } from 'next';
 
 function createSlug(title: string, id: number | string): string {
   if (!id) return '';
@@ -124,11 +124,11 @@ export default async function sitemap(props: {
 
   let shows: any[] = [];
   if (id === '0') {
-    shows = await fetchPages('/tv/popular', 20);
+    shows = await fetchPages('/tv/popular', 5);
   } else if (id === '1') {
-    shows = await fetchTrendingPages('tv', 10);
+    shows = await fetchTrendingPages('tv', 3);
   } else if (id === '2') {
-    shows = await fetchPages('/tv/top_rated', 10);
+    shows = await fetchPages('/tv/top_rated', 3);
   }
 
   const seen = new Set<string>();

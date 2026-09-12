@@ -158,49 +158,42 @@ export default async function LocalizedMoviePage(props) {
         );
     }
 
-    // Fetch collections lists and recommendations
-    let franchiseMovies = [];
-    if (movieDetails.belongs_to_collection) {
-        const collectionData = await fetchFromTMDB(`/collection/${movieDetails.belongs_to_collection.id}`, langQuery);
-        if (collectionData && collectionData.parts) {
-            franchiseMovies = collectionData.parts
-                .filter(movie => movie.id !== movieId)
-                .sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
-        }
-    }
-
-    const [recData, simData] = await Promise.all([
+    // Fetch all secondary data in parallel to minimize Vercel function duration
+    const [recData, creditsData, releaseDates, collectionData] = await Promise.all([
         fetchFromTMDB(`/movie/${movieId}/recommendations`, langQuery),
-        fetchFromTMDB(`/movie/${movieId}/similar`, langQuery)
+        fetchFromTMDB(`/movie/${movieId}/credits`, `&language=${tmdbLang}`),
+        fetchFromTMDB(`/movie/${movieId}/release_dates`, ''),
+        movieDetails.belongs_to_collection
+            ? fetchFromTMDB(`/collection/${movieDetails.belongs_to_collection.id}`, langQuery)
+            : Promise.resolve(null),
     ]);
 
-    const rawSuggestions = [...(recData?.results || []), ...(simData?.results || [])];
-    const uniqueSuggestions = [];
-    rawSuggestions.forEach(movie => {
-        const isCurrentMovie = movie.id === movieId;
-        const isAlreadyInFranchise = franchiseMovies.some(m => m.id === movie.id);
-        const isAlreadyAdded = uniqueSuggestions.some(m => m.id === movie.id);
+    // Build franchise list from collection (if any)
+    let franchiseMovies = [];
+    if (collectionData?.parts) {
+        franchiseMovies = collectionData.parts
+            .filter(movie => movie.id !== movieId)
+            .sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
+    }
 
-        if (!isCurrentMovie && !isAlreadyInFranchise && !isAlreadyAdded) {
+    const rawSuggestions = recData?.results || [];
+    const uniqueSuggestions = [];
+    const seenIds = new Set(franchiseMovies.map(m => m.id));
+    seenIds.add(movieId);
+    rawSuggestions.forEach(movie => {
+        if (!seenIds.has(movie.id)) {
+            seenIds.add(movie.id);
             uniqueSuggestions.push(movie);
         }
     });
 
     const finalSidebarItems = [...franchiseMovies];
     const paddingNeeded = 6 - finalSidebarItems.length;
-    if (paddingNeeded > 0 && uniqueSuggestions.length > 0) {
-        finalSidebarItems.push(...uniqueSuggestions.slice(0, paddingNeeded));
-    }
-
-    const remainingOffset = Math.max(0, paddingNeeded);
-    const finalBottomItems = uniqueSuggestions.slice(remainingOffset, remainingOffset + 32);
+    if (paddingNeeded > 0) finalSidebarItems.push(...uniqueSuggestions.slice(0, paddingNeeded));
+    const finalBottomItems = uniqueSuggestions.slice(Math.max(0, paddingNeeded), Math.max(0, paddingNeeded) + 24);
 
     const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
     const seoMovieSlug = createSlug(movieDetails.title, movieId, 'movie');
-
-    // Fetch movie credits (director + main cast) — cached, runs in parallel
-    const creditsData = await fetchFromTMDB(`/movie/${movieId}/credits`, `&language=${tmdbLang}`);
-    const releaseDates = await fetchFromTMDB(`/movie/${movieId}/release_dates`, '');
 
     const director = creditsData?.crew?.find(p => p.job === 'Director');
     const topActors = (creditsData?.cast || []).slice(0, 8);

@@ -111,11 +111,11 @@ export default async function sitemap(props: {
 
   let movies: any[] = [];
   if (id === '0') {
-    movies = await fetchPages('/movie/popular', 20);
+    movies = await fetchPages('/movie/popular', 5);
   } else if (id === '1') {
-    movies = await fetchTrendingPages('movie', 10);
+    movies = await fetchTrendingPages('movie', 3);
   } else if (id === '2') {
-    movies = await fetchPages('/movie/top_rated', 10);
+    movies = await fetchPages('/movie/top_rated', 3);
   }
 
   const seen = new Set<string>();

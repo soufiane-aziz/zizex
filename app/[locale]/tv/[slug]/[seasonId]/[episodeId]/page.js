@@ -192,37 +192,30 @@ export default async function LocalizedEpisodePage(props) {
     }
 
     const validSeasons = (showDetails.seasons || []).filter(s => s.season_number > 0);
+    const primaryGenreId = showDetails.genres?.[0]?.id;
 
-    // Fetch episodes list for current season
-    const seasonData = await fetchFromTMDB(`/tv/${showId}/season/${seasonNum}`, langQuery);
-    const episodes = seasonData?.episodes || [];
-
-    // Fetch similar show recommendations
-    const [recs1, recs2] = await Promise.all([
+    // Fetch all secondary data in parallel — single round-trip instead of 6 sequential ones
+    const [seasonData, recsData, tvCredits, genreData] = await Promise.all([
+        fetchFromTMDB(`/tv/${showId}/season/${seasonNum}`, langQuery),
         fetchFromTMDB(`/tv/${showId}/recommendations`, `&page=1${langQuery}`),
-        fetchFromTMDB(`/tv/${showId}/recommendations`, `&page=2${langQuery}`)
+        fetchFromTMDB(`/tv/${showId}/credits`, `&language=${tmdbLang}`),
+        primaryGenreId
+            ? fetchFromTMDB(`/discover/tv`, `&with_genres=${primaryGenreId}&sort_by=popularity.desc&page=1${langQuery}`)
+            : Promise.resolve(null),
     ]);
 
-    let combinedRecommendations = [...(recs1?.results || []), ...(recs2?.results || [])];
+    const episodes = seasonData?.episodes || [];
 
-    if (showDetails.genres && showDetails.genres.length > 0) {
-        const primaryGenreId = showDetails.genres[0].id;
-        const [dg1, dg2] = await Promise.all([
-            fetchFromTMDB(`/discover/tv`, `&with_genres=${primaryGenreId}&sort_by=popularity.desc&page=1${langQuery}`),
-            fetchFromTMDB(`/discover/tv`, `&with_genres=${primaryGenreId}&sort_by=popularity.desc&page=2${langQuery}`)
-        ]);
-        const genreMatches = [...(dg1?.results || []), ...(dg2?.results || [])]
-            .filter(show => show.id !== showId);
+    const seenShowIds = new Set([showId]);
+    const uniqueShows = [];
+    [...(recsData?.results || []), ...(genreData?.results || [])].forEach(show => {
+        if (!seenShowIds.has(show.id)) {
+            seenShowIds.add(show.id);
+            uniqueShows.push(show);
+        }
+    });
 
-        combinedRecommendations = [...combinedRecommendations, ...genreMatches];
-    }
-
-    // Deduplicate recommendations list
-    const uniqueShows = combinedRecommendations.filter((show, index, self) =>
-        self.findIndex(s => s.id === show.id) === index
-    );
-
-    const finalSimilarShows = uniqueShows.slice(0, 48);
+    const finalSimilarShows = uniqueShows.slice(0, 24);
 
     // Fetch current episode specific details for JSON-LD VideoObject and TVEpisode schemas
     const currentEpisodeDetails = episodes.find(e => e.episode_number === episodeNum) || {};
@@ -238,8 +231,6 @@ export default async function LocalizedEpisodePage(props) {
     // Embed URL for schema
     const schemaEmbedUrl = `https://multiembed.mov/?video_id=${showId}&tmdb=1&s=${seasonNum}&e=${episodeNum}`;
 
-    // Fetch TV show credits for actors & creators
-    const tvCredits = await fetchFromTMDB(`/tv/${showId}/credits`, `&language=${tmdbLang}`);
     const tvActors = (tvCredits?.cast || []).slice(0, 8);
     const tvCreators = showDetails.created_by || [];
 
