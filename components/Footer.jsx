@@ -40,7 +40,7 @@ export default function Footer() {
           {/* Brand & Description */}
           <div className="col-span-2 flex flex-col gap-4">
             <Link href="/" className="font-black text-3xl tracking-wide text-white focus:outline-none w-max">
-              <span className="text-red-600">Film</span>oxa
+              <span className="text-red-600">Ziz</span><span className="text-white">ex</span>
             </Link>
             <p className="text-sm text-zinc-500 max-w-sm leading-relaxed">
               Stream your favorite movies and TV shows for free in HD on Zizex. The ultimate destination for movie lovers.
@@ -172,7 +172,7 @@ export default function Footer() {
               <>
                 <div className="mb-6 pr-8">
                   <h3 className="text-2xl font-bold text-white tracking-tight">
-                    About <span className="text-red-600">Film</span>oxa
+                    About <span className="text-red-600">Ziz</span><span className="text-white">ex</span>
                   </h3>
                   <div className="h-[2px] w-12 bg-red-600 mt-2.5 rounded"></div>
                 </div>

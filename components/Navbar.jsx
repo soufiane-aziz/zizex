@@ -179,7 +179,7 @@ export default function Navbar({ locale, contentType }) {
           aria-label="Zizex — Go to home"
           className="text-2xl md:text-3xl font-black tracking-wide cursor-pointer focus:outline-none"
         >
-          <span className="text-red-600">Film</span><span className="text-white">oxa</span>
+          <span className="text-red-600">Ziz</span><span className="text-white">ex</span>
         </button>
       </div>
 
