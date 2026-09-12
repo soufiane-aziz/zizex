@@ -31,7 +31,7 @@ export const metadata = {
     type: 'website',
     images: [
       {
-        url: '/og-image.png?v=5',
+        url: 'https://zizex.vercel.app/og-image.jpg?v=6',
         width: 1024,
         height: 1024,
         alt: 'Zizex - Watch Movies & TV Shows For Free',
@@ -42,7 +42,7 @@ export const metadata = {
     card: 'summary',
     title: 'Zizex - Free Movies & TV Shows Streaming',
     description: 'Stream thousands of top movies and TV series free on Zizex.',
-    images: ['/og-image.png?v=5'],
+    images: ['https://zizex.vercel.app/og-image.jpg?v=6'],
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM',

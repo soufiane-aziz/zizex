@@ -73,7 +73,7 @@ export async function generateMetadata(props) {
             siteName: 'Zizex',
             images: [
                 {
-                    url: `${SITE_URL}/og-image.png?v=5`,
+                    url: `${SITE_URL}/og-image.jpg?v=6`,
                     width: 1024,
                     height: 1024,
                     alt: 'Zizex Top Rated',
@@ -86,7 +86,7 @@ export async function generateMetadata(props) {
             card: 'summary',
             title,
             description,
-            images: [`${SITE_URL}/og-image.png?v=5`],
+            images: [`${SITE_URL}/og-image.jpg?v=6`],
         },
     };
 }
