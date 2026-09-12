@@ -32,7 +32,7 @@ const fetchFromTMDB = cache(async (path, queryParams = '') => {
     }
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
 
 export async function generateMetadata(props) {
     const params = await props.params;
@@ -42,16 +42,16 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const title = isAr
-        ? 'أفلام ومسلسلات الأعلى تقييماً - Filmoxa'
+        ? 'أفلام ومسلسلات الأعلى تقييماً - Zizex'
         : isFr
-            ? 'Films et Séries Mieux Notés - Filmoxa'
-            : 'Top Rated Movies & TV Shows - Filmoxa';
+            ? 'Films et Séries Mieux Notés - Zizex'
+            : 'Top Rated Movies & TV Shows - Zizex';
 
     const description = isAr
-        ? 'اكتشف أعلى الأفلام والمسلسلات تقييماً في التاريخ. شاهد الأعمال الأكثر شهرة واعجاباً من قبل الجمهور مجاناً على Filmoxa.'
+        ? 'اكتشف أعلى الأفلام والمسلسلات تقييماً في التاريخ. شاهد الأعمال الأكثر شهرة واعجاباً من قبل الجمهور مجاناً على Zizex.'
         : isFr
-            ? 'Découvrez les films et séries les mieux notés de tous les temps. Regardez les chefs-d\'œuvre du cinéma gratuitement sur Filmoxa.'
-            : 'Discover the highest-rated movies and TV shows of all time. Stream critically acclaimed masterpieces for free on Filmoxa.';
+            ? 'Découvrez les films et séries les mieux notés de tous les temps. Regardez les chefs-d\'œuvre du cinéma gratuitement sur Zizex.'
+            : 'Discover the highest-rated movies and TV shows of all time. Stream critically acclaimed masterpieces for free on Zizex.';
 
     const keywords = isAr
         ? ['اعلى تقييم', 'افلام اسطورية', 'افلام عظيمة', 'مسلسلات اعلى تقييم', 'مشاهدة افلام', 'افلام imdb']
@@ -70,13 +70,13 @@ export async function generateMetadata(props) {
             title,
             description,
             url: `${SITE_URL}/${locale}/top-rated`,
-            siteName: 'Filmoxa',
+            siteName: 'Zizex',
             images: [
                 {
-                    url: `${SITE_URL}/og-image.png?v=3`,
+                    url: `${SITE_URL}/og-image.png?v=5`,
                     width: 1024,
                     height: 1024,
-                    alt: 'Filmoxa Top Rated',
+                    alt: 'Zizex Top Rated',
                 }
             ],
             type: 'website',
@@ -86,7 +86,7 @@ export async function generateMetadata(props) {
             card: 'summary',
             title,
             description,
-            images: [`${SITE_URL}/og-image.png?v=3`],
+            images: [`${SITE_URL}/og-image.png?v=5`],
         },
     };
 }

@@ -18,7 +18,7 @@ const ALLOWED_AD_DOMAINS = [
   'tmdb.org',
   'cloudflare.com',
   'vercel.app',
-  'filmoxa'
+  'zizex'
 ];
 
 // Spam ad network signatures to block
@@ -50,7 +50,7 @@ export default function AdBlocker() {
         return originalWindowOpen.apply(this, arguments);
       }
 
-      console.warn('[Filmoxa AdBlocker] Blocked external spam ad popup:', urlStr);
+      console.warn('[Zizex AdBlocker] Blocked external spam ad popup:', urlStr);
       return null;
     };
 

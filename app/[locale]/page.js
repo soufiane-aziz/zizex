@@ -32,7 +32,7 @@ const fetchFromTMDB = cache(async (path, queryParams = '') => {
     }
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
 
 export async function generateMetadata(props) {
     const params = await props.params;
@@ -42,22 +42,22 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const title = isAr
-        ? 'Filmoxa - شاهد أفلام ومسلسلات أونلاين مجاناً'
+        ? 'Zizex - شاهد أفلام ومسلسلات أونلاين مجاناً'
         : isFr
-            ? 'Filmoxa - Regarder Films et Séries en Streaming Gratuit'
-            : 'Filmoxa - Watch Movies & TV Shows Online Free';
+            ? 'Zizex - Regarder Films et Séries en Streaming Gratuit'
+            : 'Zizex - Watch Movies & TV Shows Online Free';
 
     const description = isAr
-        ? 'استمتع بأفضل الأفلام والمسلسلات مجاناً وبجودة عالية على Filmoxa.'
+        ? 'استمتع بأفضل الأفلام والمسلسلات مجاناً وبجودة عالية على Zizex.'
         : isFr
-            ? 'Regardez gratuitement les meilleurs films et séries sur Filmoxa.'
-            : 'Stream the best movies and TV shows for free on Filmoxa.';
+            ? 'Regardez gratuitement les meilleurs films et séries sur Zizex.'
+            : 'Stream the best movies and TV shows for free on Zizex.';
 
     const keywords = isAr
-        ? ['موقع filmoxa', 'مشاهدة افلام اونلاين', 'افلام ومسلسلات مجانا', 'موقع سيما', 'افلام مترجمة اونلاين', 'مسلسلات رمضان 2026', 'تحميل افلام مجانا', 'موقع مشاهدة افلام', 'افلام اكشن مترجمة', 'مسلسلات اجنبية مترجمة', 'موقع برستيج', 'ايجي بست البديل', 'السينما للجميع', 'افلام اون لاين hd', 'موقع سيما فور يو', 'مشاهدة مسلسلات اونلاين', 'افلام رعب مترجمة', 'موقع ماي سيما', 'افلام هندية مترجمة', 'تحميل مسلسلات مجانا', 'نتفليكس', 'موقع نتفليكس مجانا', 'ايجي بست', 'ماي سيما الاصلي', 'سيما فور يو', 'برستيج مسلسلات', 'شاهد افضل الافلام', 'عرب سيد', 'فاصل اعلاني', 'اكوام', 'توك توك سيما']
+        ? ['موقع zizex', 'مشاهدة افلام اونلاين', 'افلام ومسلسلات مجانا', 'موقع سيما', 'افلام مترجمة اونلاين', 'مسلسلات رمضان 2026', 'تحميل افلام مجانا', 'موقع مشاهدة افلام', 'افلام اكشن مترجمة', 'مسلسلات اجنبية مترجمة', 'موقع برستيج', 'ايجي بست البديل', 'السينما للجميع', 'افلام اون لاين hd', 'موقع سيما فور يو', 'مشاهدة مسلسلات اونلاين', 'افلام رعب مترجمة', 'موقع ماي سيما', 'افلام هندية مترجمة', 'تحميل مسلسلات مجانا', 'نتفليكس', 'موقع نتفليكس مجانا', 'ايجي بست', 'ماي سيما الاصلي', 'سيما فور يو', 'برستيج مسلسلات', 'شاهد افضل الافلام', 'عرب سيد', 'فاصل اعلاني', 'اكوام', 'توك توك سيما']
         : isFr
-            ? ['filmoxa streaming', 'regarder films gratuits', 'streaming vf', 'film streaming gratuit', 'site de streaming film', 'series tv streaming', 'cinema en ligne', 'voir film gratuit', 'top film streaming', 'streaming hd gratuit', 'films complets vf', 'series streaming gratuit', 'platforme de streaming', 'cinema streaming gratuit', 'nouveautes films streaming', 'voir series en streaming', 'streaming gratuit sans inscription', 'films streaming vf et vostfr', 'meilleur site streaming', 'film d action streaming', 'Netflix gratuit', 'TopCinema streaming', 'Cima4U streaming', 'MyCima vf', 'Wawacity streaming', 'Frenchstream alternative', 'Zone-Telechargement', 'Cpasbien film']
-            : ['filmoxa', 'Filmoxa', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies free', 'sci-fi series online', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch free tv shows', 'best movie streaming site', 'cinema streaming free', 'Netflix', 'watch Netflix movies free', 'HBO Max streaming', 'Disney Plus free', 'TopCinema', 'EgyBest alternative', 'MyCima', 'Cima4U', 'Shahid VIP free', 'WatchIt movies'];
+            ? ['zizex streaming', 'regarder films gratuits', 'streaming vf', 'film streaming gratuit', 'site de streaming film', 'series tv streaming', 'cinema en ligne', 'voir film gratuit', 'top film streaming', 'streaming hd gratuit', 'films complets vf', 'series streaming gratuit', 'platforme de streaming', 'cinema streaming gratuit', 'nouveautes films streaming', 'voir series en streaming', 'streaming gratuit sans inscription', 'films streaming vf et vostfr', 'meilleur site streaming', 'film d action streaming', 'Netflix gratuit', 'TopCinema streaming', 'Cima4U streaming', 'MyCima vf', 'Wawacity streaming', 'Frenchstream alternative', 'Zone-Telechargement', 'Cpasbien film']
+            : ['zizex', 'Zizex', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies free', 'sci-fi series online', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch free tv shows', 'best movie streaming site', 'cinema streaming free', 'Netflix', 'watch Netflix movies free', 'HBO Max streaming', 'Disney Plus free', 'TopCinema', 'EgyBest alternative', 'MyCima', 'Cima4U', 'Shahid VIP free', 'WatchIt movies'];
 
     return {
         title,
@@ -76,13 +76,13 @@ export async function generateMetadata(props) {
             title,
             description,
             url: `${SITE_URL}/${locale}`,
-            siteName: 'Filmoxa',
+            siteName: 'Zizex',
             images: [
                 {
-                    url: `${SITE_URL}/og-image.png?v=3`,
+                    url: `${SITE_URL}/og-image.png?v=5`,
                     width: 1024,
                     height: 1024,
-                    alt: 'Filmoxa - Watch Movies & TV Shows For Free',
+                    alt: 'Zizex - Watch Movies & TV Shows For Free',
                 }
             ],
             type: 'website',
@@ -92,7 +92,7 @@ export async function generateMetadata(props) {
             card: 'summary',
             title,
             description,
-            images: [`${SITE_URL}/og-image.png?v=3`],
+            images: [`${SITE_URL}/og-image.png?v=5`],
         },
         keywords: isAr
             ? ['أفلام', 'مسلسلات', 'مشاهدة مجانية', 'فيلم', 'مسلسل', 'بث مباشر', 'HD']

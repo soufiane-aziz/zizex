@@ -4,7 +4,7 @@
 export const revalidate = 604800;
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
 const LOCALES = ['en', 'fr', 'ar'];
 
 // ─── All 20 Genre Slugs ───────────────────────────────────────────────────────
@@ -15,7 +15,7 @@ const GENRE_SLUGS = [
   'sport', 'thriller', 'tv-movie', 'war', 'western',
 ];
 
-// ─── Static brand pages (Filmoxa keyword anchors) ────────────────────────────
+// ─── Static brand pages (Zizex keyword anchors) ────────────────────────────
 const BRAND_PAGES: { path: string; priority: number; freq: string }[] = [
   { path: '',           priority: 1.0,  freq: 'daily'   },
   { path: '/movies',    priority: 0.95, freq: 'daily'   },
@@ -44,7 +44,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];
   const now = new Date();
 
-  // 0. Root canonical — highest Filmoxa brand signal
+  // 0. Root canonical — highest Zizex brand signal
   entries.push({
     url: safeUrl(SITE_URL),
     changeFrequency: 'daily',

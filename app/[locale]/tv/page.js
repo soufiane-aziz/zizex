@@ -18,7 +18,7 @@ const fetchFromTMDB = cache(async (path, queryParams = '') => {
     }
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
 
 export async function generateMetadata(props) {
     const params = await props.params;
@@ -28,16 +28,16 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const title = isAr
-        ? 'مسلسلات أجنبية وعربية مترجمة - Filmoxa'
+        ? 'مسلسلات أجنبية وعربية مترجمة - Zizex'
         : isFr
-            ? 'Séries TV en Streaming Gratuit - Filmoxa'
-            : 'Watch TV Shows Online Free - Filmoxa';
+            ? 'Séries TV en Streaming Gratuit - Zizex'
+            : 'Watch TV Shows Online Free - Zizex';
 
     const description = isAr
-        ? 'شاهد أحدث المسلسلات الأجنبية، التركية، والكورية مترجمة بجودة عالية HD على Filmoxa. مسلسلات كاملة مجاناً.'
+        ? 'شاهد أحدث المسلسلات الأجنبية، التركية، والكورية مترجمة بجودة عالية HD على Zizex. مسلسلات كاملة مجاناً.'
         : isFr
-            ? 'Regardez les meilleures séries TV en streaming gratuit HD sur Filmoxa. Séries complètes, toutes les saisons sans inscription.'
-            : 'Stream the best and most popular TV shows for free in HD on Filmoxa. Watch full seasons and episodes online.';
+            ? 'Regardez les meilleures séries TV en streaming gratuit HD sur Zizex. Séries complètes, toutes les saisons sans inscription.'
+            : 'Stream the best and most popular TV shows for free in HD on Zizex. Watch full seasons and episodes online.';
 
     const keywords = isAr
         ? ['مسلسلات', 'مسلسلات مترجمة', 'مسلسلات اجنبية', 'مسلسلات تركية', 'مسلسل', 'تحميل مسلسلات', 'حلقات مسلسلات']
@@ -56,13 +56,13 @@ export async function generateMetadata(props) {
             title,
             description,
             url: `${SITE_URL}/${locale}/tv`,
-            siteName: 'Filmoxa',
+            siteName: 'Zizex',
             images: [
                 {
-                    url: `${SITE_URL}/og-image.png?v=3`,
+                    url: `${SITE_URL}/og-image.png?v=5`,
                     width: 1024,
                     height: 1024,
-                    alt: 'Filmoxa TV Shows',
+                    alt: 'Zizex TV Shows',
                 }
             ],
             type: 'website',
@@ -72,7 +72,7 @@ export async function generateMetadata(props) {
             card: 'summary',
             title,
             description,
-            images: [`${SITE_URL}/og-image.png?v=3`],
+            images: [`${SITE_URL}/og-image.png?v=5`],
         },
     };
 }

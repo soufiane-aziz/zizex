@@ -10,12 +10,12 @@ export async function generateMetadata(props) {
     searchParams: Promise.resolve(searchParams || {}),
   });
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
 
   return {
     ...metadata,
-    title: 'Filmoxa | Watch Free Movies & TV Shows Online',
-    description: 'Filmoxa is the ultimate free streaming platform to watch thousands of HD movies and TV series online without registration.',
+    title: 'Zizex | Watch Free Movies & TV Shows Online',
+    description: 'Zizex is the ultimate free streaming platform to watch thousands of HD movies and TV series online without registration.',
     alternates: {
       canonical: `${SITE_URL}/`,
       languages: {

@@ -1,5 +1,5 @@
 {
-  "name": "filmoxa-mtproto-server",
+  "name": "zizex-mtproto-server",
   "version": "1.0.0",
   "private": true,
   "description": "Standalone Telegram MTProto Video Streaming Server",

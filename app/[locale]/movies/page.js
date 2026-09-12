@@ -18,7 +18,7 @@ const fetchFromTMDB = cache(async (path, queryParams = '') => {
     }
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
 
 export async function generateMetadata(props) {
     const params = await props.params;
@@ -28,16 +28,16 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const title = isAr
-        ? 'أفلام مترجمة اونلاين - Filmoxa'
+        ? 'أفلام مترجمة اونلاين - Zizex'
         : isFr
-            ? 'Films en Streaming Gratuit - Filmoxa'
-            : 'Watch Movies Online Free - Filmoxa';
+            ? 'Films en Streaming Gratuit - Zizex'
+            : 'Watch Movies Online Free - Zizex';
 
     const description = isAr
-        ? 'مشاهدة أحدث الأفلام الأجنبية والعربية مترجمة وبجودة عالية HD على Filmoxa. أفلام أكشن، رعب، دراما، والمزيد مجاناً.'
+        ? 'مشاهدة أحدث الأفلام الأجنبية والعربية مترجمة وبجودة عالية HD على Zizex. أفلام أكشن، رعب، دراما، والمزيد مجاناً.'
         : isFr
-            ? 'Regardez les derniers films en streaming gratuit HD sur Filmoxa. Films d\'action, comédie, horreur et bien plus sans inscription.'
-            : 'Stream the latest and greatest movies for free in HD on Filmoxa. Action, comedy, horror, and more.';
+            ? 'Regardez les derniers films en streaming gratuit HD sur Zizex. Films d\'action, comédie, horreur et bien plus sans inscription.'
+            : 'Stream the latest and greatest movies for free in HD on Zizex. Action, comedy, horror, and more.';
 
     const keywords = isAr
         ? ['مشاهدة افلام', 'افلام مترجمة', 'افلام اكشن', 'افلام رعب', 'فيلم', 'تحميل افلام', 'افلام 2026']
@@ -56,13 +56,13 @@ export async function generateMetadata(props) {
             title,
             description,
             url: `${SITE_URL}/${locale}/movies`,
-            siteName: 'Filmoxa',
+            siteName: 'Zizex',
             images: [
                 {
-                    url: `${SITE_URL}/og-image.png?v=3`,
+                    url: `${SITE_URL}/og-image.png?v=5`,
                     width: 1024,
                     height: 1024,
-                    alt: 'Filmoxa Movies',
+                    alt: 'Zizex Movies',
                 }
             ],
             type: 'website',
@@ -72,7 +72,7 @@ export async function generateMetadata(props) {
             card: 'summary',
             title,
             description,
-            images: [`${SITE_URL}/og-image.png?v=3`],
+            images: [`${SITE_URL}/og-image.png?v=5`],
         },
     };
 }

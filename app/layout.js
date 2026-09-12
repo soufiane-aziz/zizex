@@ -8,37 +8,41 @@ const AdBlocker = dynamic(() => import('../components/AdBlocker'));
 const AntiAdBlock = dynamic(() => import('../components/AntiAdBlock'));
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app'),
-  title: 'Filmoxa - Streaming Platform',
-  description: 'Watch your favorite movies and TV shows free on Filmoxa.',
-  keywords: ['filmoxa', 'Filmoxa', 'watch movies online', 'streaming platform', 'HD movies streaming', 'TV series online', 'top rated movies', 'latest cinema releases', 'watch series', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies', 'sci-fi series', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch tv shows', 'movie streaming site', 'cinema streaming'],
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app'),
+  title: 'Zizex - Streaming Platform',
+  description: 'Watch your favorite movies and TV shows free on Zizex.',
+  keywords: ['zizex', 'Zizex', 'watch movies online', 'streaming platform', 'HD movies streaming', 'TV series online', 'top rated movies', 'latest cinema releases', 'watch series', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies', 'sci-fi series', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch tv shows', 'movie streaming site', 'cinema streaming'],
   icons: {
     icon: [
-      { url: '/logo.png?v=2', sizes: 'any', type: 'image/png' },
+      { url: '/favicon.ico?v=5', sizes: 'any' },
+      { url: '/icon.png?v=5', sizes: '512x512', type: 'image/png' },
+      { url: '/logo.png?v=5', sizes: '1024x1024', type: 'image/png' },
     ],
-    shortcut: '/logo.png?v=2',
-    apple: '/logo.png?v=2',
+    shortcut: '/favicon.ico?v=5',
+    apple: [
+      { url: '/apple-icon.png?v=5', sizes: '180x180', type: 'image/png' },
+    ],
   },
   openGraph: {
-    siteName: 'Filmoxa',
-    title: 'Filmoxa - Free Movies & TV Shows Streaming Platform',
-    description: 'Stream thousands of top movies and TV series free on Filmoxa.',
-    url: 'https://filmoxa.vercel.app',
+    siteName: 'Zizex',
+    title: 'Zizex - Free Movies & TV Shows Streaming Platform',
+    description: 'Stream thousands of top movies and TV series free on Zizex.',
+    url: 'https://zizex.vercel.app',
     type: 'website',
     images: [
       {
-        url: '/og-image.png?v=3',
+        url: '/og-image.png?v=5',
         width: 1024,
         height: 1024,
-        alt: 'Filmoxa - Watch Movies & TV Shows For Free',
+        alt: 'Zizex - Watch Movies & TV Shows For Free',
       },
     ],
   },
   twitter: {
     card: 'summary',
-    title: 'Filmoxa - Free Movies & TV Shows Streaming',
-    description: 'Stream thousands of top movies and TV series free on Filmoxa.',
-    images: ['/og-image.png?v=3'],
+    title: 'Zizex - Free Movies & TV Shows Streaming',
+    description: 'Stream thousands of top movies and TV series free on Zizex.',
+    images: ['/og-image.png?v=5'],
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM',
@@ -65,9 +69,9 @@ export default function RootLayout({ children }) {
     <html lang="en" className="dark">
       <head>
         {/* Favicon */}
-        <link rel="icon" href="/logo.png?v=2" type="image/png" />
-        <link rel="shortcut icon" href="/logo.png?v=2" />
-        <link rel="apple-touch-icon" href="/logo.png?v=2" />
+        <link rel="icon" href="/favicon.ico?v=5" sizes="any" />
+        <link rel="icon" href="/icon.png?v=5" type="image/png" sizes="512x512" />
+        <link rel="apple-touch-icon" href="/apple-icon.png?v=5" sizes="180x180" />
 
 
 
@@ -95,26 +99,26 @@ export default function RootLayout({ children }) {
               "@graph": [
                 {
                   "@type": "WebSite",
-                  "@id": "https://filmoxa.vercel.app/#website",
-                  "url": "https://filmoxa.vercel.app/",
-                  "name": "Filmoxa",
-                  "alternateName": ["Filmoxa", "filmoxa", "Filmoxa Streaming"],
-                  "description": "Watch free movies and TV shows online in HD on Filmoxa.",
+                  "@id": "https://zizex.vercel.app/#website",
+                  "url": "https://zizex.vercel.app/",
+                  "name": "Zizex",
+                  "alternateName": ["Zizex", "zizex", "Zizex Streaming"],
+                  "description": "Watch free movies and TV shows online in HD on Zizex.",
                   "potentialAction": {
                     "@type": "SearchAction",
                     "target": {
                       "@type": "EntryPoint",
-                      "urlTemplate": "https://filmoxa.vercel.app/en/search?q={search_term_string}"
+                      "urlTemplate": "https://zizex.vercel.app/en/search?q={search_term_string}"
                     },
                     "query-input": "required name=search_term_string"
                   }
                 },
                 {
                   "@type": "Organization",
-                  "@id": "https://filmoxa.vercel.app/#organization",
-                  "name": "Filmoxa",
-                  "url": "https://filmoxa.vercel.app/",
-                  "logo": "https://filmoxa.vercel.app/logo.png?v=2"
+                  "@id": "https://zizex.vercel.app/#organization",
+                  "name": "Zizex",
+                  "url": "https://zizex.vercel.app/",
+                  "logo": "https://zizex.vercel.app/logo.png?v=4"
                 }
               ]
             })

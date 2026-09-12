@@ -43,7 +43,7 @@ export async function generateMetadata(props) {
 
     if (!movieId) {
         return {
-            title: 'Filmoxa - Watch Movies Online',
+            title: 'Zizex - Watch Movies Online',
             description: 'Stream movie databases seamlessly.'
         };
     }
@@ -53,7 +53,7 @@ export async function generateMetadata(props) {
 
     if (!movieDetails) {
         return {
-            title: 'Filmoxa - Watch Movies Online'
+            title: 'Zizex - Watch Movies Online'
         };
     }
 
@@ -62,21 +62,21 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const docTitle = isAr
-        ? `Filmoxa | شاهد ${movieTitle} أونلاين مجاناً`
+        ? `Zizex | شاهد ${movieTitle} أونلاين مجاناً`
         : isFr
-            ? `Filmoxa | Regarder ${movieTitle} en Streaming Gratuit`
-            : `Filmoxa | Watch ${movieTitle} Online Free`;
+            ? `Zizex | Regarder ${movieTitle} en Streaming Gratuit`
+            : `Zizex | Watch ${movieTitle} Online Free`;
 
     const docDesc = movieDetails.overview
         ? movieDetails.overview.substring(0, 160)
-        : `Stream ${movieTitle} online on Filmoxa.`;
+        : `Stream ${movieTitle} online on Zizex.`;
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
     const ogImage = movieDetails.backdrop_path
         ? `${IMAGE_BASE_URL}/w780${movieDetails.backdrop_path}`
         : movieDetails.poster_path
             ? `${IMAGE_BASE_URL}/w500${movieDetails.poster_path}`
-            : `${SITE_URL}/logo.png?v=2`;
+            : `${SITE_URL}/logo.png?v=5`;
 
     const seoSlug = createSlug(movieDetails.title, movieId, 'movie');
     const path = `/movie/${seoSlug}`;
@@ -192,7 +192,7 @@ export default async function LocalizedMoviePage(props) {
     if (paddingNeeded > 0) finalSidebarItems.push(...uniqueSuggestions.slice(0, paddingNeeded));
     const finalBottomItems = uniqueSuggestions.slice(Math.max(0, paddingNeeded), Math.max(0, paddingNeeded) + 24);
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
     const seoMovieSlug = createSlug(movieDetails.title, movieId, 'movie');
 
     const director = creditsData?.crew?.find(p => p.job === 'Director');
@@ -281,7 +281,7 @@ export default async function LocalizedMoviePage(props) {
         '@context': 'https://schema.org',
         '@type': 'VideoObject',
         'name': `${movieDetails.title} - Watch Full Movie`,
-        'description': movieDetails.overview || `Watch ${movieDetails.title} full movie online in HD on Filmoxa.`,
+        'description': movieDetails.overview || `Watch ${movieDetails.title} full movie online in HD on Zizex.`,
         'thumbnailUrl': [
             movieDetails.backdrop_path
                 ? `${IMAGE_BASE_URL}/w780${movieDetails.backdrop_path}`

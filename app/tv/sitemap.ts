@@ -23,7 +23,7 @@ const API_KEY =
 const BASE_URL = 'https://api.themoviedb.org/3';
 const LOCALES = ['en', 'fr', 'ar'];
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
 
 // â”€â”€â”€ Fetchers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function fetchPages(endpoint: string, pages: number): Promise<any[]> {

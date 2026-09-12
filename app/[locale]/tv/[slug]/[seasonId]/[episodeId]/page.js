@@ -68,7 +68,7 @@ export async function generateMetadata(props) {
 
     if (!showId) {
         return {
-            title: 'Filmoxa - Search and Watch TV Series',
+            title: 'Zizex - Search and Watch TV Series',
             description: 'Stream series metadata seamlessly.'
         };
     }
@@ -77,7 +77,7 @@ export async function generateMetadata(props) {
     const showDetails = await fetchFromTMDB(`/tv/${showId}`, `&language=${tmdbLang}`);
 
     if (!showDetails) {
-        return { title: 'Filmoxa - Streaming Platform' };
+        return { title: 'Zizex - Streaming Platform' };
     }
 
     const showName = showDetails.name;
@@ -92,22 +92,22 @@ export async function generateMetadata(props) {
     }
 
     const docTitle = isAr
-        ? `Filmoxa | شاهد مسلسل ${showName} الموسم ${seasonNum} الحلقة ${episodeNum} أونلاين`
+        ? `Zizex | شاهد مسلسل ${showName} الموسم ${seasonNum} الحلقة ${episodeNum} أونلاين`
         : isFr
-            ? `Filmoxa | Regarder ${showName} Saison ${seasonNum} Épisode ${episodeNum} en Streaming`
-            : `Filmoxa | Watch ${showName} Season ${seasonNum} Episode ${episodeNum} Online`;
+            ? `Zizex | Regarder ${showName} Saison ${seasonNum} Épisode ${episodeNum} en Streaming`
+            : `Zizex | Watch ${showName} Season ${seasonNum} Episode ${episodeNum} Online`;
 
     const docDesc = epData && epData.overview
         ? epData.overview.substring(0, 160)
-        : `Stream ${showName} Season ${seasonNum} Episode ${episodeNum} ("${episodeTitle}") on Filmoxa.`;
+        : `Stream ${showName} Season ${seasonNum} Episode ${episodeNum} ("${episodeTitle}") on Zizex.`;
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
     const seoTvSlug = createSlug(showDetails.name, showId, 'tv');
     const ogImage = epData && epData.still_path
         ? `${IMAGE_BASE_URL}/w780${epData.still_path}`
         : showDetails.backdrop_path
             ? `${IMAGE_BASE_URL}/w780${showDetails.backdrop_path}`
-            : `${SITE_URL}/logo.png?v=2`;
+            : `${SITE_URL}/logo.png?v=5`;
 
     const path = `/tv/${seoTvSlug}/season-${seasonNum}/episode-${episodeNum}`;
     const alternates = {
@@ -220,13 +220,13 @@ export default async function LocalizedEpisodePage(props) {
     // Fetch current episode specific details for JSON-LD VideoObject and TVEpisode schemas
     const currentEpisodeDetails = episodes.find(e => e.episode_number === episodeNum) || {};
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmoxa.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
     const episodeName = currentEpisodeDetails.name || `Episode ${episodeNum}`;
     const episodeStill = currentEpisodeDetails.still_path
         ? `${IMAGE_BASE_URL}/w500${currentEpisodeDetails.still_path}`
         : showDetails.poster_path
             ? `${IMAGE_BASE_URL}/w500${showDetails.poster_path}`
-            : `${SITE_URL}/logo.png?v=2`;
+            : `${SITE_URL}/logo.png?v=5`;
 
     // Embed URL for schema
     const schemaEmbedUrl = `https://multiembed.mov/?video_id=${showId}&tmdb=1&s=${seasonNum}&e=${episodeNum}`;

@@ -43,14 +43,14 @@ export default function Navbar({ locale, contentType }) {
   useEffect(() => {
     if (isOnHomePage) {
       // Save the current state whenever we're on the home page
-      localStorage.setItem('filmoxa_nav_type', urlType);
-      localStorage.setItem('filmoxa_nav_filter', urlFilter);
+      localStorage.setItem('zizex_nav_type', urlType);
+      localStorage.setItem('zizex_nav_filter', urlFilter);
       setActiveType(urlType);
       setActiveFilter(urlFilter);
     } else {
       // On watch pages, restore the last known home filter
-      const savedType = localStorage.getItem('filmoxa_nav_type') || 'all';
-      const savedFilter = localStorage.getItem('filmoxa_nav_filter') || 'default';
+      const savedType = localStorage.getItem('zizex_nav_type') || 'all';
+      const savedFilter = localStorage.getItem('zizex_nav_filter') || 'default';
       setActiveType(savedType);
       setActiveFilter(savedFilter);
     }
@@ -176,7 +176,7 @@ export default function Navbar({ locale, contentType }) {
       >
         <button
           onClick={() => handleNavigation('all', 'default')}
-          aria-label="Filmoxa — Go to home"
+          aria-label="Zizex — Go to home"
           className="text-2xl md:text-3xl font-black tracking-wide cursor-pointer focus:outline-none"
         >
           <span className="text-red-600">Film</span><span className="text-white">oxa</span>

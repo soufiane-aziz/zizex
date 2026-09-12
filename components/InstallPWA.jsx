@@ -15,7 +15,7 @@ export default function InstallPWA({ locale = 'en' }) {
     if (isStandalone) return;
 
     // Check if already shown today
-    const lastShown = localStorage.getItem('filmoxa_pwa_banner_last_shown');
+    const lastShown = localStorage.getItem('zizex_pwa_banner_last_shown');
     const today = new Date().toDateString();
     if (lastShown === today) {
       return;
@@ -54,7 +54,7 @@ export default function InstallPWA({ locale = 'en' }) {
 
   useEffect(() => {
     if (showBanner) {
-      localStorage.setItem('filmoxa_pwa_banner_last_shown', new Date().toDateString());
+      localStorage.setItem('zizex_pwa_banner_last_shown', new Date().toDateString());
     }
   }, [showBanner]);
 
@@ -70,7 +70,7 @@ export default function InstallPWA({ locale = 'en' }) {
       setShowIosInstructions(true);
     } else {
       // General instructions if event didn't trigger
-      alert('To install Filmoxa:\n1. Open your browser menu (⋮)\n2. Tap "Add to Home Screen" or "Install App"');
+      alert('To install Zizex:\n1. Open your browser menu (⋮)\n2. Tap "Add to Home Screen" or "Install App"');
     }
   };
 
@@ -84,7 +84,7 @@ export default function InstallPWA({ locale = 'en' }) {
   const isAr = locale === 'ar';
   const isFr = locale === 'fr';
 
-  const titleText = isAr ? 'تثبيت تطبيق Filmoxa' : isFr ? 'Installer l\'application Filmoxa' : 'Install Filmoxa App';
+  const titleText = isAr ? 'تثبيت تطبيق Zizex' : isFr ? 'Installer l\'application Zizex' : 'Install Zizex App';
   const subText = isAr 
     ? 'بث سريع ووصول فوري من الشاشة الرئيسية' 
     : isFr 
@@ -99,8 +99,8 @@ export default function InstallPWA({ locale = 'en' }) {
         <div className="flex items-center gap-3 min-w-0">
           <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 border border-white/10 shadow-md">
             <Image
-              src="/logo.png?v=2"
-              alt="Filmoxa Icon"
+              src="/logo.png?v=5"
+              alt="Zizex Icon"
               width={48}
               height={48}
               className="w-full h-full object-cover"
@@ -134,9 +134,9 @@ export default function InstallPWA({ locale = 'en' }) {
         <div className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="bg-neutral-900 border border-white/10 p-6 rounded-2xl max-w-sm w-full text-center shadow-2xl">
             <div className="w-16 h-16 mx-auto mb-4 rounded-2xl overflow-hidden border border-red-600/30">
-              <Image src="/logo.png?v=2" alt="Filmoxa App" width={64} height={64} className="w-full h-full object-cover" />
+              <Image src="/logo.png?v=5" alt="Zizex App" width={64} height={64} className="w-full h-full object-cover" />
             </div>
-            <h3 className="text-white font-black text-lg mb-2">Install Filmoxa on iPhone</h3>
+            <h3 className="text-white font-black text-lg mb-2">Install Zizex on iPhone</h3>
             <p className="text-gray-300 text-sm mb-5 leading-relaxed">
               1. Tap the <strong className="text-white">Share</strong> button <i className="fa-solid fa-share-nodes text-red-500"></i> at the bottom of Safari.<br/>
               2. Scroll down and tap <strong className="text-white">"Add to Home Screen"</strong> <i className="fa-solid fa-square-plus text-red-500"></i>.

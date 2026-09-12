@@ -1,7 +1,7 @@
 export default function manifest() {
     return {
-        name: 'Filmoxa',
-        short_name: 'Filmoxa',
+        name: 'Zizex',
+        short_name: 'Zizex',
         description: 'Watch your favorite movies and TV shows for free in HD',
         start_url: '/',
         display: 'standalone',
@@ -9,7 +9,7 @@ export default function manifest() {
         theme_color: '#dc2626',
         icons: [
             {
-                src: '/logo.png?v=2',
+                src: '/logo.png?v=5',
                 sizes: 'any',
                 type: 'image/png',
                 purpose: 'any maskable',
