@@ -14,13 +14,13 @@ export const metadata = {
   keywords: ['zizex', 'Zizex', 'watch movies online', 'streaming platform', 'HD movies streaming', 'TV series online', 'top rated movies', 'latest cinema releases', 'watch series', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies', 'sci-fi series', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch tv shows', 'movie streaming site', 'cinema streaming'],
   icons: {
     icon: [
-      { url: '/favicon.ico?v=5', sizes: 'any' },
-      { url: '/icon.png?v=5', sizes: '512x512', type: 'image/png' },
-      { url: '/logo.png?v=5', sizes: '1024x1024', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
+      { url: '/logo.png', sizes: '512x512', type: 'image/png' },
     ],
-    shortcut: '/favicon.ico?v=5',
+    shortcut: '/favicon.ico',
     apple: [
-      { url: '/apple-icon.png?v=5', sizes: '180x180', type: 'image/png' },
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
   openGraph: {
@@ -31,7 +31,7 @@ export const metadata = {
     type: 'website',
     images: [
       {
-        url: 'https://zizex.vercel.app/og-image.jpg?v=6',
+        url: 'https://zizex.vercel.app/og-image.jpg',
         width: 1024,
         height: 1024,
         alt: 'Zizex - Watch Movies & TV Shows For Free',
@@ -42,7 +42,7 @@ export const metadata = {
     card: 'summary',
     title: 'Zizex - Free Movies & TV Shows Streaming',
     description: 'Stream thousands of top movies and TV series free on Zizex.',
-    images: ['https://zizex.vercel.app/og-image.jpg?v=6'],
+    images: ['https://zizex.vercel.app/og-image.jpg'],
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM',
@@ -68,10 +68,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
       <head>
-        {/* Favicon */}
-        <link rel="icon" href="/favicon.ico?v=5" sizes="any" />
-        <link rel="icon" href="/icon.png?v=5" type="image/png" sizes="512x512" />
-        <link rel="apple-touch-icon" href="/apple-icon.png?v=5" sizes="180x180" />
+        {/* Favicon & Site Icons for Google Search and Browsers */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
 
 
 
@@ -118,7 +119,7 @@ export default function RootLayout({ children }) {
                   "@id": "https://zizex.vercel.app/#organization",
                   "name": "Zizex",
                   "url": "https://zizex.vercel.app/",
-                  "logo": "https://zizex.vercel.app/logo.png?v=4"
+                  "logo": "https://zizex.vercel.app/icon.png"
                 }
               ]
             })

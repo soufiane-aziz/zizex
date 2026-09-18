@@ -41,7 +41,7 @@ export default async function LocaleLayout(props) {
         '@type': 'Organization',
         'name': 'Zizex',
         'url': `${SITE_URL}/${locale}`,
-        'logo': `${SITE_URL}/logo.png?v=5`
+        'logo': `${SITE_URL}/logo.png`
     };
 
     return (
