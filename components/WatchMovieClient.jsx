@@ -19,7 +19,7 @@ export default function WatchMovieClient({
 }) {
     const [activeServerId, setActiveServerId] = useState('server1');
     const [hasClickedPlayer, setHasClickedPlayer] = useState(false);
-    const [isIframeLoading, setIsIframeLoading] = useState(true);
+    const [isIframeLoading, setIsIframeLoading] = useState(false);
     const [showServerNotice, setShowServerNotice] = useState(true);
     const [isScreenLocked, setIsScreenLocked] = useState(false);
     const [showUnlockButton, setShowUnlockButton] = useState(false);

@@ -228,8 +228,8 @@ export default async function LocalizedEpisodePage(props) {
             ? `${IMAGE_BASE_URL}/w500${showDetails.poster_path}`
             : `${SITE_URL}/logo.png`;
 
-    // Embed URL for schema
-    const schemaEmbedUrl = `https://multiembed.mov/?video_id=${showId}&tmdb=1&s=${seasonNum}&e=${episodeNum}`;
+    // Embed URL for schema (matches Server 1 player)
+    const schemaEmbedUrl = `https://vidsrc.pm/embed/tv?tmdb=${showId}&season=${seasonNum}&episode=${episodeNum}`;
 
     const tvActors = (tvCredits?.cast || []).slice(0, 8);
     const tvCreators = showDetails.created_by || [];
@@ -349,6 +349,15 @@ export default async function LocalizedEpisodePage(props) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
             />
+            <noscript>
+                <iframe
+                    src={schemaEmbedUrl}
+                    width="100%"
+                    height="450"
+                    allowFullScreen
+                    title={`${showDetails.name} Season ${seasonNum} Episode ${episodeNum}`}
+                />
+            </noscript>
             <WatchTVClient
                 id={showId}
                 showDetails={showDetails}

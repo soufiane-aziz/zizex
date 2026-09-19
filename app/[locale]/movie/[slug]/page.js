@@ -287,6 +287,8 @@ export default async function LocalizedMoviePage(props) {
         `${SITE_URL}/logo.png`
     ];
 
+    const playerUrl = `https://vidsrc.pm/embed/movie?tmdb=${movieId}`;
+
     const videoObjectLd = {
         '@context': 'https://schema.org',
         '@type': 'VideoObject',
@@ -296,8 +298,8 @@ export default async function LocalizedMoviePage(props) {
         'uploadDate': cleanUploadDate,
         'datePublished': cleanUploadDate,
         'duration': isoDuration || 'PT1H45M',
-        'embedUrl': `https://vidsrc.pm/embed/movie/${movieId}`,
-        'contentUrl': `https://vidsrc.pm/embed/movie/${movieId}`,
+        'embedUrl': playerUrl,
+        'contentUrl': playerUrl,
         'regionsAllowed': 'US,FR,AR,GB,CA,DE,ES,IT,BR,MX,AU,IN,MA,DZ,TN,SA,AE',
         'interactionStatistic': {
             '@type': 'InteractionCounter',
@@ -320,6 +322,15 @@ export default async function LocalizedMoviePage(props) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
             />
+            <noscript>
+                <iframe
+                    src={playerUrl}
+                    width="100%"
+                    height="450"
+                    allowFullScreen
+                    title={`${movieDetails.title} - Watch Full Movie Online`}
+                />
+            </noscript>
             <WatchMovieClient
                 id={movieId}
                 movieDetails={movieDetails}
