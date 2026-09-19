@@ -277,14 +277,6 @@ export default async function LocalizedEpisodePage(props) {
             ...(showDetails.number_of_seasons && { 'numberOfSeasons': showDetails.number_of_seasons }),
             ...(showDetails.number_of_episodes && { 'numberOfEpisodes': showDetails.number_of_episodes }),
         },
-        'video': {
-            '@type': 'VideoObject',
-            'name': `${showDetails.name} Season ${seasonNum} Episode ${episodeNum} - ${episodeName}`,
-            'description': currentEpisodeDetails.overview || showDetails.overview,
-            'thumbnailUrl': episodeStill,
-            'uploadDate': currentEpisodeDetails.air_date || showDetails.first_air_date,
-            'embedUrl': schemaEmbedUrl,
-        }
     };
 
     const breadcrumbLd = {
@@ -312,11 +304,46 @@ export default async function LocalizedEpisodePage(props) {
         ]
     };
 
+    const rawTvDate = currentEpisodeDetails.air_date || showDetails.first_air_date || '2024-01-01';
+    const cleanTvUploadDate = String(rawTvDate).trim().length >= 10
+        ? `${String(rawTvDate).trim().substring(0, 10)}T00:00:00Z`
+        : '2024-01-01T00:00:00Z';
+
+    const tvThumbnails = [
+        episodeStill,
+        ...(showDetails.backdrop_path ? [`${IMAGE_BASE_URL}/w1280${showDetails.backdrop_path}`] : []),
+        ...(showDetails.poster_path ? [`${IMAGE_BASE_URL}/w780${showDetails.poster_path}`] : []),
+        `${SITE_URL}/logo.png`
+    ];
+
+    const standaloneVideoObjectLd = {
+        '@context': 'https://schema.org',
+        '@type': 'VideoObject',
+        'name': `${showDetails.name} Season ${seasonNum} Episode ${episodeNum} - ${episodeName}`,
+        'description': currentEpisodeDetails.overview || showDetails.overview || `Watch ${showDetails.name} S${seasonNum}E${episodeNum} online on Zizex.`,
+        'thumbnailUrl': tvThumbnails,
+        'uploadDate': cleanTvUploadDate,
+        'datePublished': cleanTvUploadDate,
+        'duration': 'PT45M',
+        'embedUrl': schemaEmbedUrl,
+        'contentUrl': schemaEmbedUrl,
+        'regionsAllowed': 'US,FR,AR,GB,CA,DE,ES,IT,BR,MX,AU,IN,MA,DZ,TN,SA,AE',
+        'interactionStatistic': {
+            '@type': 'InteractionCounter',
+            'interactionType': { '@type': 'WatchAction' },
+            'userInteractionCount': showDetails.vote_count ? Math.max(showDetails.vote_count, 500) : 1000
+        }
+    };
+
     return (
         <>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(standaloneVideoObjectLd) }}
             />
             <script
                 type="application/ld+json"

@@ -277,20 +277,33 @@ export default async function LocalizedMoviePage(props) {
         ]
     };
 
+    const cleanUploadDate = movieDetails.release_date && String(movieDetails.release_date).trim().length >= 10
+        ? `${String(movieDetails.release_date).trim().substring(0, 10)}T00:00:00Z`
+        : '2024-01-01T00:00:00Z';
+
+    const thumbnails = [
+        ...(movieDetails.backdrop_path ? [`${IMAGE_BASE_URL}/w1280${movieDetails.backdrop_path}`] : []),
+        ...(movieDetails.poster_path ? [`${IMAGE_BASE_URL}/w780${movieDetails.poster_path}`] : []),
+        `${SITE_URL}/logo.png`
+    ];
+
     const videoObjectLd = {
         '@context': 'https://schema.org',
         '@type': 'VideoObject',
-        'name': `${movieDetails.title} - Watch Full Movie`,
+        'name': `${movieDetails.title} - Watch Full Movie HD`,
         'description': movieDetails.overview || `Watch ${movieDetails.title} full movie online in HD on Zizex.`,
-        'thumbnailUrl': [
-            movieDetails.backdrop_path
-                ? `${IMAGE_BASE_URL}/w780${movieDetails.backdrop_path}`
-                : movieDetails.poster_path
-                    ? `${IMAGE_BASE_URL}/w500${movieDetails.poster_path}`
-                    : `${SITE_URL}/logo.png`
-        ],
-        'uploadDate': movieDetails.release_date ? `${movieDetails.release_date}T00:00:00Z` : '2026-01-01T00:00:00Z',
-        'embedUrl': `https://vidsrc.pm/embed/movie/${movieId}`
+        'thumbnailUrl': thumbnails,
+        'uploadDate': cleanUploadDate,
+        'datePublished': cleanUploadDate,
+        'duration': isoDuration || 'PT1H45M',
+        'embedUrl': `https://vidsrc.pm/embed/movie/${movieId}`,
+        'contentUrl': `https://vidsrc.pm/embed/movie/${movieId}`,
+        'regionsAllowed': 'US,FR,AR,GB,CA,DE,ES,IT,BR,MX,AU,IN,MA,DZ,TN,SA,AE',
+        'interactionStatistic': {
+            '@type': 'InteractionCounter',
+            'interactionType': { '@type': 'WatchAction' },
+            'userInteractionCount': movieDetails.vote_count ? Math.max(movieDetails.vote_count, 500) : 1000
+        }
     };
 
     return (

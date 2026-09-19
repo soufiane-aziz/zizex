@@ -26,18 +26,22 @@ const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
 
 // ─── Fetchers ─────────────────────────────────────────────────────────────────
-async function fetchPages(endpoint: string, pages: number): Promise<any[]> {
+async function fetchPageRange(endpoint: string, startPage: number, endPage: number): Promise<any[]> {
   if (!API_KEY) return [];
-  const nums = Array.from({ length: pages }, (_, i) => i + 1);
+  const pages = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i);
+  }
   try {
     const responses = await Promise.all(
-      nums.map(p =>
-        fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&page=${p}`, {
+      pages.map(p => {
+        const sep = endpoint.includes('?') ? '&' : '?';
+        return fetch(`${BASE_URL}${endpoint}${sep}api_key=${API_KEY}&page=${p}`, {
           next: { revalidate: 604800 },
         })
           .then(r => (r.ok ? r.json() : null))
-          .catch(() => null),
-      ),
+          .catch(() => null);
+      }),
     );
     return responses.flatMap(d => d?.results ?? []);
   } catch {
@@ -45,12 +49,15 @@ async function fetchPages(endpoint: string, pages: number): Promise<any[]> {
   }
 }
 
-async function fetchTrendingPages(type: string, pages: number): Promise<any[]> {
+async function fetchTrendingRange(type: string, startPage: number, endPage: number): Promise<any[]> {
   if (!API_KEY) return [];
-  const nums = Array.from({ length: pages }, (_, i) => i + 1);
+  const pages = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i);
+  }
   try {
     const responses = await Promise.all(
-      nums.map(p =>
+      pages.map(p =>
         fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}&page=${p}`, {
           next: { revalidate: 604800 },
         })
@@ -75,12 +82,11 @@ function safeDate(dateStr?: string | null): Date {
   if (!clean || clean.length < 4) return now;
   try {
     const d = new Date(clean);
-    // Google Search Console rejects dates older than 2010 or in the future
-    if (d instanceof Date && !isNaN(d.getTime()) && d.getFullYear() >= 2010 && d <= now) {
+    if (d instanceof Date && !isNaN(d.getTime()) && d.getFullYear() >= 2000 && d <= now) {
       return d;
     }
   } catch {
-    // Fallback to current date on any parsing exception
+    // Fallback
   }
   return now;
 }
@@ -93,29 +99,38 @@ function buildAlternates(path: string): Record<string, string> {
 }
 
 // ─── generateSitemaps ─────────────────────────────────────────────────────────
-// id 0 = popular movies   (pages 1-20)
-// id 1 = trending movies  (pages 1-10)
-// id 2 = top-rated movies (pages 1-10)
-// Each batch can have up to ~400 unique movies × 3 locales = ~1200 URLs, well under 50k
+// Generates 12 sub-sitemaps (0 to 11) for ~1,200 movies × 3 locales = ~3,600 URLs
 export async function generateSitemaps() {
-  return [{ id: '0' }, { id: '1' }, { id: '2' }];
+  return Array.from({ length: 12 }, (_, i) => ({ id: String(i) }));
 }
 
 // ─── Sitemap: Movies ─────────────────────────────────────────────────────────
-// Served at: /movies/sitemap/0.xml  /movies/sitemap/1.xml  /movies/sitemap/2.xml
-// Submitted to GSC as: /movies/sitemap.xml (index)
+// Served at: /movies/sitemap/0.xml ... /movies/sitemap/11.xml
 export default async function sitemap(props: {
   id: Promise<string>;
 }): Promise<MetadataRoute.Sitemap> {
   const id = await props.id;
+  const sId = parseInt(id, 10) || 0;
 
   let movies: any[] = [];
-  if (id === '0') {
-    movies = await fetchPages('/movie/popular', 5);
-  } else if (id === '1') {
-    movies = await fetchTrendingPages('movie', 3);
-  } else if (id === '2') {
-    movies = await fetchPages('/movie/top_rated', 3);
+  if (sId >= 0 && sId <= 4) {
+    // Popular movies (pages 1..25 split into 5 batches)
+    const start = sId * 5 + 1;
+    movies = await fetchPageRange('/movie/popular', start, start + 4);
+  } else if (sId >= 5 && sId <= 7) {
+    // Top-rated movies (pages 1..15 split into 3 batches)
+    const start = (sId - 5) * 5 + 1;
+    movies = await fetchPageRange('/movie/top_rated', start, start + 4);
+  } else if (sId >= 8 && sId <= 9) {
+    // Trending movies (pages 1..10 split into 2 batches)
+    const start = (sId - 8) * 5 + 1;
+    movies = await fetchTrendingRange('movie', start, start + 4);
+  } else if (sId === 10) {
+    // Action & Adventure movies
+    movies = await fetchPageRange('/discover/movie?with_genres=28,12&sort_by=popularity.desc', 1, 5);
+  } else if (sId === 11) {
+    // Sci-Fi, Animation & Thriller movies
+    movies = await fetchPageRange('/discover/movie?with_genres=878,16,53&sort_by=popularity.desc', 1, 5);
   }
 
   const seen = new Set<string>();
