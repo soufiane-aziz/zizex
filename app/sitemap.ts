@@ -1,4 +1,4 @@
-﻿import type { MetadataRoute } from 'next';
+import type { MetadataRoute } from 'next';
 
 // ─── Cache: 7-day CDN revalidation ───────────────────────────────────────────
 export const revalidate = 604800;
@@ -33,7 +33,7 @@ function safeUrl(url: string): string {
 function buildAlternates(path: string): Record<string, string> {
   const alt: Record<string, string> = {};
   LOCALES.forEach(loc => { alt[loc] = safeUrl(`${SITE_URL}/${loc}${path}`); });
-  alt['x-default'] = safeUrl(`${SITE_URL}/en${path}`);
+  alt['x-default'] = safeUrl(`${SITE_URL}${path || '/'}`);
   return alt;
 }
 
@@ -55,7 +55,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         en: safeUrl(`${SITE_URL}/en`),
         fr: safeUrl(`${SITE_URL}/fr`),
         ar: safeUrl(`${SITE_URL}/ar`),
-        'x-default': safeUrl(`${SITE_URL}/en`),
+        'x-default': safeUrl(`${SITE_URL}/`),
       },
     },
   });

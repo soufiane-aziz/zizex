@@ -328,6 +328,17 @@ export default async function LocalizedEpisodePage(props) {
         'embedUrl': schemaEmbedUrl,
         'contentUrl': schemaEmbedUrl,
         'regionsAllowed': 'US,FR,AR,GB,CA,DE,ES,IT,BR,MX,AU,IN,MA,DZ,TN,SA,AE',
+        'isPartOf': {
+            '@type': 'WebSite',
+            '@id': 'https://zizex.vercel.app/#website',
+            'name': 'Zizex',
+            'url': 'https://zizex.vercel.app/'
+        },
+        'provider': {
+            '@type': 'Organization',
+            '@id': 'https://zizex.vercel.app/#organization',
+            'name': 'Zizex'
+        },
         'interactionStatistic': {
             '@type': 'InteractionCounter',
             'interactionType': { '@type': 'WatchAction' },

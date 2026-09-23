@@ -103,13 +103,17 @@ export default function RootLayout({ children }) {
                   "@id": "https://zizex.vercel.app/#website",
                   "url": "https://zizex.vercel.app/",
                   "name": "Zizex",
-                  "alternateName": ["Zizex", "zizex", "Zizex Streaming"],
-                  "description": "Watch free movies and TV shows online in HD on Zizex.",
+                  "alternateName": ["Zizex", "zizex", "Zizex Streaming", "Zizex App", "zizex.vercel.app", "موقع Zizex"],
+                  "description": "Zizex is the official free movies and TV shows streaming platform online in HD.",
+                  "inLanguage": ["en", "fr", "ar"],
+                  "publisher": {
+                    "@id": "https://zizex.vercel.app/#organization"
+                  },
                   "potentialAction": {
                     "@type": "SearchAction",
                     "target": {
                       "@type": "EntryPoint",
-                      "urlTemplate": "https://zizex.vercel.app/en/search?q={search_term_string}"
+                      "urlTemplate": "https://zizex.vercel.app/en?q={search_term_string}"
                     },
                     "query-input": "required name=search_term_string"
                   }
@@ -119,7 +123,22 @@ export default function RootLayout({ children }) {
                   "@id": "https://zizex.vercel.app/#organization",
                   "name": "Zizex",
                   "url": "https://zizex.vercel.app/",
-                  "logo": "https://zizex.vercel.app/icon.png"
+                  "logo": "https://zizex.vercel.app/icon.png",
+                  "description": "Official Zizex Streaming Platform",
+                  "sameAs": []
+                },
+                {
+                  "@type": "WebPage",
+                  "@id": "https://zizex.vercel.app/#webpage",
+                  "url": "https://zizex.vercel.app/",
+                  "name": "Zizex - Free Movies & TV Shows Streaming Platform",
+                  "description": "Stream thousands of top movies and TV series free on Zizex.",
+                  "isPartOf": {
+                    "@id": "https://zizex.vercel.app/#website"
+                  },
+                  "about": {
+                    "@id": "https://zizex.vercel.app/#organization"
+                  }
                 }
               ]
             })

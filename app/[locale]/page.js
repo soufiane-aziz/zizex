@@ -42,22 +42,22 @@ export async function generateMetadata(props) {
     const isFr = locale === 'fr';
 
     const title = isAr
-        ? 'Zizex - شاهد أفلام ومسلسلات أونلاين مجاناً'
+        ? 'Zizex - موقع Zizex مشاهدة أفلام ومسلسلات أونلاين مجاناً'
         : isFr
-            ? 'Zizex - Regarder Films et Séries en Streaming Gratuit'
-            : 'Zizex - Watch Movies & TV Shows Online Free';
+            ? 'Zizex - Regarder Films et Séries en Streaming Gratuit | Site Officiel'
+            : 'Zizex - Watch Free Movies & TV Shows Online | Official Site';
 
     const description = isAr
-        ? 'استمتع بأفضل الأفلام والمسلسلات مجاناً وبجودة عالية على Zizex.'
+        ? 'موقع Zizex الأصلي لمشاهدة أحدث الأفلام والمسلسلات مجاناً وبجودة عالية HD بدون إعلانات مزعجة.'
         : isFr
-            ? 'Regardez gratuitement les meilleurs films et séries sur Zizex.'
-            : 'Stream the best movies and TV shows for free on Zizex.';
+            ? 'Zizex est la plateforme officielle pour regarder gratuitement les meilleurs films et séries en streaming HD.'
+            : 'Zizex is the official free streaming platform to watch thousands of top movies and TV series free online in HD.';
 
     const keywords = isAr
-        ? ['موقع zizex', 'مشاهدة افلام اونلاين', 'افلام ومسلسلات مجانا', 'موقع سيما', 'افلام مترجمة اونلاين', 'مسلسلات رمضان 2026', 'تحميل افلام مجانا', 'موقع مشاهدة افلام', 'افلام اكشن مترجمة', 'مسلسلات اجنبية مترجمة', 'موقع برستيج', 'ايجي بست البديل', 'السينما للجميع', 'افلام اون لاين hd', 'موقع سيما فور يو', 'مشاهدة مسلسلات اونلاين', 'افلام رعب مترجمة', 'موقع ماي سيما', 'افلام هندية مترجمة', 'تحميل مسلسلات مجانا', 'نتفليكس', 'موقع نتفليكس مجانا', 'ايجي بست', 'ماي سيما الاصلي', 'سيما فور يو', 'برستيج مسلسلات', 'شاهد افضل الافلام', 'عرب سيد', 'فاصل اعلاني', 'اكوام', 'توك توك سيما']
+        ? ['zizex', 'Zizex', 'zizex.vercel.app', 'موقع zizex', 'منصة zizex', 'zizex streaming', 'مشاهدة افلام اونلاين', 'افلام ومسلسلات مجانا', 'موقع سيما', 'افلام مترجمة اونلاين', 'تحميل افلام مجانا', 'موقع مشاهدة افلام', 'افلام اكشن مترجمة', 'مسلسلات اجنبية مترجمة', 'ايجي بست البديل', 'السينما للجميع']
         : isFr
-            ? ['zizex streaming', 'regarder films gratuits', 'streaming vf', 'film streaming gratuit', 'site de streaming film', 'series tv streaming', 'cinema en ligne', 'voir film gratuit', 'top film streaming', 'streaming hd gratuit', 'films complets vf', 'series streaming gratuit', 'platforme de streaming', 'cinema streaming gratuit', 'nouveautes films streaming', 'voir series en streaming', 'streaming gratuit sans inscription', 'films streaming vf et vostfr', 'meilleur site streaming', 'film d action streaming', 'Netflix gratuit', 'TopCinema streaming', 'Cima4U streaming', 'MyCima vf', 'Wawacity streaming', 'Frenchstream alternative', 'Zone-Telechargement', 'Cpasbien film']
-            : ['zizex', 'Zizex', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies free', 'sci-fi series online', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch free tv shows', 'best movie streaming site', 'cinema streaming free', 'Netflix', 'watch Netflix movies free', 'HBO Max streaming', 'Disney Plus free', 'TopCinema', 'EgyBest alternative', 'MyCima', 'Cima4U', 'Shahid VIP free', 'WatchIt movies'];
+            ? ['zizex', 'Zizex', 'zizex.vercel.app', 'zizex streaming', 'site zizex', 'zizex official', 'regarder films gratuits', 'streaming vf', 'film streaming gratuit', 'site de streaming film', 'series tv streaming', 'cinema en ligne', 'voir film gratuit', 'top film streaming', 'streaming hd gratuit', 'films complets vf']
+            : ['zizex', 'Zizex', 'zizex.vercel.app', 'zizex streaming', 'zizex app', 'zizex site', 'zizex official', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site'];
 
     return {
         title,
@@ -69,7 +69,7 @@ export async function generateMetadata(props) {
                 'en': `${SITE_URL}/en`,
                 'fr': `${SITE_URL}/fr`,
                 'ar': `${SITE_URL}/ar`,
-                'x-default': `${SITE_URL}/en`,
+                'x-default': `${SITE_URL}/`,
             }
         },
         openGraph: {
@@ -94,11 +94,6 @@ export async function generateMetadata(props) {
             description,
             images: [`${SITE_URL}/og-image.jpg?v=6`],
         },
-        keywords: isAr
-            ? ['أفلام', 'مسلسلات', 'مشاهدة مجانية', 'فيلم', 'مسلسل', 'بث مباشر', 'HD']
-            : isFr
-                ? ['films', 'séries', 'streaming gratuit', 'regarder en ligne', 'HD', 'cinéma']
-                : ['watch movies online', 'free streaming', 'TV shows', 'HD movies', 'watch online free'],
     };
 }
 

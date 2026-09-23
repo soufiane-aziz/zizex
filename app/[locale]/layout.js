@@ -21,42 +21,33 @@ export default async function LocaleLayout(props) {
     const isRtl = locale === 'ar';
 
     const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
-    const websiteJsonLd = {
+    const webPageJsonLd = {
         '@context': 'https://schema.org',
-        '@type': 'WebSite',
-        'name': 'Zizex',
+        '@type': 'WebPage',
+        '@id': `${SITE_URL}/${locale}#webpage`,
         'url': `${SITE_URL}/${locale}`,
-        'potentialAction': {
-            '@type': 'SearchAction',
-            'target': {
-                '@type': 'EntryPoint',
-                'urlTemplate': `${SITE_URL}/${locale}?q={search_term_string}`
-            },
-            'query-input': 'required name=search_term_string'
+        'name': locale === 'ar'
+            ? 'Zizex - موقع Zizex مشاهدة أفلام ومسلسلات أونلاين مجاناً'
+            : locale === 'fr'
+                ? 'Zizex - Regarder Films et Séries en Streaming Gratuit | Site Officiel'
+                : 'Zizex - Watch Free Movies & TV Shows Online | Official Site',
+        'inLanguage': locale,
+        'isPartOf': {
+            '@type': 'WebSite',
+            '@id': 'https://zizex.vercel.app/#website',
+            'name': 'Zizex',
+            'url': 'https://zizex.vercel.app/'
         }
-    };
-
-    const organizationJsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'Organization',
-        'name': 'Zizex',
-        'url': `${SITE_URL}/${locale}`,
-        'logo': `${SITE_URL}/logo.png`
     };
 
     return (
         <div dir={isRtl ? 'rtl' : 'ltr'} lang={locale} className={inter.className}>
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
             />
             {children}
             <InstallPWA locale={locale} />
-
         </div>
     );
 }
