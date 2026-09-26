@@ -14,11 +14,11 @@ export const metadata = {
   keywords: ['zizex', 'Zizex', 'watch movies online', 'streaming platform', 'HD movies streaming', 'TV series online', 'top rated movies', 'latest cinema releases', 'watch series', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies', 'sci-fi series', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch tv shows', 'movie streaming site', 'cinema streaming'],
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
       { url: '/icon.png', sizes: '512x512', type: 'image/png' },
-      { url: '/logo.png', sizes: '512x512', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/logo.png', sizes: '1024x1024', type: 'image/png' },
     ],
-    shortcut: '/favicon.ico',
+    shortcut: '/icon.png',
     apple: [
       { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
@@ -69,9 +69,9 @@ export default function RootLayout({ children }) {
     <html lang="en" className="dark">
       <head>
         {/* Favicon & Site Icons for Google Search and Browsers */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
-        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="shortcut icon" href="/icon.png" />
         <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
 
 
