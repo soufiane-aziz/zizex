@@ -55,6 +55,7 @@ export default function Footer() {
               <li><Link href={`/${locale}/movies`} className="hover:text-red-500 transition-colors duration-200">Movies</Link></li>
               <li><Link href={`/${locale}/tv`} className="hover:text-red-500 transition-colors duration-200">TV Shows</Link></li>
               <li><Link href={`/${locale}/top-rated`} className="hover:text-red-500 transition-colors duration-200">Top Rated</Link></li>
+              <li><Link href={`/${locale}/trending`} className="hover:text-red-500 transition-colors duration-200">Trending</Link></li>
             </ul>
           </div>
 
@@ -63,12 +64,9 @@ export default function Footer() {
             <h4 className="text-xs font-semibold uppercase tracking-widest text-zinc-300">Company</h4>
             <ul className="space-y-3 text-sm text-zinc-500">
               <li>
-                <button 
-                  onClick={() => setActiveModal('about')} 
-                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none cursor-pointer"
-                >
+                <Link href={`/${locale}/about`} className="hover:text-red-500 transition-colors duration-200">
                   About Us
-                </button>
+                </Link>
               </li>
               <li>
                 <button 
@@ -79,12 +77,9 @@ export default function Footer() {
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => setActiveModal('contact')} 
-                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none cursor-pointer"
-                >
+                <Link href={`/${locale}/contact`} className="hover:text-red-500 transition-colors duration-200">
                   Contact Support
-                </button>
+                </Link>
               </li>
             </ul>
           </div>
@@ -102,12 +97,9 @@ export default function Footer() {
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => setActiveModal('privacy')} 
-                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none cursor-pointer"
-                >
+                <Link href={`/${locale}/privacy`} className="hover:text-red-500 transition-colors duration-200">
                   Privacy Policy
-                </button>
+                </Link>
               </li>
               <li>
                 <button 

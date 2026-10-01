@@ -165,6 +165,7 @@ export default function Navbar({ locale, contentType }) {
   const isMoviesActive = contentType === 'movie' || pathname.includes(`/${resolvedLocale}/movie`);
   const isTvActive = contentType === 'tv' || pathname.includes(`/${resolvedLocale}/tv`);
   const isTopRatedActive = contentType === 'top_rated' || pathname.includes(`/${resolvedLocale}/top-rated`);
+  const isTrendingActive = pathname.includes(`/${resolvedLocale}/trending`);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-12 py-2 sm:py-2.5 bg-black/50 backdrop-blur-md border-b border-white/10 shadow-lg">
@@ -184,18 +185,21 @@ export default function Navbar({ locale, contentType }) {
       </div>
 
       {/* 2. ZONE CENTRALE : MENU PC & TABLETTE (PARFAITEMENT CENTRÉ) */}
-      <div className="hidden sm:flex flex-1 items-center justify-center gap-6 md:gap-8 lg:gap-10 text-xs md:text-sm tracking-wider uppercase shrink-0 mx-4">
-        <Link href={`${homeBase}`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`relative py-1 cursor-pointer focus:outline-none transition-all duration-300 text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isHomeActive ? 'font-black after:w-full' : 'font-bold after:w-0 hover:after:w-full'}`}>
+      <div className="hidden sm:flex flex-1 items-center justify-center gap-4 md:gap-8 lg:gap-10 text-xs md:text-sm tracking-wider uppercase shrink-0 mx-4">
+        <Link href={`${homeBase}`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`relative py-1 whitespace-nowrap cursor-pointer focus:outline-none transition-all duration-300 text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isHomeActive ? 'font-black after:w-full' : 'font-bold after:w-0 hover:after:w-full'}`}>
           Home
         </Link>
-        <Link href={`${homeBase}/movies`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`relative py-1 cursor-pointer focus:outline-none transition-all duration-300 text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isMoviesActive ? 'font-black after:w-full' : 'font-bold after:w-0 hover:after:w-full'}`}>
+        <Link href={`${homeBase}/movies`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`relative py-1 whitespace-nowrap cursor-pointer focus:outline-none transition-all duration-300 text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isMoviesActive ? 'font-black after:w-full' : 'font-bold after:w-0 hover:after:w-full'}`}>
           Movies
         </Link>
-        <Link href={`${homeBase}/tv`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`relative py-1 cursor-pointer focus:outline-none transition-all duration-300 text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isTvActive ? 'font-black after:w-full' : 'font-bold after:w-0 hover:after:w-full'}`}>
+        <Link href={`${homeBase}/tv`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`relative py-1 whitespace-nowrap cursor-pointer focus:outline-none transition-all duration-300 text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isTvActive ? 'font-black after:w-full' : 'font-bold after:w-0 hover:after:w-full'}`}>
           TV
         </Link>
-        <Link href={`${homeBase}/top-rated`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`relative py-1 cursor-pointer focus:outline-none transition-all duration-300 text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isTopRatedActive ? 'font-black after:w-full' : 'font-bold after:w-0 hover:after:w-full'}`}>
+        <Link href={`${homeBase}/top-rated`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`relative py-1 whitespace-nowrap cursor-pointer focus:outline-none transition-all duration-300 text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isTopRatedActive ? 'font-black after:w-full' : 'font-bold after:w-0 hover:after:w-full'}`}>
           Top Rated
+        </Link>
+        <Link href={`${homeBase}/trending`} onClick={() => { setSearchQuery(''); setSuggestions([]); setIsSearchInputVisible(false); }} className={`relative py-1 whitespace-nowrap cursor-pointer focus:outline-none transition-all duration-300 text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-600 after:transition-all after:duration-300 ${isTrendingActive ? 'font-black after:w-full' : 'font-bold after:w-0 hover:after:w-full'}`}>
+          Trending
         </Link>
       </div>
 
@@ -364,6 +368,18 @@ export default function Navbar({ locale, contentType }) {
               >
                 <span>Top Rated</span>
                 {isTopRatedActive && <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />}
+              </Link>
+
+              <Link
+                href={`${homeBase}/trending`}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`px-5 py-3 text-left transition-all duration-200 flex items-center justify-between font-extrabold ${isTrendingActive
+                  ? 'bg-gradient-to-r from-red-600/20 to-red-600/5 text-red-500 border-l-4 border-red-600'
+                  : 'text-gray-300 hover:text-white hover:bg-white/[0.06] border-l-4 border-transparent'
+                  }`}
+              >
+                <span>Trending</span>
+                {isTrendingActive && <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />}
               </Link>
             </div>
           )}

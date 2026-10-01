@@ -67,23 +67,23 @@ export default async function AboutPage(props) {
 
         features: isAr
             ? [
-                { icon: '🎬', title: 'مكتبة ضخمة', desc: 'آلاف الأفلام والمسلسلات من مختلف الأنواع والأجيال.' },
-                { icon: '🌍', title: 'محتوى متعدد اللغات', desc: 'استمتع بالمحتوى باللغة العربية والإنجليزية والفرنسية.' },
-                { icon: '📱', title: 'متوافق مع جميع الأجهزة', desc: 'شاهد على الهاتف أو الجهاز اللوحي أو الحاسوب بسهولة.' },
-                { icon: '🆓', title: 'مجاني 100%', desc: 'لا اشتراكات، لا بطاقات ائتمانية. استمتع مجاناً للأبد.' },
+                { icon: 'fa-film', title: 'مكتبة ضخمة', desc: 'آلاف الأفلام والمسلسلات من مختلف الأنواع والأجيال.' },
+                { icon: 'fa-globe', title: 'محتوى متعدد اللغات', desc: 'استمتع بالمحتوى باللغة العربية والإنجليزية والفرنسية.' },
+                { icon: 'fa-mobile-screen', title: 'متوافق مع جميع الأجهزة', desc: 'شاهد على الهاتف أو الجهاز اللوحي أو الحاسوب بسهولة.' },
+                { icon: 'fa-circle-check', title: 'مجاني 100%', desc: 'لا اشتراكات، لا بطاقات ائتمانية. استمتع مجاناً للأبد.' },
             ]
             : isFr
                 ? [
-                    { icon: '🎬', title: 'Catalogue Immense', desc: 'Des milliers de films et séries de tous genres et époques.' },
-                    { icon: '🌍', title: 'Multi-langue', desc: 'Profitez du contenu en Français, Anglais et Arabe.' },
-                    { icon: '📱', title: 'Tous Appareils', desc: 'Regardez sur mobile, tablette ou ordinateur facilement.' },
-                    { icon: '🆓', title: '100% Gratuit', desc: 'Aucun abonnement, aucune carte bancaire. Gratuit pour toujours.' },
+                    { icon: 'fa-film', title: 'Catalogue Immense', desc: 'Des milliers de films et séries de tous genres et époques.' },
+                    { icon: 'fa-globe', title: 'Multi-langue', desc: 'Profitez du contenu en Français, Anglais et Arabe.' },
+                    { icon: 'fa-mobile-screen', title: 'Tous Appareils', desc: 'Regardez sur mobile, tablette ou ordinateur facilement.' },
+                    { icon: 'fa-circle-check', title: '100% Gratuit', desc: 'Aucun abonnement, aucune carte bancaire. Gratuit pour toujours.' },
                 ]
                 : [
-                    { icon: '🎬', title: 'Huge Library', desc: 'Thousands of movies and TV shows across all genres and eras.' },
-                    { icon: '🌍', title: 'Multi-language', desc: 'Enjoy content in English, French, and Arabic.' },
-                    { icon: '📱', title: 'All Devices', desc: 'Watch on mobile, tablet, or desktop with ease.' },
-                    { icon: '🆓', title: '100% Free', desc: 'No subscriptions, no credit cards. Free forever.' },
+                    { icon: 'fa-film', title: 'Huge Library', desc: 'Thousands of movies and TV shows across all genres and eras.' },
+                    { icon: 'fa-globe', title: 'Multi-language', desc: 'Enjoy content in English, French, and Arabic.' },
+                    { icon: 'fa-mobile-screen', title: 'All Devices', desc: 'Watch on mobile, tablet, or desktop with ease.' },
+                    { icon: 'fa-circle-check', title: '100% Free', desc: 'No subscriptions, no credit cards. Free forever.' },
                 ],
 
         faq: isAr
@@ -111,205 +111,97 @@ export default async function AboutPage(props) {
         ctaHref: `/${locale}`,
     };
 
-    // FAQ JSON-LD for Google rich snippets
     const faqJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
         'mainEntity': content.faq.map(({ q, a }) => ({
             '@type': 'Question',
             'name': q,
-            'acceptedAnswer': {
-                '@type': 'Answer',
-                'text': a,
-            },
+            'acceptedAnswer': { '@type': 'Answer', 'text': a },
         })),
     };
 
-    // BreadcrumbList JSON-LD
     const breadcrumbJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         'itemListElement': [
-            {
-                '@type': 'ListItem',
-                'position': 1,
-                'name': 'Zizex',
-                'item': `${SITE_URL}/${locale}`,
-            },
-            {
-                '@type': 'ListItem',
-                'position': 2,
-                'name': isAr ? 'من نحن' : isFr ? 'À Propos' : 'About',
-                'item': `${SITE_URL}/${locale}/about`,
-            },
+            { '@type': 'ListItem', 'position': 1, 'name': 'Zizex', 'item': `${SITE_URL}/${locale}` },
+            { '@type': 'ListItem', 'position': 2, 'name': isAr ? 'من نحن' : isFr ? 'À Propos' : 'About', 'item': `${SITE_URL}/${locale}/about` },
         ],
     };
 
     return (
         <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-            />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
 
-            <main
-                dir={isAr ? 'rtl' : 'ltr'}
-                style={{
-                    minHeight: '100vh',
-                    background: 'linear-gradient(135deg, #0a0a0f 0%, #111827 50%, #0a0a0f 100%)',
-                    color: '#f1f5f9',
-                    fontFamily: "'Inter', 'Segoe UI', sans-serif",
-                    padding: '0',
-                }}
-            >
+            <main dir={isAr ? 'rtl' : 'ltr'} className="min-h-screen bg-dark-bg text-gray-200">
+
                 {/* Hero */}
-                <section
-                    style={{
-                        textAlign: 'center',
-                        padding: '80px 20px 60px',
-                        background: 'linear-gradient(180deg, rgba(99,102,241,0.15) 0%, transparent 100%)',
-                        borderBottom: '1px solid rgba(99,102,241,0.2)',
-                    }}
-                >
-                    <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🎬</div>
-                    <h1
-                        style={{
-                            fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-                            fontWeight: 800,
-                            background: 'linear-gradient(135deg, #a78bfa, #6366f1, #60a5fa)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            margin: '0 0 16px',
-                        }}
-                    >
-                        {content.hero.headline}
+                <section className="border-b border-zinc-800/60 text-center px-5 pt-20 pb-16">
+                    <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
+                        <span className="text-crimson-600">Ziz</span><span className="text-white">ex</span>
+                        <span className="text-gray-400 font-light block sm:inline sm:ms-3 text-2xl sm:text-3xl mt-1 sm:mt-0">
+                            — {isAr ? 'من نحن' : isFr ? 'À Propos' : 'About Us'}
+                        </span>
                     </h1>
-                    <p
-                        style={{
-                            fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
-                            color: '#94a3b8',
-                            maxWidth: '640px',
-                            margin: '0 auto',
-                            lineHeight: 1.7,
-                        }}
-                    >
+                    <p className="text-gray-400 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
                         {content.hero.sub}
                     </p>
                 </section>
 
                 {/* Mission */}
-                <section
-                    style={{
-                        maxWidth: '820px',
-                        margin: '60px auto',
-                        padding: '0 20px',
-                    }}
-                >
-                    <div
-                        style={{
-                            background: 'rgba(99,102,241,0.08)',
-                            border: '1px solid rgba(99,102,241,0.25)',
-                            borderRadius: '20px',
-                            padding: '40px',
-                        }}
-                    >
-                        <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#a78bfa', margin: '0 0 16px' }}>
-                            {content.mission.title}
-                        </h2>
-                        <p style={{ fontSize: '1.1rem', color: '#cbd5e1', lineHeight: 1.8, margin: 0 }}>
-                            {content.mission.body}
-                        </p>
+                <section className="max-w-3xl mx-auto px-5 py-14">
+                    <div className="bg-dark-card border border-zinc-800/60 rounded-2xl p-8 sm:p-10">
+                        <div className="flex items-center gap-3 mb-5">
+                            <div className="h-[3px] w-8 bg-crimson-600 rounded" />
+                            <h2 className="text-xl font-bold text-white">{content.mission.title}</h2>
+                        </div>
+                        <p className="text-gray-400 leading-relaxed text-base">{content.mission.body}</p>
                     </div>
                 </section>
 
                 {/* Features */}
-                <section style={{ maxWidth: '1000px', margin: '0 auto 60px', padding: '0 20px' }}>
-                    <div
-                        style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-                            gap: '20px',
-                        }}
-                    >
+                <section className="max-w-5xl mx-auto px-5 pb-14">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                         {content.features.map((f, i) => (
-                            <div
-                                key={i}
-                                style={{
-                                    background: 'rgba(255,255,255,0.04)',
-                                    border: '1px solid rgba(255,255,255,0.08)',
-                                    borderRadius: '16px',
-                                    padding: '28px 24px',
-                                    textAlign: 'center',
-                                    transition: 'transform 0.2s, border-color 0.2s',
-                                }}
-                            >
-                                <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>{f.icon}</div>
-                                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#e2e8f0', margin: '0 0 8px' }}>{f.title}</h3>
-                                <p style={{ fontSize: '0.9rem', color: '#94a3b8', margin: 0, lineHeight: 1.6 }}>{f.desc}</p>
+                            <div key={i} className="bg-dark-card border border-zinc-800/60 rounded-xl p-6 text-center hover:border-crimson-700/50 transition-colors duration-200">
+                                <i className={`fa-solid ${f.icon} text-crimson-600 text-2xl mb-4 block`} />
+                                <h3 className="text-white font-bold text-sm mb-2">{f.title}</h3>
+                                <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
                             </div>
                         ))}
                     </div>
                 </section>
 
                 {/* FAQ */}
-                <section style={{ maxWidth: '820px', margin: '0 auto 60px', padding: '0 20px' }}>
-                    <h2
-                        style={{
-                            fontSize: '1.75rem',
-                            fontWeight: 700,
-                            textAlign: 'center',
-                            color: '#e2e8f0',
-                            marginBottom: '32px',
-                        }}
-                    >
-                        {isAr ? 'الأسئلة الشائعة' : isFr ? 'Questions Fréquentes' : 'Frequently Asked Questions'}
-                    </h2>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <section className="max-w-3xl mx-auto px-5 pb-14">
+                    <div className="flex items-center gap-3 mb-8">
+                        <div className="h-[3px] w-8 bg-crimson-600 rounded" />
+                        <h2 className="text-xl font-bold text-white">
+                            {isAr ? 'الأسئلة الشائعة' : isFr ? 'Questions Fréquentes' : 'Frequently Asked Questions'}
+                        </h2>
+                    </div>
+                    <div className="flex flex-col gap-3">
                         {content.faq.map((item, i) => (
-                            <div
-                                key={i}
-                                style={{
-                                    background: 'rgba(255,255,255,0.04)',
-                                    border: '1px solid rgba(255,255,255,0.08)',
-                                    borderRadius: '12px',
-                                    padding: '20px 24px',
-                                }}
-                            >
-                                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#a78bfa', margin: '0 0 8px' }}>
-                                    {item.q}
-                                </h3>
-                                <p style={{ fontSize: '0.95rem', color: '#94a3b8', margin: 0, lineHeight: 1.7 }}>
-                                    {item.a}
-                                </p>
+                            <div key={i} className="bg-dark-card border border-zinc-800/60 rounded-xl p-5 hover:border-zinc-700 transition-colors duration-200">
+                                <h3 className="text-white font-semibold text-sm mb-2">{item.q}</h3>
+                                <p className="text-gray-500 text-sm leading-relaxed">{item.a}</p>
                             </div>
                         ))}
                     </div>
                 </section>
 
                 {/* CTA */}
-                <section style={{ textAlign: 'center', padding: '0 20px 80px' }}>
+                <section className="text-center px-5 pb-20">
                     <a
                         href={content.ctaHref}
-                        style={{
-                            display: 'inline-block',
-                            padding: '16px 40px',
-                            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                            color: '#fff',
-                            fontWeight: 700,
-                            fontSize: '1.1rem',
-                            borderRadius: '50px',
-                            textDecoration: 'none',
-                            boxShadow: '0 8px 32px rgba(99,102,241,0.4)',
-                            transition: 'transform 0.2s, box-shadow 0.2s',
-                        }}
+                        className="inline-block px-8 py-3 bg-crimson-600 hover:bg-crimson-700 text-white font-bold rounded-lg transition-colors duration-200 text-sm"
                     >
                         {content.ctaLabel}
                     </a>
                 </section>
+
             </main>
         </>
     );

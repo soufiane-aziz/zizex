@@ -7,8 +7,7 @@ const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY
 const BASE_URL = "https://api.themoviedb.org/3";
 
 const UNIFIED_GENRES = [
-    { name: { en: "Action", fr: "Action", ar: "أكشن" }, movieIds: "28", tvId: "10759" },
-    { name: { en: "Adventure", fr: "Aventure", ar: "مغامرة" }, movieIds: "12", tvId: "10759" },
+    { name: { en: "Action & Adventure", fr: "Action & Aventure", ar: "أكشن ومغامرة" }, movieIds: "28,12", tvId: "10759" },
     { name: { en: "Animation", fr: "Animation", ar: "أنيميشن" }, movieIds: "16", tvId: "16" },
     { name: { en: "Comedy", fr: "Comédie", ar: "كوميدي" }, movieIds: "35", tvId: "35" },
     { name: { en: "Crime", fr: "Crime", ar: "جريمة" }, movieIds: "80", tvId: "80" },
@@ -120,16 +119,6 @@ export default async function TopRatedPage(props) {
     }
 
     heroMovies = primaryDataResults.slice(0, 10);
-    const remainingPrimary = primaryDataResults.slice(10);
-
-    if (remainingPrimary.length > 0) {
-        let rowTitle = locale === 'ar' ? "الأعلى تقييمًا" : locale === 'fr' ? "Succès Mieux Notés" : "Top Rated Hits";
-        allCategories.push({
-            id: 'primary-dynamic-row',
-            name: rowTitle,
-            movies: remainingPrimary,
-        });
-    }
 
     const blendedGenres = await Promise.all(
         UNIFIED_GENRES.map(async (genre) => {
@@ -158,7 +147,7 @@ export default async function TopRatedPage(props) {
 
             return {
                 id: `blended-${resolvedRowName.toLowerCase().replace(/\s+/g, '-')}`,
-                name: locale === 'ar' ? `الأعلى تقييمًا: ${resolvedRowName}` : locale === 'fr' ? `Top Mieux Notés: ${resolvedRowName}` : `Top Rated ${resolvedRowName}`,
+                name: resolvedRowName,
                 movies: blendedList,
                 movieGenreId: genre.movieIds,
                 tvGenreId: genre.tvId,

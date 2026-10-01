@@ -184,26 +184,26 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
         <div className={`w-full relative z-10 ${isExpanded ? 'min-h-screen' : 'mb-10 sm:mb-14'}`}>
 
             {/* ROW HEADER BLOCK */}
-            <div className={`flex justify-between items-center transition-all duration-300 ${isExpanded
+            <div className={`flex justify-between items-center gap-2 sm:gap-4 transition-all duration-300 ${isExpanded
                 ? 'fixed top-0 left-0 right-0 w-full bg-[#050505]/95 backdrop-blur-md py-4 sm:py-5 px-4 sm:px-8 border-b border-white/10 z-[100] shadow-2xl'
-                : 'mb-4 sm:mb-6 relative z-20 px-2 sm:px-0'
+                : 'mb-3 sm:mb-6 relative z-20 px-2 sm:px-0'
                 }`}>
-                <h2 className={`font-black flex items-center gap-2 sm:gap-4 tracking-wider uppercase text-gray-100 transition-all duration-300 ${isExpanded ? 'text-lg sm:text-3xl' : 'text-xl sm:text-2xl'
+                <h2 className={`font-black flex items-center gap-1.5 sm:gap-3 tracking-wider uppercase text-gray-100 min-w-0 transition-all duration-300 ${isExpanded ? 'text-base sm:text-3xl' : 'text-sm sm:text-xl md:text-2xl'
                     }`}>
-                    <span className="w-1 sm:w-1.5 h-4 sm:h-6 rounded-sm bg-amber-500"></span>
-                    {title}
+                    <span className="w-1 sm:w-1.5 h-3.5 sm:h-6 rounded-sm bg-amber-500 shrink-0"></span>
+                    <span className="truncate whitespace-nowrap">{title}</span>
                 </h2>
 
                 <button
                     onClick={() => onExpandToggle(!isExpanded)}
                     aria-label={isExpanded ? closeText : viewAllText}
-                    className={`group/btn flex items-center gap-1.5 sm:gap-2.5 text-xs sm:text-sm font-black tracking-wide uppercase transition-all duration-200 cursor-pointer ${isExpanded
+                    className={`group/btn flex items-center gap-1.5 sm:gap-2.5 text-xs sm:text-sm font-black tracking-wide uppercase transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${isExpanded
                         ? 'px-3 sm:px-5 py-2 sm:py-2.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-black shadow-md'
                         : 'text-amber-500 hover:text-amber-400'
                         }`}
                 >
-                    <span>{isExpanded ? closeText : viewAllText}</span>
-                    <i className={`text-[11px] sm:text-xs transform transition-transform duration-200 ${isExpanded
+                    <span className="whitespace-nowrap">{isExpanded ? closeText : viewAllText}</span>
+                    <i className={`text-[11px] sm:text-xs transform transition-transform duration-200 shrink-0 ${isExpanded
                         ? 'fa-solid fa-xmark text-sm group-hover/btn:rotate-90'
                         : `fa-solid ${isAr ? 'fa-chevron-left' : 'fa-chevron-right'} group-hover/btn:translate-x-1.5`
                         }`}></i>

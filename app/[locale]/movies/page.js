@@ -99,7 +99,7 @@ export default async function MoviesPage(props) {
     const remainingPrimary = primaryDataResults.slice(10);
 
     if (remainingPrimary.length > 0) {
-        let rowTitle = locale === 'ar' ? "أفلام متداولة" : locale === 'fr' ? "Films Tendances" : "Trending Movies";
+        let rowTitle = locale === 'ar' ? "الأكثر مشاهدة الآن" : locale === 'fr' ? "Tendances du Moment" : "Trending Now";
         allCategories.push({
             id: 'primary-dynamic-row',
             name: rowTitle,
@@ -108,7 +108,22 @@ export default async function MoviesPage(props) {
     }
 
     const genreListData = await fetchFromTMDB(`/genre/${contentType}/list`, langQuery);
-    const genres = genreListData?.genres || [];
+    const rawGenres = genreListData?.genres || [];
+    
+    // Combine Action (28) and Adventure (12) into a single Action & Adventure category
+    const actionAdvName = locale === 'ar' ? 'أكشن ومغامرة' : locale === 'fr' ? 'Action & Aventure' : 'Action & Adventure';
+    const genres = [];
+    let addedActionAdv = false;
+    for (const g of rawGenres) {
+        if (g.id === 28 || g.id === 12) {
+            if (!addedActionAdv) {
+                genres.push({ id: '28,12', name: actionAdvName });
+                addedActionAdv = true;
+            }
+        } else {
+            genres.push(g);
+        }
+    }
 
     const dynamicGenres = await Promise.all(
         genres.map(async (genre) => {

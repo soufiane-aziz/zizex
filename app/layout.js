@@ -74,6 +74,15 @@ export default function RootLayout({ children }) {
         <link rel="shortcut icon" href="/icon.png?v=2" />
         <link rel="apple-touch-icon" href="/apple-icon.png?v=2" sizes="180x180" />
 
+        {/* Preload hero / OG image — improves LCP (Core Web Vitals) */}
+        <link
+          rel="preload"
+          href="/og-image.jpg"
+          as="image"
+          type="image/jpeg"
+          fetchPriority="high"
+        />
+
         {/* DNS / Preconnect — open TCP connections early for critical resources */}
         <link rel="preconnect" href="https://image.tmdb.org" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.themoviedb.org" />

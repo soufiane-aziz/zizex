@@ -7,8 +7,7 @@ const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY
 const BASE_URL = "https://api.themoviedb.org/3";
 
 const UNIFIED_GENRES = [
-    { name: { en: "Action", fr: "Action", ar: "أكشن" }, movieIds: "28", tvId: "10759" },
-    { name: { en: "Adventure", fr: "Aventure", ar: "مغامرة" }, movieIds: "12", tvId: "10759" },
+    { name: { en: "Action & Adventure", fr: "Action & Aventure", ar: "أكشن ومغامرة" }, movieIds: "28,12", tvId: "10759" },
     { name: { en: "Animation", fr: "Animation", ar: "أنيميشن" }, movieIds: "16", tvId: "16" },
     { name: { en: "Comedy", fr: "Comédie", ar: "كوميدي" }, movieIds: "35", tvId: "35" },
     { name: { en: "Crime", fr: "Crime", ar: "جريمة" }, movieIds: "80", tvId: "80" },
@@ -147,19 +146,7 @@ export default async function LocalizedHomePage(props) {
     if (remainingPrimary.length > 0) {
         let rowTitle = filterType === 'top_rated'
             ? (locale === 'ar' ? "الأعلى تقييمًا" : locale === 'fr' ? "Succès Mieux Notés" : "Top Rated Hits")
-            : (locale === 'ar' ? "المتداول الآن" : locale === 'fr' ? "Tendances Actuelles" : "Trending Now");
-
-        if (contentType !== 'all') {
-            if (filterType === 'top_rated') {
-                rowTitle = contentType === 'movie'
-                    ? (locale === 'ar' ? "أفلام أعلى تقييمًا" : locale === 'fr' ? "Films Mieux Notés" : "Top Rated Movies")
-                    : (locale === 'ar' ? "مسلسلات أعلى تقييمًا" : locale === 'fr' ? "Séries Mieux Notées" : "Top Rated TV");
-            } else {
-                rowTitle = contentType === 'movie'
-                    ? (locale === 'ar' ? "أفلام متداولة" : locale === 'fr' ? "Films Tendances" : "Trending Movies")
-                    : (locale === 'ar' ? "مسلسلات متداولة" : locale === 'fr' ? "Séries Tendances" : "Trending TV");
-            }
-        }
+            : (locale === 'ar' ? "الأكثر مشاهدة الآن" : locale === 'fr' ? "Tendances du Moment" : "Trending Now");
 
         allCategories.push({
             id: 'primary-dynamic-row',

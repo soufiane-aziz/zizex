@@ -99,7 +99,7 @@ export default async function TVPage(props) {
     const remainingPrimary = primaryDataResults.slice(10);
 
     if (remainingPrimary.length > 0) {
-        let rowTitle = locale === 'ar' ? "مسلسلات متداولة" : locale === 'fr' ? "Séries Tendances" : "Trending TV Shows";
+        let rowTitle = locale === 'ar' ? "الأكثر مشاهدة الآن" : locale === 'fr' ? "Tendances du Moment" : "Trending Now";
         allCategories.push({
             id: 'primary-dynamic-row',
             name: rowTitle,
