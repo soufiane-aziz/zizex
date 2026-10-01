@@ -14,13 +14,13 @@ export const metadata = {
   keywords: ['zizex', 'ziz ex', 'Zizex', 'ZIZEX', 'ziz-ex', 'Ziz Ex', 'ZIZ EX', 'zizex.vercel.app', 'zizex streaming', 'zizex app', 'zizex official', 'watch movies online', 'streaming platform', 'HD movies streaming', 'TV series online', 'top rated movies', 'latest cinema releases'],
   icons: {
     icon: [
-      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/logo.png', sizes: '1024x1024', type: 'image/png' },
+      { url: '/icon.png?v=2', sizes: '512x512', type: 'image/png' },
+      { url: '/favicon.ico?v=2', sizes: 'any' },
+      { url: '/logo.png?v=2', sizes: '1024x1024', type: 'image/png' },
     ],
-    shortcut: '/icon.png',
+    shortcut: '/icon.png?v=2',
     apple: [
-      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: '/apple-icon.png?v=2', sizes: '180x180', type: 'image/png' },
     ],
   },
   openGraph: {
@@ -31,7 +31,7 @@ export const metadata = {
     type: 'website',
     images: [
       {
-        url: 'https://zizex.vercel.app/og-image.jpg',
+        url: 'https://zizex.vercel.app/og-image.jpg?v=2',
         width: 1024,
         height: 1024,
         alt: 'Zizex - Watch Movies & TV Shows For Free',
@@ -42,7 +42,7 @@ export const metadata = {
     card: 'summary',
     title: 'Zizex - Free Movies & TV Shows Streaming',
     description: 'Stream thousands of top movies and TV series free on Zizex.',
-    images: ['https://zizex.vercel.app/og-image.jpg'],
+    images: ['https://zizex.vercel.app/og-image.jpg?v=2'],
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM',
@@ -69,10 +69,10 @@ export default function RootLayout({ children }) {
     <html lang="en" className="dark">
       <head>
         {/* Favicon & Site Icons for Google Search and Browsers */}
-        <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="shortcut icon" href="/icon.png" />
-        <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
+        <link rel="icon" href="/icon.png?v=2" type="image/png" sizes="512x512" />
+        <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
+        <link rel="shortcut icon" href="/icon.png?v=2" />
+        <link rel="apple-touch-icon" href="/apple-icon.png?v=2" sizes="180x180" />
 
         {/* DNS / Preconnect — open TCP connections early for critical resources */}
         <link rel="preconnect" href="https://image.tmdb.org" crossOrigin="anonymous" />
