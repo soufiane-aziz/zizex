@@ -166,6 +166,37 @@ export default function RootLayout({ children }) {
                   "isPartOf": {
                     "@id": "https://zizex.vercel.app/#website"
                   }
+                },
+                {
+                  "@type": "ItemList",
+                  "@id": "https://zizex.vercel.app/#sitenavigation",
+                  "name": "Zizex Navigation",
+                  "itemListElement": [
+                    {
+                      "@type": "SiteNavigationElement",
+                      "position": 1,
+                      "name": "Movies",
+                      "url": "https://zizex.vercel.app/en/movies"
+                    },
+                    {
+                      "@type": "SiteNavigationElement",
+                      "position": 2,
+                      "name": "TV Shows",
+                      "url": "https://zizex.vercel.app/en/tv"
+                    },
+                    {
+                      "@type": "SiteNavigationElement",
+                      "position": 3,
+                      "name": "Top Rated",
+                      "url": "https://zizex.vercel.app/en/top-rated"
+                    },
+                    {
+                      "@type": "SiteNavigationElement",
+                      "position": 4,
+                      "name": "Trending",
+                      "url": "https://zizex.vercel.app/en/trending"
+                    }
+                  ]
                 }
               ]
             })
