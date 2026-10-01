@@ -22,7 +22,8 @@ const BRAND_PAGES: { path: string; priority: number; freq: string }[] = [
   { path: '/top-rated', priority: 0.80, freq: 'weekly'  },
   { path: '/trending',  priority: 0.80, freq: 'daily'   },
   { path: '/search',    priority: 0.70, freq: 'weekly'  },
-  { path: '/about',     priority: 0.60, freq: 'monthly' },
+  { path: '/about',     priority: 0.65, freq: 'monthly' },
+  { path: '/contact',   priority: 0.60, freq: 'monthly' },
 ];
 
 function safeUrl(url: string): string {

@@ -59,6 +59,8 @@ async function handleSubmission() {
       urlSet.add(`${SITE_URL}/${loc}/movies`);
       urlSet.add(`${SITE_URL}/${loc}/tv`);
       urlSet.add(`${SITE_URL}/${loc}/top-rated`);
+      urlSet.add(`${SITE_URL}/${loc}/about`);
+      urlSet.add(`${SITE_URL}/${loc}/contact`);
     });
 
     popularMovies.forEach(movie => {
