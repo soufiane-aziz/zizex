@@ -134,7 +134,7 @@ export default function WatchTVClient({
     }, [currentSeason, currentEpisode]);
 
     // Show loading overlay while the iframe loads.
-    // Auto-switch to next server after 8s if vidsrc.pm (or any server) stalls.
+    // Auto-switch to next server if Server 1 (or any server) stalls.
     const autoSwitchTimerRef = useRef(null);
     const slowHintTimerRef = useRef(null);
     useEffect(() => {
@@ -236,12 +236,12 @@ export default function WatchTVClient({
     }
 
     const baseServers = [
-        { id: 'server1', name: 'Server 1', url: `https://vidsrc.pm/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
-        { id: 'server2', name: 'Server 2', url: `https://autoembed.co/tv/tmdb/${id}-${currentSeason}-${currentEpisode}` },
-        { id: 'server3', name: 'Server 3', url: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}` },
-        { id: 'server4', name: 'Server 4', url: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
-        { id: 'server5', name: 'Server 5', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}?primaryColor=E50914&autoplay=true` },
-        { id: 'server6', name: 'Server 6', url: `https://www.2embed.cc/embedtv/${id}&s=${currentSeason}&e=${currentEpisode}` },
+        { id: 'server1', name: 'Server 1', url: `https://autoembed.co/tv/tmdb/${id}-${currentSeason}-${currentEpisode}` },
+        { id: 'server2', name: 'Server 2', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}?primaryColor=E50914&autoplay=true` },
+        { id: 'server3', name: 'Server 3', url: `https://embedder.to/e/?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
+        { id: 'server4', name: 'Server 4', url: `https://vidsrc.to/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server5', name: 'Server 5', url: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
+        { id: 'server6', name: 'Server 6', url: `https://111movies.com/tv/${id}/${currentSeason}/${currentEpisode}` },
     ];
 
     const filteredBaseServers = showVip

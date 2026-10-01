@@ -8,7 +8,7 @@ const ALLOWED_AD_DOMAINS = [
   'adsterra',
   'as.net',
   'exdynsrv',
-  'vidsrc.pm',
+  'vidsrc.cc',
   'vidsrc.me',
   'autoembed.co',
   'multiembed.mov',

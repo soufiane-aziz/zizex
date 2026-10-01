@@ -9,7 +9,7 @@ const ALLOWED_PATTERNS = [
   'adsterra',
   'as.net',
   'exdynsrv',
-  'vidsrc.pm',
+  'vidsrc.cc',
   'vidsrc.me',
   'autoembed.co',
   'multiembed.mov',

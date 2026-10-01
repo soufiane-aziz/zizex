@@ -37,7 +37,7 @@ export default function WatchMovieClient({
     }, []);
 
     // Show loading overlay until real iframe onLoad fires.
-    // Auto-switch to next server after 8s if vidsrc.pm (or any server) stalls.
+    // Auto-switch to next server if Server 1 (or any server) stalls.
     const autoSwitchTimerRef = useRef(null);
     const slowHintTimerRef = useRef(null);
     useEffect(() => {
@@ -164,12 +164,12 @@ export default function WatchMovieClient({
     const showVip = hasVipMapping;
 
     const baseServers = [
-        { id: 'server1', name: 'Server 1', url: `https://vidsrc.pm/embed/movie?tmdb=${id}` },
-        { id: 'server2', name: 'Server 2', url: `https://autoembed.co/movie/tmdb/${id}` },
-        { id: 'server3', name: 'Server 3', url: `https://multiembed.mov/?video_id=${id}&tmdb=1` },
-        { id: 'server4', name: 'Server 4', url: `https://vidsrc.me/embed/movie?tmdb=${id}` },
-        { id: 'server5', name: 'Server 5', url: `https://vidlink.pro/movie/${id}?primaryColor=E50914&autoplay=true` },
-        { id: 'server6', name: 'Server 6', url: `https://www.2embed.cc/embed/${id}` },
+        { id: 'server1', name: 'Server 1', url: `https://autoembed.co/movie/tmdb/${id}` },
+        { id: 'server2', name: 'Server 2', url: `https://vidlink.pro/movie/${id}?primaryColor=E50914&autoplay=true` },
+        { id: 'server3', name: 'Server 3', url: `https://embedder.to/e/?tmdb=${id}` },
+        { id: 'server4', name: 'Server 4', url: `https://vidsrc.to/embed/movie/${id}` },
+        { id: 'server5', name: 'Server 5', url: `https://vidsrc.me/embed/movie?tmdb=${id}` },
+        { id: 'server6', name: 'Server 6', url: `https://111movies.com/movie/${id}` },
     ];
 
     const filteredBaseServers = showVip

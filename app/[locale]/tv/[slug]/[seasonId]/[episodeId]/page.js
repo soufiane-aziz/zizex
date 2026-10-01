@@ -5,6 +5,14 @@ import { createSlug, extractIdFromSlug } from '../../../../../../lib/slug';
 export const revalidate = 604800; // 7 days caching on Edge CDN
 export const dynamicParams = true;
 
+export async function generateStaticParams() {
+    return [
+        { locale: 'en', slug: 'watch-trending-1', seasonId: 'season-1', episodeId: 'episode-1' },
+        { locale: 'fr', slug: 'watch-trending-1', seasonId: 'season-1', episodeId: 'episode-1' },
+        { locale: 'ar', slug: 'watch-trending-1', seasonId: 'season-1', episodeId: 'episode-1' },
+    ];
+}
+
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'f82feeca535cc0132d1ab38948a70405';
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
@@ -229,7 +237,7 @@ export default async function LocalizedEpisodePage(props) {
             : `${SITE_URL}/logo.png`;
 
     // Embed URL for schema (matches Server 1 player)
-    const schemaEmbedUrl = `https://vidsrc.pm/embed/tv?tmdb=${showId}&season=${seasonNum}&episode=${episodeNum}`;
+    const schemaEmbedUrl = `https://vidlink.pro/tv/${showId}/${seasonNum}/${episodeNum}`;
 
     const tvActors = (tvCredits?.cast || []).slice(0, 8);
     const tvCreators = showDetails.created_by || [];
