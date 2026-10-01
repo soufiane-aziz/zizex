@@ -9,9 +9,9 @@ const AntiAdBlock = dynamic(() => import('../components/AntiAdBlock'));
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app'),
-  title: 'Zizex - Streaming Platform',
-  description: 'Watch your favorite movies and TV shows free on Zizex.',
-  keywords: ['zizex', 'Zizex', 'watch movies online', 'streaming platform', 'HD movies streaming', 'TV series online', 'top rated movies', 'latest cinema releases', 'watch series', 'cinema for you', 'movie streaming site', 'online film platform', 'action movies', 'sci-fi series', 'trending movies 2026', 'hd film streaming', 'stream full movies', 'watch tv shows', 'movie streaming site', 'cinema streaming'],
+  title: 'Zizex - Free Movies & TV Shows Streaming Platform',
+  description: 'Watch your favorite movies and TV shows free on Zizex. Official free streaming platform.',
+  keywords: ['zizex', 'ziz ex', 'Zizex', 'ZIZEX', 'ziz-ex', 'Ziz Ex', 'ZIZ EX', 'zizex.vercel.app', 'zizex streaming', 'zizex app', 'zizex official', 'watch movies online', 'streaming platform', 'HD movies streaming', 'TV series online', 'top rated movies', 'latest cinema releases'],
   icons: {
     icon: [
       { url: '/icon.png', sizes: '512x512', type: 'image/png' },
@@ -74,8 +74,6 @@ export default function RootLayout({ children }) {
         <link rel="shortcut icon" href="/icon.png" />
         <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
 
-
-
         {/* DNS / Preconnect — open TCP connections early for critical resources */}
         <link rel="preconnect" href="https://image.tmdb.org" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.themoviedb.org" />
@@ -91,7 +89,7 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="https://vidsrc.me" />
         <link rel="dns-prefetch" href="https://vidlink.pro" />
 
-        {/* JSON-LD Schema for Brand Ranking */}
+        {/* JSON-LD Schema for Brand Keyword Priority Ranking */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -103,7 +101,19 @@ export default function RootLayout({ children }) {
                   "@id": "https://zizex.vercel.app/#website",
                   "url": "https://zizex.vercel.app/",
                   "name": "Zizex",
-                  "alternateName": ["Zizex", "zizex", "Zizex Streaming", "Zizex App", "zizex.vercel.app", "موقع Zizex"],
+                  "alternateName": [
+                    "Zizex",
+                    "zizex",
+                    "ziz ex",
+                    "Ziz Ex",
+                    "ZIZEX",
+                    "ZIZ EX",
+                    "ziz-ex",
+                    "Zizex Streaming",
+                    "Zizex App",
+                    "zizex.vercel.app",
+                    "موقع Zizex"
+                  ],
                   "description": "Zizex is the official free movies and TV shows streaming platform online in HD.",
                   "inLanguage": ["en", "fr", "ar"],
                   "publisher": {
@@ -129,15 +139,32 @@ export default function RootLayout({ children }) {
                 },
                 {
                   "@type": "WebPage",
-                  "@id": "https://zizex.vercel.app/#webpage",
+                  "@id": "https://zizex.vercel.app/#mainpage",
                   "url": "https://zizex.vercel.app/",
-                  "name": "Zizex - Free Movies & TV Shows Streaming Platform",
-                  "description": "Stream thousands of top movies and TV series free on Zizex.",
+                  "name": "Zizex - Main Official Site",
+                  "description": "Official main page for Zizex free streaming platform.",
                   "isPartOf": {
                     "@id": "https://zizex.vercel.app/#website"
-                  },
-                  "about": {
-                    "@id": "https://zizex.vercel.app/#organization"
+                  }
+                },
+                {
+                  "@type": "WebPage",
+                  "@id": "https://zizex.vercel.app/fr#mainpage",
+                  "url": "https://zizex.vercel.app/fr",
+                  "name": "Zizex French - Site Officiel",
+                  "description": "Page officielle Zizex en Français.",
+                  "isPartOf": {
+                    "@id": "https://zizex.vercel.app/#website"
+                  }
+                },
+                {
+                  "@type": "WebPage",
+                  "@id": "https://zizex.vercel.app/ar#mainpage",
+                  "url": "https://zizex.vercel.app/ar",
+                  "name": "Zizex Arabic - الموقع الرسمي",
+                  "description": "الصفحة الرسمية لـ Zizex باللغة العربية.",
+                  "isPartOf": {
+                    "@id": "https://zizex.vercel.app/#website"
                   }
                 }
               ]

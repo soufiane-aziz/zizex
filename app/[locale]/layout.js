@@ -31,6 +31,11 @@ export default async function LocaleLayout(props) {
             : locale === 'fr'
                 ? 'Zizex - Regarder Films et Séries en Streaming Gratuit | Site Officiel'
                 : 'Zizex - Watch Free Movies & TV Shows Online | Official Site',
+        'description': locale === 'ar'
+            ? 'الموقع الرسمي لـ Zizex باللغة العربية لمشاهدة الأفلام والمسلسلات.'
+            : locale === 'fr'
+                ? 'Site officiel Zizex en Français pour regarder films et séries.'
+                : 'Main official site for Zizex free movies and TV series streaming.',
         'inLanguage': locale,
         'isPartOf': {
             '@type': 'WebSite',

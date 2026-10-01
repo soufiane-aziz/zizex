@@ -17,11 +17,10 @@ const GENRE_SLUGS = [
 
 // ─── Static brand pages (Zizex keyword anchors) ────────────────────────────
 const BRAND_PAGES: { path: string; priority: number; freq: string }[] = [
-  { path: '',           priority: 1.0,  freq: 'daily'   },
-  { path: '/movies',    priority: 0.95, freq: 'daily'   },
-  { path: '/tv',        priority: 0.95, freq: 'daily'   },
-  { path: '/top-rated', priority: 0.85, freq: 'weekly'  },
-  { path: '/trending',  priority: 0.85, freq: 'daily'   },
+  { path: '/movies',    priority: 0.85, freq: 'daily'   },
+  { path: '/tv',        priority: 0.85, freq: 'daily'   },
+  { path: '/top-rated', priority: 0.80, freq: 'weekly'  },
+  { path: '/trending',  priority: 0.80, freq: 'daily'   },
   { path: '/search',    priority: 0.70, freq: 'weekly'  },
   { path: '/about',     priority: 0.60, freq: 'monthly' },
 ];
@@ -39,12 +38,11 @@ function buildAlternates(path: string): Record<string, string> {
 
 // ─── Sitemap 0: Static pages (root + brand + genres) ─────────────────────────
 // Served at: /sitemap.xml
-// Total entries: 1 + (7×3) + (20×3) = 82 URLs
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];
   const now = new Date();
 
-  // 0. Root canonical — highest Zizex brand signal
+  // 1. Top 1: Main Canonical URL (Root & EN) — Priority 1.0
   entries.push({
     url: safeUrl(SITE_URL),
     changeFrequency: 'daily',
@@ -60,7 +58,54 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   });
 
-  // 1. Brand static pages per locale (7 × 3 = 21 entries)
+  entries.push({
+    url: safeUrl(`${SITE_URL}/en`),
+    changeFrequency: 'daily',
+    priority: 1.0,
+    lastModified: now,
+    alternates: {
+      languages: {
+        en: safeUrl(`${SITE_URL}/en`),
+        fr: safeUrl(`${SITE_URL}/fr`),
+        ar: safeUrl(`${SITE_URL}/ar`),
+        'x-default': safeUrl(`${SITE_URL}/`),
+      },
+    },
+  });
+
+  // 2. Top 2: French URL (/fr) — Priority 0.99
+  entries.push({
+    url: safeUrl(`${SITE_URL}/fr`),
+    changeFrequency: 'daily',
+    priority: 0.99,
+    lastModified: now,
+    alternates: {
+      languages: {
+        en: safeUrl(`${SITE_URL}/en`),
+        fr: safeUrl(`${SITE_URL}/fr`),
+        ar: safeUrl(`${SITE_URL}/ar`),
+        'x-default': safeUrl(`${SITE_URL}/`),
+      },
+    },
+  });
+
+  // 3. Top 3: Arabic URL (/ar) — Priority 0.98
+  entries.push({
+    url: safeUrl(`${SITE_URL}/ar`),
+    changeFrequency: 'daily',
+    priority: 0.98,
+    lastModified: now,
+    alternates: {
+      languages: {
+        en: safeUrl(`${SITE_URL}/en`),
+        fr: safeUrl(`${SITE_URL}/fr`),
+        ar: safeUrl(`${SITE_URL}/ar`),
+        'x-default': safeUrl(`${SITE_URL}/`),
+      },
+    },
+  });
+
+  // 4. Brand static pages per locale (/movies, /tv, etc.)
   LOCALES.forEach(locale => {
     BRAND_PAGES.forEach(page => {
       entries.push({
@@ -73,19 +118,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   });
 
-  // 2. Genre pages per locale (20 × 3 = 60 entries)
+  // 5. Genre pages per locale
   LOCALES.forEach(locale => {
     GENRE_SLUGS.forEach(slug => {
       const path = `/genre/${slug}`;
       entries.push({
         url: safeUrl(`${SITE_URL}/${locale}${path}`),
         changeFrequency: 'weekly',
-        priority: 0.70,
+        priority: 0.50,
         lastModified: now,
         alternates: { languages: buildAlternates(path) },
       });
     });
   });
 
-  return entries; // 82 total URLs
+  return entries;
 }

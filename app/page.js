@@ -14,9 +14,9 @@ export async function generateMetadata(props) {
 
   return {
     ...metadata,
-    title: 'Zizex - Free Movies & TV Shows Streaming Platform',
+    title: 'Zizex - Official Free Movies & TV Shows Streaming Platform',
     description: 'Zizex is the official free streaming platform to watch thousands of HD movies and TV series online without registration. Stream top movies and shows on Zizex.',
-    keywords: ['zizex', 'Zizex', 'zizex.vercel.app', 'zizex streaming', 'zizex app', 'zizex site', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'TV series online'],
+    keywords: ['zizex', 'ziz ex', 'Zizex', 'ZIZEX', 'ziz-ex', 'Ziz Ex', 'ZIZ EX', 'zizex.vercel.app', 'zizex streaming', 'zizex app', 'zizex site', 'zizex official', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'TV series online'],
     alternates: {
       canonical: `${SITE_URL}/`,
       languages: {
@@ -27,7 +27,7 @@ export async function generateMetadata(props) {
       },
     },
     openGraph: {
-      title: 'Zizex - Free Movies & TV Shows Streaming Platform',
+      title: 'Zizex - Official Free Movies & TV Shows Streaming Platform',
       description: 'Zizex is the official free streaming platform to watch thousands of HD movies and TV series online without registration.',
       url: `${SITE_URL}/`,
       siteName: 'Zizex',

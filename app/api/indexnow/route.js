@@ -45,7 +45,14 @@ async function handleSubmission() {
       fetchTMDB('/tv/popular', 4),
     ]);
 
-    const urlSet = new Set();
+    const primaryBrandUrls = [
+      `${SITE_URL}/`,
+      `${SITE_URL}/en`,
+      `${SITE_URL}/fr`,
+      `${SITE_URL}/ar`,
+    ];
+
+    const urlSet = new Set(primaryBrandUrls);
 
     LOCALES.forEach(loc => {
       urlSet.add(`${SITE_URL}/${loc}`);

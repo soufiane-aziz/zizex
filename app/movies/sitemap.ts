@@ -150,7 +150,7 @@ export default async function sitemap(props: {
       entries.push({
         url: safeUrl(`${SITE_URL}/${locale}${path}`),
         changeFrequency: 'weekly',
-        priority: 0.60,
+        priority: 0.40,
         lastModified: lastMod,
         alternates: { languages: buildAlternates(path) },
       });
