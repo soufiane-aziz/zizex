@@ -3,6 +3,9 @@ import type { MetadataRoute } from 'next';
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
 
 export default function robots(): MetadataRoute.Robots {
+  const movieSitemaps = Array.from({ length: 12 }, (_, i) => `${SITE_URL}/movies/sitemap/${i}.xml`);
+  const tvSitemaps = Array.from({ length: 12 }, (_, i) => `${SITE_URL}/tv/sitemap/${i}.xml`);
+
   return {
     rules: [
       {
@@ -25,9 +28,9 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: [
-      `${SITE_URL}/sitemap.xml`,          // Root static pages & genres
-      `${SITE_URL}/movies/sitemap.xml`,   // Movies master sitemap index
-      `${SITE_URL}/tv/sitemap.xml`,       // TV shows master sitemap index
+      `${SITE_URL}/sitemap.xml`,
+      ...movieSitemaps,
+      ...tvSitemaps,
     ],
   };
 }
