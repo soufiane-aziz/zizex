@@ -236,9 +236,7 @@ export default function RootLayout({ children }) {
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
-                  gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
-                    page_path: window.location.pathname,
-                  });
+                  gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');
                 `,
               }}
             />
@@ -270,10 +268,10 @@ export default function RootLayout({ children }) {
             `,
           }}
         />
-        {/* SocialBar Ad Script */}
+        {/* SocialBar Ad Script — lazyOnload so it never races with GA4 */}
         <Script
           src="https://bashsecret.com/14/0d/97/140d9749cb302ce1cda4cddc6eccd9b8.js"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
         {/* Service Worker: blocks unauthorized ad redirects from streaming iframes */}
         <Script
