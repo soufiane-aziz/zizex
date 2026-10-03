@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 const BAD_BOT_REGEX = /python|httpx|aiohttp|scrapy|puppeteer|playwright|headlesschrome|selenium|phantomjs|curl\/|wget\/|go-http-client|java\/|node-fetch|axios|postman|libwww-perl|bytespider|petalsearch|semrush|ahrefsbot|mj12bot|dotbot|claudebot|gptbot/i;
 
 // 2. Verified search engine crawlers and social media preview bots to ALLOW
-const GOOD_BOT_REGEX = /googlebot|bingbot|yandex|duckduckbot|slurp|baiduspider|facebookexternalhit|twitterbot|whatsapp|telegrambot|linkedinbot|pinterest/i;
+const GOOD_BOT_REGEX = /google|bing|yandex|duckduck|slurp|baidu|facebook|twitter|whatsapp|telegram|linkedin|pinterest/i;
 
 // 3. Simple Edge sliding window rate limiter (In-Memory per Edge Instance)
 const ipRateMap = new Map();
