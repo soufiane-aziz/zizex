@@ -9,6 +9,7 @@ const AntiAdBlock = dynamic(() => import('../components/AntiAdBlock'));
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app'),
+  manifest: '/manifest.webmanifest',
   title: 'Zizex - Free Movies & TV Shows Streaming Platform',
   description: 'Watch your favorite movies and TV shows free on Zizex. Official free streaming platform.',
   keywords: ['zizex', 'ziz ex', 'Zizex', 'ZIZEX', 'ziz-ex', 'Ziz Ex', 'ZIZ EX', 'zizex.vercel.app', 'zizex streaming', 'zizex app', 'zizex official', 'watch movies online', 'streaming platform', 'HD movies streaming', 'TV series online', 'top rated movies', 'latest cinema releases'],
