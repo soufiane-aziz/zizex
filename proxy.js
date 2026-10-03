@@ -99,8 +99,8 @@ export default function proxy(request) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except static assets
+     * Match all request paths except static assets, sitemaps, robots.txt, feed.xml, and manifests
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|sitemap|robots\\.txt|feed\\.xml|manifest\\.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt)$).*)',
   ],
 };
