@@ -102,12 +102,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <button 
-                  onClick={() => setActiveModal('dmca')} 
-                  className="hover:text-red-500 transition-colors duration-200 text-left focus:outline-none cursor-pointer"
-                >
-                  DMCA
-                </button>
+                <Link href={`/${locale}/dmca`} className="hover:text-red-500 transition-colors duration-200">
+                  DMCA Policy
+                </Link>
               </li>
             </ul>
           </div>
