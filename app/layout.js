@@ -15,13 +15,14 @@ export const metadata = {
   keywords: ['zizex', 'ziz ex', 'Zizex', 'ZIZEX', 'ziz-ex', 'Ziz Ex', 'ZIZ EX', 'zizex.vercel.app', 'zizex streaming', 'zizex app', 'zizex official', 'watch movies online', 'streaming platform', 'HD movies streaming', 'TV series online', 'top rated movies', 'latest cinema releases'],
   icons: {
     icon: [
-      { url: '/icon.png?v=2', sizes: '512x512', type: 'image/png' },
-      { url: '/favicon.ico?v=2', sizes: 'any' },
-      { url: '/logo.png?v=2', sizes: '1024x1024', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon-120x120.png', sizes: '120x120', type: 'image/png' },
+      { url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
     ],
-    shortcut: '/icon.png?v=2',
+    shortcut: '/favicon.ico',
     apple: [
-      { url: '/apple-icon.png?v=2', sizes: '180x180', type: 'image/png' },
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
   openGraph: {
@@ -69,12 +70,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
       <head>
-        {/* Favicon & Site Icons for Google Search and Browsers */}
-        <link rel="icon" href="/icon.png?v=2" type="image/png" sizes="512x512" />
-        <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
-        <link rel="shortcut icon" href="/icon.png?v=2" />
-        <link rel="apple-touch-icon" href="/apple-icon.png?v=2" sizes="180x180" />
-
         {/* Preload hero / OG image — improves LCP (Core Web Vitals) */}
         <link
           rel="preload"
