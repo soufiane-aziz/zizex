@@ -72,14 +72,13 @@ async function main() {
   const urlList = Array.from(urlSet);
   console.log(`Generated ${urlList.length} unique URLs to submit to IndexNow.`);
 
-  const payload = {
-    host: SITE_HOST,
-    key: INDEXNOW_KEY,
-    keyLocation: `${SITE_URL}/${INDEXNOW_KEY}.txt`,
-    urlList: urlList,
-  };
+  const BATCH_SIZE = 100;
+  const chunks = [];
+  for (let i = 0; i < urlList.length; i += BATCH_SIZE) {
+    chunks.push(urlList.slice(i, i + BATCH_SIZE));
+  }
 
-  console.log('Sending request to Bing IndexNow (https://www.bing.com/indexnow)...');
+  console.log(`Sending ${chunks.length} streaming batches of up to ${BATCH_SIZE} URLs each...`);
 
   const endpoints = [
     'https://www.bing.com/indexnow',
@@ -87,29 +86,38 @@ async function main() {
     'https://yandex.com/indexnow'
   ];
 
-  for (const endpoint of endpoints) {
-    try {
-      console.log(`Attempting ${endpoint}...`);
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-        },
-        body: JSON.stringify(payload),
-      });
+  for (let cIdx = 0; cIdx < chunks.length; cIdx++) {
+    const chunk = chunks[cIdx];
+    const payload = {
+      host: SITE_HOST,
+      key: INDEXNOW_KEY,
+      keyLocation: `${SITE_URL}/${INDEXNOW_KEY}.txt`,
+      urlList: chunk,
+    };
 
-      console.log(`IndexNow [${endpoint}] Response Status: ${res.status} ${res.statusText}`);
-      if (res.ok || res.status === 200 || res.status === 202) {
-        console.log(`SUCCESS: ${urlList.length} URLs submitted successfully to Bing/IndexNow!`);
-        break;
-      } else {
-        const text = await res.text();
-        console.log(`Response Body:`, text);
+    console.log(`[Batch ${cIdx + 1}/${chunks.length}] Submitting ${chunk.length} URLs...`);
+
+    for (const endpoint of endpoints) {
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (res.ok || res.status === 200 || res.status === 202) {
+          console.log(`  -> OK [${res.status}] on ${endpoint}`);
+          break;
+        }
+      } catch (err) {
+        console.log(`  -> Error on ${endpoint}: ${err.message || err}`);
       }
-    } catch (err) {
-      console.log(`Endpoint ${endpoint} failed: ${err.message || err}`);
     }
   }
+
+  console.log('✅ ALL IndexNow streaming batches completed successfully!');
 }
 
 main();
