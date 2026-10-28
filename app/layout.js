@@ -7,12 +7,23 @@ import dynamic from 'next/dynamic';
 const AdBlocker = dynamic(() => import('../components/AdBlocker'));
 const AntiAdBlock = dynamic(() => import('../components/AntiAdBlock'));
 
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app').replace(/\/$/, '');
+
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app'),
+  metadataBase: new URL(SITE_URL),
   manifest: '/manifest.webmanifest',
-  title: 'Zizex - Free Movies & TV Shows Streaming Platform',
+  applicationName: 'Zizex',
+  appleWebApp: {
+    title: 'Zizex',
+    statusBarStyle: 'default',
+    capable: true,
+  },
+  title: {
+    default: 'Zizex - Free Movies & TV Shows Streaming Platform',
+    template: '%s | Zizex',
+  },
   description: 'Watch your favorite movies and TV shows free on Zizex. Official free streaming platform.',
-  keywords: ['zizex', 'ziz ex', 'Zizex', 'ZIZEX', 'ziz-ex', 'Ziz Ex', 'ZIZ EX', 'zizex.vercel.app', 'zizex streaming', 'zizex app', 'zizex official', 'watch movies online', 'streaming platform', 'HD movies streaming', 'TV series online', 'top rated movies', 'latest cinema releases'],
+  keywords: ['zizex', 'ziz ex', 'Zizex', 'ZIZEX', 'ziz-ex', 'Ziz Ex', 'ZIZ EX', 'zizex streaming', 'zizex app', 'zizex official', 'watch movies online', 'streaming platform', 'HD movies streaming', 'TV series online', 'top rated movies', 'latest cinema releases'],
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -29,11 +40,11 @@ export const metadata = {
     siteName: 'Zizex',
     title: 'Zizex - Free Movies & TV Shows Streaming Platform',
     description: 'Stream thousands of top movies and TV series free on Zizex.',
-    url: 'https://zizex.vercel.app',
+    url: SITE_URL,
     type: 'website',
     images: [
       {
-        url: 'https://zizex.vercel.app/og-image.jpg?v=2',
+        url: `${SITE_URL}/og-image.jpg?v=2`,
         width: 1024,
         height: 1024,
         alt: 'Zizex - Watch Movies & TV Shows For Free',
@@ -44,7 +55,7 @@ export const metadata = {
     card: 'summary',
     title: 'Zizex - Free Movies & TV Shows Streaming',
     description: 'Stream thousands of top movies and TV series free on Zizex.',
-    images: ['https://zizex.vercel.app/og-image.jpg?v=2'],
+    images: [`${SITE_URL}/og-image.jpg?v=2`],
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM',
@@ -104,8 +115,8 @@ export default function RootLayout({ children }) {
               "@graph": [
                 {
                   "@type": "WebSite",
-                  "@id": "https://zizex.vercel.app/#website",
-                  "url": "https://zizex.vercel.app/",
+                  "@id": `${SITE_URL}/#website`,
+                  "url": `${SITE_URL}/`,
                   "name": "Zizex",
                   "alternateName": [
                     "Zizex",
@@ -117,90 +128,89 @@ export default function RootLayout({ children }) {
                     "ziz-ex",
                     "Zizex Streaming",
                     "Zizex App",
-                    "zizex.vercel.app",
                     "موقع Zizex"
                   ],
                   "description": "Zizex is the official free movies and TV shows streaming platform online in HD.",
                   "inLanguage": ["en", "fr", "ar"],
                   "publisher": {
-                    "@id": "https://zizex.vercel.app/#organization"
+                    "@id": `${SITE_URL}/#organization`
                   },
                   "potentialAction": {
                     "@type": "SearchAction",
                     "target": {
                       "@type": "EntryPoint",
-                      "urlTemplate": "https://zizex.vercel.app/en?q={search_term_string}"
+                      "urlTemplate": `${SITE_URL}/en?q={search_term_string}`
                     },
                     "query-input": "required name=search_term_string"
                   }
                 },
                 {
                   "@type": "Organization",
-                  "@id": "https://zizex.vercel.app/#organization",
+                  "@id": `${SITE_URL}/#organization`,
                   "name": "Zizex",
-                  "url": "https://zizex.vercel.app/",
-                  "logo": "https://zizex.vercel.app/icon.png",
+                  "url": `${SITE_URL}/`,
+                  "logo": `${SITE_URL}/icon.png`,
                   "description": "Official Zizex Streaming Platform",
                   "sameAs": []
                 },
                 {
                   "@type": "WebPage",
-                  "@id": "https://zizex.vercel.app/#mainpage",
-                  "url": "https://zizex.vercel.app/",
+                  "@id": `${SITE_URL}/#mainpage`,
+                  "url": `${SITE_URL}/`,
                   "name": "Zizex - Main Official Site",
                   "description": "Official main page for Zizex free streaming platform.",
                   "isPartOf": {
-                    "@id": "https://zizex.vercel.app/#website"
+                    "@id": `${SITE_URL}/#website`
                   }
                 },
                 {
                   "@type": "WebPage",
-                  "@id": "https://zizex.vercel.app/fr#mainpage",
-                  "url": "https://zizex.vercel.app/fr",
+                  "@id": `${SITE_URL}/fr#mainpage`,
+                  "url": `${SITE_URL}/fr`,
                   "name": "Zizex French - Site Officiel",
                   "description": "Page officielle Zizex en Français.",
                   "isPartOf": {
-                    "@id": "https://zizex.vercel.app/#website"
+                    "@id": `${SITE_URL}/#website`
                   }
                 },
                 {
                   "@type": "WebPage",
-                  "@id": "https://zizex.vercel.app/ar#mainpage",
-                  "url": "https://zizex.vercel.app/ar",
+                  "@id": `${SITE_URL}/ar#mainpage`,
+                  "url": `${SITE_URL}/ar`,
                   "name": "Zizex Arabic - الموقع الرسمي",
                   "description": "الصفحة الرسمية لـ Zizex باللغة العربية.",
                   "isPartOf": {
-                    "@id": "https://zizex.vercel.app/#website"
+                    "@id": `${SITE_URL}/#website`
                   }
                 },
                 {
                   "@type": "ItemList",
-                  "@id": "https://zizex.vercel.app/#sitenavigation",
+                  "@id": `${SITE_URL}/#sitenavigation`,
                   "name": "Zizex Navigation",
                   "itemListElement": [
                     {
                       "@type": "SiteNavigationElement",
                       "position": 1,
                       "name": "Movies",
-                      "url": "https://zizex.vercel.app/en/movies"
+                      "url": `${SITE_URL}/en/movies`
                     },
                     {
                       "@type": "SiteNavigationElement",
                       "position": 2,
                       "name": "TV Shows",
-                      "url": "https://zizex.vercel.app/en/tv"
+                      "url": `${SITE_URL}/en/tv`
                     },
                     {
                       "@type": "SiteNavigationElement",
                       "position": 3,
                       "name": "Top Rated",
-                      "url": "https://zizex.vercel.app/en/top-rated"
+                      "url": `${SITE_URL}/en/top-rated`
                     },
                     {
                       "@type": "SiteNavigationElement",
                       "position": 4,
                       "name": "Trending",
-                      "url": "https://zizex.vercel.app/en/trending"
+                      "url": `${SITE_URL}/en/trending`
                     }
                   ]
                 }

@@ -1,11 +1,7 @@
-import type { MetadataRoute } from 'next';
+// @ts-nocheck
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app').replace(/\/$/, '');
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
-
-export default function robots(): MetadataRoute.Robots {
-  const movieSitemaps = Array.from({ length: 12 }, (_, i) => `${SITE_URL}/movies/sitemap/${i}.xml`);
-  const tvSitemaps = Array.from({ length: 12 }, (_, i) => `${SITE_URL}/tv/sitemap/${i}.xml`);
-
+export default function robots() {
   return {
     rules: [
       {
@@ -15,6 +11,24 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: [
+          // Known anti-piracy crawlers & copyright scrapers (found on Lumen)
+          'MarkScan',
+          'Markscan',
+          'Marketly',
+          'MediaStory',
+          'OpSec',
+          'RedPoints',
+          'Digimarc',
+          'Corsearch',
+          'Link-Busters',
+          'ToppleTrack',
+          'AudioLock',
+          'RemoveYourMedia',
+          'FriendMTS',
+          'Group-IB',
+          'IP-Echelon',
+          'MarkMonitor',
+          // Generic aggressive scrapers
           'Bytespider',
           'PetalBot',
           'AhrefsBot',
@@ -23,15 +37,16 @@ export default function robots(): MetadataRoute.Robots {
           'DotBot',
           'Scrapy',
           'Python',
+          'python-requests',
         ],
         disallow: ['/'],
       },
     ],
+    // Only expose general sitemaps. Detailed movie/tv sitemaps remain accessible
+    // for direct webmaster submission in GSC/Bing without being broadcast to scrapers.
     sitemap: [
       `${SITE_URL}/sitemap.xml`,
       `${SITE_URL}/feed.xml`,
-      ...movieSitemaps,
-      ...tvSitemaps,
     ],
   };
 }
