@@ -83,8 +83,8 @@ export function middleware(request) {
 
   const response = NextResponse.next();
 
-  // Layer 4: Set Edge CDN Cache-Control headers for localized routes
-  if (pathname.startsWith('/en/') || pathname.startsWith('/fr/') || pathname.startsWith('/ar/')) {
+  // Layer 4: Set Edge CDN Cache-Control headers for all public web routes to relieve Origin transfer & CPU
+  if (!pathname.startsWith('/api/')) {
     response.headers.set('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800');
   }
 

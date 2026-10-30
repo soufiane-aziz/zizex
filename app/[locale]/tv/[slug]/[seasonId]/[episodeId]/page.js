@@ -1,6 +1,7 @@
 import React, { cache } from 'react';
 import WatchTVClient from '../../../../../../components/WatchTVClient';
 import { createSlug, extractIdFromSlug } from '../../../../../../lib/slug';
+import { fetchFromTMDB } from '../../../../../../lib/tmdb';
 
 export const revalidate = 604800; // 7 days caching on Edge CDN
 export const dynamicParams = true;
@@ -13,22 +14,7 @@ export async function generateStaticParams() {
     ];
 }
 
-const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'f82feeca535cc0132d1ab38948a70405';
-const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
-
-const fetchFromTMDB = cache(async (path, queryParams = '') => {
-    const url = `${BASE_URL}${path}?api_key=${API_KEY}${queryParams}`;
-    for (let attempt = 0; attempt < 2; attempt++) {
-        try {
-            const res = await fetch(url, { next: { revalidate: 604800 } });
-            if (res.ok) return await res.json();
-        } catch (err) {
-            console.error(`TMDB fetch attempt ${attempt + 1} error for ${path}:`, err);
-        }
-    }
-    return null;
-});
 
 // Helper to resolve TV Show ID from slug
 const resolveTVShowId = cache(async (slug) => {

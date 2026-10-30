@@ -1,19 +1,6 @@
 import { redirect, RedirectType } from 'next/navigation';
 import { createSlug, extractIdFromSlug } from '../../../lib/slug';
-
-const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'f82feeca535cc0132d1ab38948a70405';
-const BASE_URL = "https://api.themoviedb.org/3";
-
-async function fetchFromTMDB(path, queryParams = '') {
-    const url = `${BASE_URL}${path}?api_key=${API_KEY}${queryParams}`;
-    try {
-        const res = await fetch(url, { next: { revalidate: 604800 } });
-        if (!res.ok) return null;
-        return await res.json();
-    } catch {
-        return null;
-    }
-}
+import { fetchFromTMDB } from '../../../lib/tmdb';
 
 export default async function DetailsRedirectPage(props) {
     const params = await props.params;

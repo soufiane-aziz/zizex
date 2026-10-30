@@ -37,7 +37,7 @@ async function fetchPageRange(endpoint: string, startPage: number, endPage: numb
       pages.map(p => {
         const sep = endpoint.includes('?') ? '&' : '?';
         return fetch(`${BASE_URL}${endpoint}${sep}api_key=${API_KEY}&page=${p}`, {
-          next: { revalidate: 604800 },
+          cache: 'no-store',
         })
           .then(r => (r.ok ? r.json() : null))
           .catch(() => null);
@@ -59,7 +59,7 @@ async function fetchTrendingRange(type: string, startPage: number, endPage: numb
     const responses = await Promise.all(
       pages.map(p =>
         fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}&page=${p}`, {
-          next: { revalidate: 604800 },
+          cache: 'no-store',
         })
           .then(r => (r.ok ? r.json() : null))
           .catch(() => null),
@@ -75,7 +75,7 @@ async function fetchTvSeasonCount(id: number): Promise<number> {
   if (!API_KEY) return 2;
   try {
     const res = await fetch(`${BASE_URL}/tv/${id}?api_key=${API_KEY}`, {
-      next: { revalidate: 604800 },
+      cache: 'no-store',
     });
     if (!res.ok) return 2;
     const data = await res.json();

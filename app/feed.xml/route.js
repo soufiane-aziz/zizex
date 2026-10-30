@@ -30,8 +30,8 @@ function escapeXml(unsafe) {
 export async function GET() {
   try {
     const [movieRes, tvRes] = await Promise.all([
-      fetch(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`, { next: { revalidate: 86400 } }),
-      fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}`, { next: { revalidate: 86400 } }),
+      fetch(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`, { cache: 'no-store' }),
+      fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}`, { cache: 'no-store' }),
     ]);
 
     const movieData = movieRes.ok ? await movieRes.json() : null;

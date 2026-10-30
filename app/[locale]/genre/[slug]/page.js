@@ -1,11 +1,9 @@
 import React, { cache } from 'react';
 import HomeClient from '../../../../components/HomeClient';
 import { createSlug } from '../../../../lib/slug';
+import { fetchFromTMDB } from '../../../../lib/tmdb';
 
 export const revalidate = 604800; // 7 days caching on Edge CDN
-
-const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'f82feeca535cc0132d1ab38948a70405';
-const BASE_URL = "https://api.themoviedb.org/3";
 
 const GENRE_MAP = {
     'action': { movie: '28', tv: '10759', title: { en: 'Action Movies & TV', fr: 'Films & Séries Action', ar: 'أفلام ومسلسلات أكشن' } },
@@ -20,18 +18,6 @@ const GENRE_MAP = {
     'mystery': { movie: '9648', tv: '9648', title: { en: 'Mystery Movies & TV', fr: 'Mystère Films & Séries', ar: 'أفلام ومسلسلات غموض' } },
     'sci-fi': { movie: '878', tv: '10765', title: { en: 'Science Fiction Movies & TV', fr: 'Science Fiction Films & Séries', ar: 'أفلام ومسلسلات خيال علمي' } },
 };
-
-const fetchFromTMDB = cache(async (path, queryParams = '') => {
-    const url = `${BASE_URL}${path}?api_key=${API_KEY}${queryParams}`;
-    try {
-        const res = await fetch(url, { next: { revalidate: 604800 } });
-        if (!res.ok) return null;
-        return await res.json();
-    } catch (err) {
-        console.error(`TMDB fetch error for ${path}:`, err);
-        return null;
-    }
-});
 
 export async function generateMetadata(props) {
     const params = await props.params;
