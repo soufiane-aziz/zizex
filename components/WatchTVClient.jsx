@@ -236,12 +236,12 @@ export default function WatchTVClient({
     }
 
     const baseServers = [
-        { id: 'server1', name: 'Server 1', url: `https://autoembed.co/tv/tmdb/${id}-${currentSeason}-${currentEpisode}` },
-        { id: 'server2', name: 'Server 2', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}?primaryColor=E50914&autoplay=true` },
-        { id: 'server3', name: 'Server 3', url: `https://embedder.to/e/?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
-        { id: 'server4', name: 'Server 4', url: `https://vidsrc.to/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
-        { id: 'server5', name: 'Server 5', url: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
-        { id: 'server6', name: 'Server 6', url: `https://111movies.com/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server1', name: 'Server 1 (Fast HLS)', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}?primaryColor=f59e0b&autoplay=false` },
+        { id: 'server2', name: 'Server 2 (Multi-Source)', url: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}` },
+        { id: 'server3', name: 'Server 3 (HD Pro)', url: `https://vidsrc.cc/v2/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server4', name: 'Server 4 (AutoEmbed)', url: `https://player.autoembed.cc/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server5', name: 'Server 5 (VidSrc Cloud)', url: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
+        { id: 'server6', name: 'Server 6 (Smashy)', url: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
     ];
 
     const filteredBaseServers = showVip
