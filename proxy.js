@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
-// 1. Known scraper / bot user-agent patterns
-const BAD_BOT_REGEX = /python|httpx|aiohttp|scrapy|puppeteer|playwright|headlesschrome|selenium|phantomjs|curl\/|wget\/|go-http-client|java\/|node-fetch|axios|postman|libwww-perl|bytespider|petalsearch|semrush|ahrefsbot|mj12bot|dotbot|claudebot|gptbot/i;
+// 1. Known scraper / bot user-agent patterns & Copyright DMCA crawlers
+const BAD_BOT_REGEX = /python|httpx|aiohttp|scrapy|puppeteer|playwright|headlesschrome|selenium|phantomjs|curl\/|wget\/|go-http-client|java\/|node-fetch|axios|postman|libwww-perl|bytespider|petalsearch|semrush|ahrefsbot|mj12bot|dotbot|claudebot|gptbot|markscan|marketly|mediastory|opsec|redpoints|digimarc|corsearch|link-busters|toppletrack|audiolock|removeyourmedia|friendmts|group-ib|ip-echelon|markmonitor/i;
 
 // 2. Verified search engine crawlers and social media preview bots to ALLOW
 const GOOD_BOT_REGEX = /google|bing|yandex|duckduck|slurp|baidu|facebook|twitter|whatsapp|telegram|linkedin|pinterest/i;
