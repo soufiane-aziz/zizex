@@ -282,7 +282,7 @@ export default async function LocalizedMoviePage(props) {
         `${SITE_URL}/logo.png`
     ];
 
-    const playerUrl = `https://vidlink.pro/movie/${movieId}`;
+    const playerUrl = `https://moviesapi.to/movie/${movieId}`;
 
     const videoObjectLd = {
         '@context': 'https://schema.org',

@@ -236,12 +236,12 @@ export default function WatchTVClient({
     }
 
     const baseServers = [
-        { id: 'server1', name: 'Server 1', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}?primaryColor=f59e0b&autoplay=false` },
-        { id: 'server2', name: 'Server 2', url: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}` },
-        { id: 'server3', name: 'Server 3', url: `https://vidsrc.cc/v2/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
-        { id: 'server4', name: 'Server 4', url: `https://player.autoembed.cc/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
-        { id: 'server5', name: 'Server 5', url: `https://vidsrc.me/embed/tv?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
-        { id: 'server6', name: 'Server 6', url: `https://embed.smashystream.com/playere.php?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
+        { id: 'server1', name: 'Server 1', url: `https://moviesapi.to/tv/${id}-${currentSeason}-${currentEpisode}` },
+        { id: 'server2', name: 'Server 2', url: `https://player.smashystream.com/playere.php?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
+        { id: 'server3', name: 'Server 3', url: `https://embedwave.cc/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server4', name: 'Server 4', url: `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}?primaryColor=f59e0b&autoplay=false` },
+        { id: 'server5', name: 'Server 5', url: `https://player.videasy.net/tv/${id}/${currentSeason}/${currentEpisode}` },
+        { id: 'server6', name: 'Server 6', url: `https://vidsrc.pm/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
     ];
 
     const filteredBaseServers = showVip
@@ -253,6 +253,7 @@ export default function WatchTVClient({
         : baseServers;
 
     const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
+    const isSandboxed = !['server4', 'server5', 'server6'].includes(activeServer.id);
 
     const handleServerChange = (serverId) => {
         if (serverId !== activeServerId) {
@@ -433,6 +434,7 @@ export default function WatchTVClient({
                                     allowFullScreen
                                     scrolling="no"
                                     frameBorder="0"
+                                    sandbox={isSandboxed ? "allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock allow-modals" : undefined}
                                     allow="autoplay; encrypted-media; fullscreen; picture-in-picture; remote-playback"
                                     loading="eager"
                                     fetchPriority="high"

@@ -223,7 +223,7 @@ export default async function LocalizedEpisodePage(props) {
             : `${SITE_URL}/logo.png`;
 
     // Embed URL for schema (matches Server 1 player)
-    const schemaEmbedUrl = `https://vidlink.pro/tv/${showId}/${seasonNum}/${episodeNum}`;
+    const schemaEmbedUrl = `https://moviesapi.to/tv/${showId}-${seasonNum}-${episodeNum}`;
 
     const tvActors = (tvCredits?.cast || []).slice(0, 8);
     const tvCreators = showDetails.created_by || [];

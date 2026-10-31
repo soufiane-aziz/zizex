@@ -161,11 +161,19 @@ export default function Navbar({ locale, contentType }) {
     router.push(dynamicHref);
   };
 
-  const isHomeActive = contentType === 'home' || pathname === `/${resolvedLocale}` || pathname === `/${resolvedLocale}/`;
-  const isMoviesActive = contentType === 'movie' || pathname.includes(`/${resolvedLocale}/movie`);
-  const isTvActive = contentType === 'tv' || pathname.includes(`/${resolvedLocale}/tv`);
-  const isTopRatedActive = contentType === 'top_rated' || pathname.includes(`/${resolvedLocale}/top-rated`);
-  const isTrendingActive = pathname.includes(`/${resolvedLocale}/trending`);
+  const [isHomeActive, setIsHomeActive] = useState(false);
+  const [isMoviesActive, setIsMoviesActive] = useState(false);
+  const [isTvActive, setIsTvActive] = useState(false);
+  const [isTopRatedActive, setIsTopRatedActive] = useState(false);
+  const [isTrendingActive, setIsTrendingActive] = useState(false);
+
+  useEffect(() => {
+    setIsHomeActive(contentType === 'home' || pathname === `/${resolvedLocale}` || pathname === `/${resolvedLocale}/`);
+    setIsMoviesActive(contentType === 'movie' || pathname.includes(`/${resolvedLocale}/movie`));
+    setIsTvActive(contentType === 'tv' || pathname.includes(`/${resolvedLocale}/tv`));
+    setIsTopRatedActive(contentType === 'top_rated' || pathname.includes(`/${resolvedLocale}/top-rated`));
+    setIsTrendingActive(pathname.includes(`/${resolvedLocale}/trending`));
+  }, [contentType, pathname, resolvedLocale]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-12 py-2 sm:py-2.5 bg-black/50 backdrop-blur-md border-b border-white/10 shadow-lg">

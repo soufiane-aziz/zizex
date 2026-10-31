@@ -164,12 +164,12 @@ export default function WatchMovieClient({
     const showVip = hasVipMapping;
 
     const baseServers = [
-        { id: 'server1', name: 'Server 1', url: `https://vidlink.pro/movie/${id}?primaryColor=f59e0b&autoplay=false` },
-        { id: 'server2', name: 'Server 2', url: `https://multiembed.mov/?video_id=${id}&tmdb=1` },
-        { id: 'server3', name: 'Server 3', url: `https://vidsrc.cc/v2/embed/movie/${id}` },
-        { id: 'server4', name: 'Server 4', url: `https://player.autoembed.cc/embed/movie/${id}` },
-        { id: 'server5', name: 'Server 5', url: `https://vidsrc.me/embed/movie?tmdb=${id}` },
-        { id: 'server6', name: 'Server 6', url: `https://embed.smashystream.com/playere.php?tmdb=${id}` },
+        { id: 'server1', name: 'Server 1', url: `https://moviesapi.to/movie/${id}` },
+        { id: 'server2', name: 'Server 2', url: `https://player.smashystream.com/playere.php?tmdb=${id}` },
+        { id: 'server3', name: 'Server 3', url: `https://embedwave.cc/embed/movie/${id}` },
+        { id: 'server4', name: 'Server 4', url: `https://vidlink.pro/movie/${id}?primaryColor=f59e0b&autoplay=false` },
+        { id: 'server5', name: 'Server 5', url: `https://player.videasy.net/movie/${id}` },
+        { id: 'server6', name: 'Server 6', url: `https://vidsrc.pm/embed/movie/${id}` },
     ];
 
     const filteredBaseServers = showVip
@@ -181,6 +181,7 @@ export default function WatchMovieClient({
         : baseServers;
 
     const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
+    const isSandboxed = !['server4', 'server5', 'server6'].includes(activeServer.id);
 
     const handleServerChange = (serverId) => {
         if (serverId !== activeServerId) {
@@ -356,6 +357,7 @@ export default function WatchMovieClient({
                                 scrolling="no"
                                 frameBorder="0"
                                 title="Movie Player"
+                                sandbox={isSandboxed ? "allow-scripts allow-same-origin allow-forms allow-presentation allow-pointer-lock allow-modals" : undefined}
                                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture; remote-playback"
                                 loading="eager"
                                 fetchPriority="high"
