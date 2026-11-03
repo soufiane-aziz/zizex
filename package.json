@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "telegram-vip": "node telegram-mtproto.js",
+    "indexnow": "node scripts/submit-indexnow.js",
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check ."

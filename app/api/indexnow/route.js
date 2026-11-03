@@ -1,8 +1,8 @@
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'f82feeca535cc0132d1ab38948a70405';
 const BASE_URL = 'https://api.themoviedb.org/3';
-const SITE_HOST = 'zizex.vercel.app';
+const SITE_HOST = process.env.SITE_HOST || process.env.NEXT_PUBLIC_SITE_HOST || 'zizex-tv.vercel.app';
 const SITE_URL = `https://${SITE_HOST}`;
-const INDEXNOW_KEY = '2eb2044748994acca0ef609dba36cd43';
+const INDEXNOW_KEY = process.env.INDEXNOW_KEY || '1c16825c90304ba8acb2c46cd33ce693';
 const LOCALES = ['en', 'fr', 'ar'];
 
 function createSlug(title, id) {
