@@ -8,8 +8,8 @@ const GOOD_BOT_REGEX = /google|bing|yandex|duckduck|slurp|baidu|facebook|twitter
 
 // 3. Simple Edge sliding window rate limiter (In-Memory per Edge Instance)
 const ipRateMap = new Map();
-const RATE_LIMIT_WINDOW = 30 * 1000; // 30 seconds
-const MAX_REQUESTS_PER_WINDOW = 20;   // Max 20 episode/movie page loads per 30s
+const RATE_LIMIT_WINDOW = 60 * 1000; // 60 seconds
+const MAX_REQUESTS_PER_WINDOW = 120;  // 120 page loads per minute (prevents automated crawler flooding while keeping human browsing flawless)
 
 function isRateLimited(ip) {
   const now = Date.now();
@@ -72,11 +72,19 @@ export function middleware(request) {
   }
 
   // Layer 3: Edge Rate Limiting for rapid automated page crawling
-  if (isWatchPage && !GOOD_BOT_REGEX.test(ua) && ip !== 'unknown') {
+  // NOTE: Never rate-limit Next.js internal background prefetch or RSC data requests
+  const isPrefetch = 
+    request.headers.get('next-router-prefetch') ||
+    request.headers.get('purpose') === 'prefetch' ||
+    request.headers.get('sec-purpose') === 'prefetch' ||
+    request.headers.get('x-nextjs-data') ||
+    request.nextUrl.searchParams.has('_rsc');
+
+  if (isWatchPage && !isPrefetch && !GOOD_BOT_REGEX.test(ua) && ip !== 'unknown') {
     if (isRateLimited(ip)) {
-      return new NextResponse('Too Many Requests: Rate limit exceeded.', {
+      return new NextResponse('Too Many Requests: Rate limit exceeded. Please wait a moment.', {
         status: 429,
-        headers: { 'Content-Type': 'text/plain', 'Retry-After': '30' },
+        headers: { 'Content-Type': 'text/plain', 'Retry-After': '10' },
       });
     }
   }

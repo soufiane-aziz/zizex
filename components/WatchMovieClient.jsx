@@ -418,6 +418,7 @@ export default function WatchMovieClient({
                                 {sidebarMovies.length > 0 ? (
                                     sidebarMovies.map((movie) => (
                                         <Link
+                                            prefetch={false}
                                             key={movie.id}
                                             href={`/${locale}/movie/${createSlug(movie.title, movie.id, 'movie')}`}
                                             className="w-full flex items-start gap-3 p-2 rounded-lg bg-zinc-900/40 border border-transparent hover:border-white/5 hover:bg-zinc-800/40 transition-all group/side cursor-pointer"
@@ -467,6 +468,7 @@ export default function WatchMovieClient({
                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4">
                         {bottomSimilarMovies.map((movie) => (
                             <Link
+                                prefetch={false}
                                 href={`/${locale}/movie/${createSlug(movie.title, movie.id, 'movie')}`}
                                 key={movie.id}
                                 className="group flex flex-col bg-zinc-900/20 border border-white/5 rounded-lg overflow-hidden transition-all hover:scale-[1.03] hover:border-white/10 hover:shadow-xl cursor-pointer"

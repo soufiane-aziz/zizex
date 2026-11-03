@@ -450,6 +450,7 @@ export default function WatchTVClient({
                             <div className="flex items-center justify-between gap-2 sm:gap-3 w-full">
                                 {prevEpisodeNum ? (
                                     <Link
+                                        prefetch={false}
                                         href={`/${locale}/tv/${slug}/season-${prevSeasonNum}/episode-${prevEpisodeNum}`}
                                         className="flex-1 sm:flex-none max-w-[48%] sm:max-w-none flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-gray-300 hover:text-white border border-white/10 text-[11px] sm:text-sm font-bold backdrop-blur-md transition-all duration-200 shadow-md group"
                                     >
@@ -462,6 +463,7 @@ export default function WatchTVClient({
 
                                 {nextEpisodeNum ? (
                                     <Link
+                                        prefetch={false}
                                         href={`/${locale}/tv/${slug}/season-${nextSeasonNum}/episode-${nextEpisodeNum}`}
                                         className="flex-1 sm:flex-none max-w-[48%] sm:max-w-none flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white border border-red-500/40 text-[11px] sm:text-sm font-extrabold shadow-lg shadow-red-600/30 transition-all duration-200 transform hover:scale-105 active:scale-95 group ml-auto"
                                     >
@@ -533,6 +535,7 @@ export default function WatchTVClient({
                                                 const isSelected = s.season_number === currentSeason;
                                                 return (
                                                     <Link
+                                                        prefetch={false}
                                                         key={s.id}
                                                         href={`/${locale}/tv/${slug}/season-${s.season_number}/episode-1`}
                                                         onClick={() => setIsDropdownOpen(false)}
@@ -565,6 +568,7 @@ export default function WatchTVClient({
                                     const isSelected = ep.episode_number === currentEpisode;
                                     return (
                                         <Link
+                                            prefetch={false}
                                             key={ep.id}
                                             href={`/${locale}/tv/${slug}/season-${currentSeason}/episode-${ep.episode_number}`}
                                             className={`w-full flex items-start gap-3 py-[7px] px-2.5 rounded-lg text-left transition-all group/ep cursor-pointer border ${isSelected
@@ -615,6 +619,7 @@ export default function WatchTVClient({
                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4">
                         {similarShows.map((show) => (
                             <Link
+                                prefetch={false}
                                 href={`/${locale}/tv/${createSlug(show.name, show.id, 'tv')}/season-1/episode-1`}
                                 key={show.id}
                                 className="group flex flex-col bg-zinc-900/20 border border-white/5 rounded-lg overflow-hidden transition-all hover:scale-[1.03] hover:border-white/10 hover:shadow-xl cursor-pointer"
