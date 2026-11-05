@@ -410,25 +410,25 @@ export default function HomeClient({
                             <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent z-10"></div>
                             <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/65 via-transparent to-transparent z-10"></div>
 
-                            {/* Mobile Image: Vertical Poster */}
+                            {/* Mobile Image: Vertical Poster — only preloaded on mobile (sizes="1px" on sm+ tells browser to skip it) */}
                             <Image
                                 src={movie.poster_path ? `${IMAGE_BASE_URL}/w780${movie.poster_path}` : movie.backdrop_path ? `${IMAGE_BASE_URL}/w780${movie.backdrop_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero poster'}
                                 fill
                                 priority={index === 0}
-                                fetchPriority={index === 0 ? "high" : "auto"}
-                                sizes="(max-width: 640px) 100vw, 1px"
+                                fetchPriority={index === 0 ? "high" : "low"}
+                                sizes="(max-width: 639px) 100vw, 1px"
                                 className={`sm:hidden w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${isActive ? 'scale-105' : 'scale-100'} object-center`}
                             />
 
-                            {/* Desktop Image: backdrop for sharp widescreen display */}
+                            {/* Desktop Image: Widescreen backdrop — only preloaded on desktop (sizes="1px" on mobile tells browser to skip it) */}
                             <Image
                                 src={movie.backdrop_path ? `${IMAGE_BASE_URL}/w1280${movie.backdrop_path}` : movie.poster_path ? `${IMAGE_BASE_URL}/w1280${movie.poster_path}` : '/no-poster.png'}
                                 alt={movie.title || movie.name || 'Hero backdrop'}
                                 fill
                                 priority={index === 0}
-                                fetchPriority={index === 0 ? "high" : "auto"}
-                                sizes="(max-width: 640px) 1px, 100vw"
+                                fetchPriority={index === 0 ? "high" : "low"}
+                                sizes="(max-width: 639px) 1px, 100vw"
                                 className={`hidden sm:block w-full h-full object-cover transform transition-transform duration-[10000ms] ease-out ${isActive ? 'scale-110' : 'scale-100'} object-center`}
                             />
                         </div>

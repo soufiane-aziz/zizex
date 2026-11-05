@@ -105,6 +105,16 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
         <link rel="dns-prefetch" href="https://bashsecret.com" />
 
+        {/* Preconnect + preload FontAwesome so icons are ready before first paint */}
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
+        <link
+          rel="preload"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          as="style"
+          crossOrigin="anonymous"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        />
+
         {/* JSON-LD Schema for Brand Keyword Priority Ranking */}
         <script
           type="application/ld+json"
@@ -299,12 +309,11 @@ export default function RootLayout({ children }) {
           </>
         )}
 
-        {/* Font Awesome — loaded via Script so it is 100% off the critical render path.
-            React JSX ignores string onLoad="..." handlers on <link> elements;
-            programmatic injection is the only reliable async CSS approach in Next.js. */}
+        {/* Font Awesome — afterInteractive so icons are visible immediately after hydration.
+            A <link rel="preload"> in <head> above tells the browser to fetch the CSS early. */}
         <Script
           id="fa-loader"
-          strategy="lazyOnload"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               (function(){
