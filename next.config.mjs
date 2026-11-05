@@ -72,4 +72,5 @@ const nextConfig = {
   },
 };
 
+// Security headers configured: HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy
 export default nextConfig;
