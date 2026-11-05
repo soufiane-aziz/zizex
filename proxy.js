@@ -103,15 +103,6 @@ export function middleware(request) {
     }
   }
 
-  // 5. Layer 4: Shield internal VIP streaming APIs from direct third-party hotlinking/scraping
-  if (pathname.startsWith('/api/vip-')) {
-    const referer = request.headers.get('referer') || '';
-    const origin = request.headers.get('origin') || '';
-    if (!referer && !origin && !ua.includes('Mozilla')) {
-      return new NextResponse('Forbidden', { status: 403 });
-    }
-  }
-
   const response = NextResponse.next();
 
   // Layer 5: Set Edge CDN Cache-Control & Security headers

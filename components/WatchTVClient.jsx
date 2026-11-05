@@ -71,10 +71,10 @@ export default function WatchTVClient({
         if (e) e.stopPropagation();
 
         if (!isScreenLocked) {
-            // Trigger Smartlink ad on Lock (max once every 5 minutes, unless VIP server)
+            // Trigger Smartlink ad on Lock (max once every 5 minutes)
             const now = Date.now();
             const FIVE_MINUTES = 5 * 60 * 1000;
-            if (activeServerId !== 'server_vip' && (now - lastLockAdTimeRef.current >= FIVE_MINUTES)) {
+            if (now - lastLockAdTimeRef.current >= FIVE_MINUTES) {
                 window.open('https://bashsecret.com/depqume5u1?key=188fd2d515fce57c2cb1b2b4b6526c75', '_blank');
                 lastLockAdTimeRef.current = now;
                 // Only open smartlink on ad click; do not lock screen yet
@@ -143,7 +143,7 @@ export default function WatchTVClient({
         clearTimeout(autoSwitchTimerRef.current);
         clearTimeout(slowHintTimerRef.current);
 
-        // Ultra-fast 200ms timer: dismiss spinner overlay instantly so VIP / Server 1 is 100% visible & playable in 1-2s!
+        // Ultra-fast 200ms timer: dismiss spinner overlay instantly so Server 1 is 100% visible & playable in 1-2s!
         const hideSpinnerTimer = setTimeout(() => {
             setIsIframeLoading(false);
         }, 200);
@@ -157,25 +157,6 @@ export default function WatchTVClient({
 
     const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
-    const [hasVipMapping, setHasVipMapping] = useState(false);
-
-    useEffect(() => {
-        fetch('/api/vip-mapping')
-            .then(res => res.json())
-            .then(mapping => {
-                const epKey = `${id}-${currentSeason}-${currentEpisode}`;
-                const showKey = String(id);
-                if (mapping && ((mapping[epKey] && mapping[epKey].messageId) || (mapping[showKey] && mapping[showKey].messageId))) {
-                    setHasVipMapping(true);
-                    setActiveServerId('server_vip');
-                } else {
-                    setHasVipMapping(false);
-                }
-            })
-            .catch(() => setHasVipMapping(false));
-    }, [id, currentSeason, currentEpisode]);
-
-    const showVip = hasVipMapping;
     const currentEpisodeNum = Number(currentEpisode);
     const currentSeasonNum = Number(currentSeason);
 
@@ -221,21 +202,7 @@ export default function WatchTVClient({
         }
     }
 
-    const vipQueryParams = new URLSearchParams({
-        id: `${id}-${currentSeason}-${currentEpisode}`,
-        slug: slug || '',
-        locale: locale || 'en'
-    });
-    if (prevSeasonNum && prevEpisodeNum) {
-        vipQueryParams.set('prevS', prevSeasonNum);
-        vipQueryParams.set('prevE', prevEpisodeNum);
-    }
-    if (nextSeasonNum && nextEpisodeNum) {
-        vipQueryParams.set('nextS', nextSeasonNum);
-        vipQueryParams.set('nextE', nextEpisodeNum);
-    }
-
-    const baseServers = [
+    const servers = [
         { id: 'server1', name: 'Server 1', url: `https://moviesapi.to/tv/${id}-${currentSeason}-${currentEpisode}` },
         { id: 'server2', name: 'Server 2', url: `https://player.smashystream.com/playere.php?tmdb=${id}&season=${currentSeason}&episode=${currentEpisode}` },
         { id: 'server3', name: 'Server 3', url: `https://embedwave.cc/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
@@ -243,14 +210,6 @@ export default function WatchTVClient({
         { id: 'server5', name: 'Server 5', url: `https://player.videasy.net/tv/${id}/${currentSeason}/${currentEpisode}` },
         { id: 'server6', name: 'Server 6', url: `https://vidsrc.pm/embed/tv/${id}/${currentSeason}/${currentEpisode}` },
     ];
-
-    const filteredBaseServers = showVip
-        ? baseServers.filter(s => s.id !== 'server6')
-        : baseServers;
-
-    const servers = showVip
-        ? [{ id: 'server_vip', name: 'VIP', url: `/api/vip-player?${vipQueryParams.toString()}` }, ...filteredBaseServers]
-        : baseServers;
 
     const activeServer = servers.find(s => s.id === activeServerId) || servers[0];
     const isSandboxed = !['server4', 'server5', 'server6'].includes(activeServer.id);
@@ -273,10 +232,6 @@ export default function WatchTVClient({
     };
 
     const handlePlayerClick = () => {
-        if (activeServerId === 'server_vip') {
-            setHasClickedPlayer(true);
-            return;
-        }
         window.open('https://bashsecret.com/depqume5u1?key=188fd2d515fce57c2cb1b2b4b6526c75', '_blank');
         setHasClickedPlayer(true);
     };
@@ -361,8 +316,8 @@ export default function WatchTVClient({
                         <div className="flex flex-col gap-2">
                             <div ref={playerContainerRef} className="relative w-full h-[calc(56.25vw+10px)] sm:h-auto sm:aspect-video bg-black rounded-xl overflow-hidden border border-white/5 shadow-2xl group [&:fullscreen]:w-screen [&:fullscreen]:h-screen [&:fullscreen]:rounded-none [&:-webkit-full-screen]:w-screen [&:-webkit-full-screen]:h-screen [&:-webkit-full-screen]:rounded-none">
 
-                                {/* VIP-Style Lock Screen Button */}
-                                {!isIframeLoading && activeServerId !== 'server_vip' && (
+                                {/* Lock Screen Button */}
+                                {!isIframeLoading && (
                                     <button
                                         onClick={toggleScreenLock}
                                         title={isScreenLocked ? (isAr ? 'إلغاء القفل' : isFr ? 'Déverrouiller' : 'Unlock screen') : (isAr ? 'قفل الشاشة' : isFr ? 'Verrouiller' : 'Lock screen')}
@@ -385,7 +340,7 @@ export default function WatchTVClient({
                                 )}
 
                                 {/* Touch Shield Blocker when locked */}
-                                {isScreenLocked && activeServerId !== 'server_vip' && (
+                                {isScreenLocked && (
                                     <div
                                         className="absolute inset-0 z-40 bg-transparent cursor-default select-none"
                                         onClick={handleLockedScreenTap}
@@ -419,7 +374,7 @@ export default function WatchTVClient({
                                 )}
 
                                 {/* Smartlink Ad Overlay (Invisible) */}
-                                {!hasClickedPlayer && !isIframeLoading && !isScreenLocked && activeServerId !== 'server_vip' && (
+                                {!hasClickedPlayer && !isIframeLoading && !isScreenLocked && (
                                     <div
                                         className="absolute inset-0 z-10 cursor-pointer"
                                         onClick={handlePlayerClick}
