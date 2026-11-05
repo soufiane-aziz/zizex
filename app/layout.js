@@ -6,7 +6,6 @@ import Script from 'next/script';
 import dynamic from 'next/dynamic';
 
 const AdBlocker = dynamic(() => import('../components/AdBlocker'));
-const AntiAdBlock = dynamic(() => import('../components/AntiAdBlock'));
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app').replace(/\/$/, '');
 
@@ -284,7 +283,6 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <AdBlocker />
-        <AntiAdBlock />
         {children}
         <Analytics />
         <SpeedInsights />

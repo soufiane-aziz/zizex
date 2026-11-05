@@ -32,10 +32,10 @@ for (const rel of TARGET_FILES) {
 
   // Check for corrupted \n (literal backslash-n) in import line
   const hasCorruption = content.includes("from './lib/security';\\nimport") ||
-                        content.includes("from '../../lib/security';\\nimport") ||
-                        content.includes("from '../../../lib/security';\\nimport") ||
-                        content.includes('/security\';\\nimport');
-  
+    content.includes("from '../../lib/security';\\nimport") ||
+    content.includes("from '../../../lib/security';\\nimport") ||
+    content.includes('/security\';\\nimport');
+
   if (hasCorruption) {
     // Fix: replace literal \n with real newline
     const fixed = content.replace(/';\\n(import)/g, "';\n$1");
@@ -48,8 +48,9 @@ for (const rel of TARGET_FILES) {
   const hasImport = content.includes('safeJsonLd') && content.match(/import\s*\{[^}]*safeJsonLd/);
   const hasCall = content.includes('safeJsonLd(');
   const hasOld = content.includes('JSON.stringify(') && content.includes('__html');
-  
+
   console.log(`${rel}: import=${!!hasImport} call=${hasCall} old=${hasOld}`);
 }
 
 console.log('\nVerification complete.');
+

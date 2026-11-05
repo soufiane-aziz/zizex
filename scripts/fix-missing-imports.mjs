@@ -16,7 +16,7 @@ const MISSING_IMPORT_FILES = [
 for (const rel of MISSING_IMPORT_FILES) {
   const fp = join(ROOT, rel).replace(/\//g, '\\');
   const content = readFileSync(fp, 'utf8');
-  
+
   if (content.match(/import\s*\{[^}]*safeJsonLd/)) {
     console.log(`Already has import: ${rel}`);
     continue;
@@ -35,3 +35,4 @@ for (const rel of MISSING_IMPORT_FILES) {
 }
 
 console.log('Done!');
+
