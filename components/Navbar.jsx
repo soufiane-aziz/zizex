@@ -143,9 +143,17 @@ export default function Navbar({ locale, contentType }) {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && suggestions.length > 0) {
+    if (e.key === 'Enter') {
       e.preventDefault();
-      redirectToItem(suggestions[0]);
+      if (searchQuery.trim()) {
+        const query = searchQuery.trim();
+        setSuggestions([]);
+        setSearchQuery('');
+        setIsSearchInputVisible(false);
+        router.push(`/${resolvedLocale}/search?q=${encodeURIComponent(query)}`);
+      } else if (suggestions.length > 0) {
+        redirectToItem(suggestions[0]);
+      }
     }
   };
 
@@ -297,6 +305,13 @@ export default function Navbar({ locale, contentType }) {
                   );
                 })}
               </div>
+              <Link
+                href={`/${resolvedLocale}/search?q=${encodeURIComponent(searchQuery.trim())}`}
+                onClick={() => { setSuggestions([]); setSearchQuery(''); setIsSearchInputVisible(false); }}
+                className="block text-center py-2.5 bg-amber-500/10 hover:bg-amber-500 text-amber-400 hover:text-black font-extrabold text-xs uppercase tracking-wider transition-all border-t border-white/10"
+              >
+                {resolvedLocale === 'ar' ? 'عرض جميع النتائج' : resolvedLocale === 'fr' ? 'Voir tous les résultats' : 'View all results'} →
+              </Link>
             </div>
           )}
         </div>
