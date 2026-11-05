@@ -108,6 +108,7 @@ export default function Navbar({ locale, contentType }) {
         const data = await res.json();
 
         const queryLower = searchQuery.trim().toLowerCase();
+        const normQuery = queryLower.replace(/[-_:\s]+/g, ' ');
 
         const validResults = (data.results || [])
           .filter(item => item.media_type === 'movie' || item.media_type === 'tv')
@@ -115,7 +116,8 @@ export default function Navbar({ locale, contentType }) {
           .filter(item => {
             const titleToDisplay = item.title || item.name;
             if (!titleToDisplay) return false;
-            return titleToDisplay.toLowerCase().startsWith(queryLower);
+            const normTitle = titleToDisplay.toLowerCase().replace(/[-_:\s]+/g, ' ');
+            return normTitle.includes(normQuery) || titleToDisplay.toLowerCase().includes(queryLower);
           });
 
         setSuggestions(validResults.slice(0, 6));

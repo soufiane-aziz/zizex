@@ -43,7 +43,7 @@ export async function generateMetadata(props) {
             ? `Découvrez et regardez les meilleurs ${genreTitle} en streaming HD gratuit sur Zizex.`
             : `Stream top ${genreTitle} in HD quality online for free on Zizex.`;
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app';
     const path = `/genre/${cleanSlug}`;
 
     return {
@@ -114,7 +114,7 @@ export default async function LocalizedGenrePage(props) {
     const heroMovies = primaryCategory.movies.slice(0, 10);
     const categoryTitle = targetGenreConfig?.title[locale] || targetGenreConfig?.title.en || cleanSlug.toUpperCase();
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app';
     const canonicalUrl = `${SITE_URL}/${locale}/genre/${cleanSlug}`;
 
     const collectionLd = {

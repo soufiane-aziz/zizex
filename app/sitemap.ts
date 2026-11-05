@@ -4,7 +4,7 @@ import type { MetadataRoute } from 'next';
 export const revalidate = 604800;
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app';
 const LOCALES = ['en', 'fr', 'ar'];
 
 // ─── All 20 Genre Slugs ───────────────────────────────────────────────────────

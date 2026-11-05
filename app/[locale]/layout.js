@@ -8,7 +8,7 @@ const InstallPWA = dynamic(() => import('../../components/InstallPWA'));
 const inter = { className: 'font-sans' };
 
 export const metadata = {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app'),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app'),
     verification: {
         google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'RetFRXiOgoyM5G7xUBlpRIQIZ85-z80QTyCx0lX21pM',
     },
@@ -21,7 +21,7 @@ export default async function LocaleLayout(props) {
 
     const isRtl = locale === 'ar';
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app';
     const webPageJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'WebPage',
@@ -40,9 +40,9 @@ export default async function LocaleLayout(props) {
         'inLanguage': locale,
         'isPartOf': {
             '@type': 'WebSite',
-            '@id': 'https://zizex.vercel.app/#website',
+            '@id': 'https://zizex-tv.vercel.app/#website',
             'name': 'Zizex',
-            'url': 'https://zizex.vercel.app/'
+            'url': 'https://zizex-tv.vercel.app/'
         }
     };
 

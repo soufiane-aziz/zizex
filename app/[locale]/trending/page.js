@@ -5,7 +5,7 @@ import { fetchFromTMDB } from '../../../lib/tmdb';
 
 export const revalidate = 86400;
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app';
 
 // All genres — movies + matching TV genre id
 const GENRES = [

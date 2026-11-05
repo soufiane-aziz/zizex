@@ -10,7 +10,7 @@ export async function generateMetadata(props) {
     searchParams: Promise.resolve(searchParams || {}),
   });
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app';
 
   return {
     ...metadata,

@@ -17,7 +17,7 @@ const UNIFIED_GENRES = [
     { name: { en: "Science Fiction", fr: "Science Fiction", ar: "خيال علمي" }, movieIds: "878", tvId: "10765" }
 ];
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app';
 
 export async function generateMetadata(props) {
     const params = await props.params;

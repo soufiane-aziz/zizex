@@ -1,6 +1,6 @@
 const API_KEY = process.env.TMDB_API_KEY || process.env.NEXT_PUBLIC_TMDB_API_KEY || '';
 const BASE_URL = 'https://api.themoviedb.org/3';
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app';
 
 export const revalidate = 86400; // 24 hours caching
 

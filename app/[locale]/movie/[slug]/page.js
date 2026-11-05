@@ -67,7 +67,7 @@ export async function generateMetadata(props) {
         ? movieDetails.overview.substring(0, 160)
         : `Stream ${movieTitle} online on Zizex.`;
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app';
     const ogImage = movieDetails.backdrop_path
         ? `${IMAGE_BASE_URL}/w780${movieDetails.backdrop_path}`
         : movieDetails.poster_path
@@ -188,7 +188,7 @@ export default async function LocalizedMoviePage(props) {
     if (paddingNeeded > 0) finalSidebarItems.push(...uniqueSuggestions.slice(0, paddingNeeded));
     const finalBottomItems = uniqueSuggestions.slice(Math.max(0, paddingNeeded), Math.max(0, paddingNeeded) + 24);
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app';
     const seoMovieSlug = createSlug(movieDetails.title, movieId, 'movie');
 
     const director = creditsData?.crew?.find(p => p.job === 'Director');
@@ -299,13 +299,13 @@ export default async function LocalizedMoviePage(props) {
         'regionsAllowed': 'US,FR,AR,GB,CA,DE,ES,IT,BR,MX,AU,IN,MA,DZ,TN,SA,AE',
         'isPartOf': {
             '@type': 'WebSite',
-            '@id': 'https://zizex.vercel.app/#website',
+            '@id': 'https://zizex-tv.vercel.app/#website',
             'name': 'Zizex',
-            'url': 'https://zizex.vercel.app/'
+            'url': 'https://zizex-tv.vercel.app/'
         },
         'provider': {
             '@type': 'Organization',
-            '@id': 'https://zizex.vercel.app/#organization',
+            '@id': 'https://zizex-tv.vercel.app/#organization',
             'name': 'Zizex'
         },
         'interactionStatistic': {

@@ -288,7 +288,7 @@ export default function Footer() {
               <>
                 <div className="mb-6 pr-8">
                   <h3 className="text-2xl font-bold text-white tracking-tight">
-                    Contact <span className="text-red-600">Ziz</span>Hub Support
+                    Contact <span className="text-red-600">Ziz</span><span className="text-white">ex</span> Support
                   </h3>
                   <div className="h-[2px] w-12 bg-red-600 mt-2.5 rounded"></div>
                 </div>

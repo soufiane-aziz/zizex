@@ -1,5 +1,5 @@
 import { safeJsonLd } from '../../../lib/security';
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app';
 
 export async function generateMetadata(props) {
     const params = await props.params;

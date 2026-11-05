@@ -96,7 +96,7 @@ export async function generateMetadata(props) {
         ? epData.overview.substring(0, 160)
         : `Stream ${showName} Season ${seasonNum} Episode ${episodeNum} ("${episodeTitle}") on Zizex.`;
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app';
     const seoTvSlug = createSlug(showDetails.name, showId, 'tv');
     const ogImage = epData && epData.still_path
         ? `${IMAGE_BASE_URL}/w780${epData.still_path}`
@@ -215,7 +215,7 @@ export default async function LocalizedEpisodePage(props) {
     // Fetch current episode specific details for JSON-LD VideoObject and TVEpisode schemas
     const currentEpisodeDetails = episodes.find(e => e.episode_number === episodeNum) || {};
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app';
     const episodeName = currentEpisodeDetails.name || `Episode ${episodeNum}`;
     const episodeStill = currentEpisodeDetails.still_path
         ? `${IMAGE_BASE_URL}/w500${currentEpisodeDetails.still_path}`
@@ -325,13 +325,13 @@ export default async function LocalizedEpisodePage(props) {
         'regionsAllowed': 'US,FR,AR,GB,CA,DE,ES,IT,BR,MX,AU,IN,MA,DZ,TN,SA,AE',
         'isPartOf': {
             '@type': 'WebSite',
-            '@id': 'https://zizex.vercel.app/#website',
+            '@id': 'https://zizex-tv.vercel.app/#website',
             'name': 'Zizex',
-            'url': 'https://zizex.vercel.app/'
+            'url': 'https://zizex-tv.vercel.app/'
         },
         'provider': {
             '@type': 'Organization',
-            '@id': 'https://zizex.vercel.app/#organization',
+            '@id': 'https://zizex-tv.vercel.app/#organization',
             'name': 'Zizex'
         },
         'interactionStatistic': {

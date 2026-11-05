@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 
 const AdBlocker = dynamic(() => import('../components/AdBlocker'));
 
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app').replace(/\/$/, '');
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app').replace(/\/$/, '');
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),

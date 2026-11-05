@@ -4,7 +4,7 @@ import { fetchFromTMDB } from '../../../lib/tmdb';
 
 export const revalidate = 604800;
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex-tv.vercel.app';
 
 export async function generateMetadata(props) {
     const params = await props.params;
