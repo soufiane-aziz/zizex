@@ -1,4 +1,5 @@
 import React, { cache } from 'react';
+import { safeJsonLd } from '../../../../lib/security';
 import HomeClient from '../../../../components/HomeClient';
 import { createSlug } from '../../../../lib/slug';
 import { fetchFromTMDB } from '../../../../lib/tmdb';
@@ -156,11 +157,11 @@ export default async function LocalizedGenrePage(props) {
         <>
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionLd) }}
+                dangerouslySetInnerHTML={{ __html: safeJsonLd(collectionLd) }}
             />
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+                dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbLd) }}
             />
             <HomeClient
                 initialHeroMovies={heroMovies}

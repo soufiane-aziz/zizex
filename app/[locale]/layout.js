@@ -1,4 +1,5 @@
 import Script from 'next/script';
+import { safeJsonLd } from '../../lib/security';
 import dynamic from 'next/dynamic';
 
 const InstallPWA = dynamic(() => import('../../components/InstallPWA'));
@@ -49,7 +50,7 @@ export default async function LocaleLayout(props) {
         <div dir={isRtl ? 'rtl' : 'ltr'} lang={locale} className={inter.className}>
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
+                dangerouslySetInnerHTML={{ __html: safeJsonLd(webPageJsonLd) }}
             />
             {children}
             <InstallPWA locale={locale} />

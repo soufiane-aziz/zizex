@@ -1,3 +1,4 @@
+import { safeJsonLd } from '../../../lib/security';
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
 
 export async function generateMetadata(props) {
@@ -146,7 +147,7 @@ export default async function DmcaPage(props) {
 
     return (
         <>
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbJsonLd) }} />
 
             <main dir={isAr ? 'rtl' : 'ltr'} className="min-h-screen bg-[#070708] text-gray-200 relative overflow-hidden flex flex-col justify-between">
 

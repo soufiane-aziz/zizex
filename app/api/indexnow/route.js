@@ -1,9 +1,29 @@
-const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'f82feeca535cc0132d1ab38948a70405';
+import { NextResponse } from 'next/server';
+
+export const runtime = 'nodejs';
+
 const BASE_URL = 'https://api.themoviedb.org/3';
 const SITE_HOST = process.env.SITE_HOST || process.env.NEXT_PUBLIC_SITE_HOST || 'zizex-tv.vercel.app';
 const SITE_URL = `https://${SITE_HOST}`;
-const INDEXNOW_KEY = process.env.INDEXNOW_KEY || '1c16825c90304ba8acb2c46cd33ce693';
 const LOCALES = ['en', 'fr', 'ar'];
+
+// ── Rate Limiting: allow at most 1 submission per 5 minutes per IP ───────────
+const submissionMap = new Map();
+const COOLDOWN_MS = 5 * 60 * 1000;
+
+function isRateLimited(ip) {
+  const last = submissionMap.get(ip);
+  const now = Date.now();
+  if (last && now - last < COOLDOWN_MS) return true;
+  submissionMap.set(ip, now);
+  // Cleanup old entries
+  if (submissionMap.size > 1000) {
+    for (const [k, v] of submissionMap.entries()) {
+      if (now - v > COOLDOWN_MS) submissionMap.delete(k);
+    }
+  }
+  return false;
+}
 
 function createSlug(title, id) {
   if (!id) return '';
@@ -18,11 +38,11 @@ function createSlug(title, id) {
   return clean ? `watch-${clean}-${id}` : `watch-${id}`;
 }
 
-async function fetchTMDB(endpoint, pages = 3) {
+async function fetchTMDB(endpoint, apiKey, pages = 3) {
   const nums = Array.from({ length: pages }, (_, i) => i + 1);
   const responses = await Promise.all(
     nums.map(p =>
-      fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&page=${p}`)
+      fetch(`${BASE_URL}${endpoint}?api_key=${apiKey}&page=${p}`)
         .then(res => (res.ok ? res.json() : null))
         .catch(() => null)
     )
@@ -30,19 +50,41 @@ async function fetchTMDB(endpoint, pages = 3) {
   return responses.flatMap(r => r?.results ?? []);
 }
 
-export async function GET() {
-  return handleSubmission();
-}
+async function handleSubmission(req) {
+  // ── 1. Auth: require INDEXNOW_SECRET if set ────────────────────────────────
+  const indexnowSecret = process.env.INDEXNOW_SECRET;
+  if (indexnowSecret) {
+    const { searchParams } = new URL(req.url);
+    const provided = searchParams.get('secret');
+    if (provided !== indexnowSecret) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+  }
 
-export async function POST() {
-  return handleSubmission();
-}
+  // ── 2. Rate limiting ───────────────────────────────────────────────────────
+  const ip =
+    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    req.headers.get('x-real-ip') ||
+    'unknown';
+  if (ip !== 'unknown' && isRateLimited(ip)) {
+    return NextResponse.json({ error: 'Rate limit exceeded. Try again in 5 minutes.' }, { status: 429 });
+  }
 
-async function handleSubmission() {
+  // ── 3. Resolve keys from env only ─────────────────────────────────────────
+  const apiKey = process.env.TMDB_API_KEY || process.env.NEXT_PUBLIC_TMDB_API_KEY;
+  const indexnowKey = process.env.INDEXNOW_KEY;
+
+  if (!apiKey) {
+    return NextResponse.json({ error: 'Service configuration unavailable' }, { status: 500 });
+  }
+  if (!indexnowKey) {
+    return NextResponse.json({ error: 'IndexNow key not configured' }, { status: 500 });
+  }
+
   try {
     const [popularMovies, popularTV] = await Promise.all([
-      fetchTMDB('/movie/popular', 4),
-      fetchTMDB('/tv/popular', 4),
+      fetchTMDB('/movie/popular', apiKey, 4),
+      fetchTMDB('/tv/popular', apiKey, 4),
     ]);
 
     const primaryBrandUrls = [
@@ -85,25 +127,31 @@ async function handleSubmission() {
 
     const payload = {
       host: SITE_HOST,
-      key: INDEXNOW_KEY,
-      keyLocation: `${SITE_URL}/${INDEXNOW_KEY}.txt`,
-      urlList: urlList,
+      key: indexnowKey,
+      keyLocation: `${SITE_URL}/${indexnowKey}.txt`,
+      urlList,
     };
 
     const res = await fetch('https://www.bing.com/indexnow', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
       body: JSON.stringify(payload),
     });
 
-    return Response.json({
+    return NextResponse.json({
       success: res.ok || res.status === 200 || res.status === 202,
       status: res.status,
       submittedUrls: urlList.length,
     });
   } catch (error) {
-    return Response.json({ success: false, error: String(error) }, { status: 500 });
+    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
+}
+
+export async function GET(req) {
+  return handleSubmission(req);
+}
+
+export async function POST(req) {
+  return handleSubmission(req);
 }

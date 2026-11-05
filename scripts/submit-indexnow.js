@@ -1,4 +1,4 @@
-const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'f82feeca535cc0132d1ab38948a70405';
+const API_KEY = process.env.TMDB_API_KEY || process.env.NEXT_PUBLIC_TMDB_API_KEY || '';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const SITE_HOST = process.env.SITE_HOST || process.env.NEXT_PUBLIC_SITE_HOST || 'zizex-tv.vercel.app';
 const SITE_URL = `https://${SITE_HOST}`;

@@ -1,4 +1,5 @@
 import React, { cache } from 'react';
+import { safeJsonLd } from '../../../lib/security';
 import HomeClient from '../../../components/HomeClient';
 import { fetchFromTMDB } from '../../../lib/tmdb';
 
@@ -164,7 +165,7 @@ export default async function TrendingPage(props) {
 
     return (
         <>
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbLd) }} />
             <HomeClient
                 initialHeroMovies={heroMovies}
                 initialCategories={allCategories}

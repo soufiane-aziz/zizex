@@ -318,8 +318,6 @@ export default function HomeClient({
 
     // Build a per-category loadMore function from the category metadata embedded in the id
     const tmdbLang = locale === 'ar' ? 'ar-AE' : locale === 'fr' ? 'fr-FR' : 'en-US';
-    const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'f82feeca535cc0132d1ab38948a70405';
-    const BASE_URL = 'https://api.themoviedb.org/3';
 
     function createLoadMore(category) {
         return async (page) => {
@@ -331,8 +329,8 @@ export default function HomeClient({
                 // Blended genre rows: use embedded movieGenreId / tvGenreId
                 if (id.startsWith('blended-') && movieGenreId && tvGenreId) {
                     const [mRes, tRes] = await Promise.all([
-                        fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${movieGenreId}&page=${page}${sortBy}${lang}`),
-                        fetch(`${BASE_URL}/discover/tv?api_key=${API_KEY}&with_genres=${tvGenreId}&page=${page}${sortBy}${lang}`)
+                        fetch(`/api/tmdb?endpoint=/discover/movie&with_genres=${movieGenreId}&page=${page}${sortBy}${lang}`),
+                        fetch(`/api/tmdb?endpoint=/discover/tv&with_genres=${tvGenreId}&page=${page}${sortBy}${lang}`)
                     ]);
                     const [mData, tData] = await Promise.all([mRes.json(), tRes.json()]);
                     const movies = (mData.results || []).map(m => ({ ...m, media_type: 'movie' }));
@@ -348,7 +346,7 @@ export default function HomeClient({
 
                 // Single content-type genre rows: use embedded contentType + genreId
                 if (cType && genreId) {
-                    const res = await fetch(`${BASE_URL}/discover/${cType}?api_key=${API_KEY}&with_genres=${genreId}&page=${page}${sortBy}${lang}`);
+                    const res = await fetch(`/api/tmdb?endpoint=/discover/${cType}&with_genres=${genreId}&page=${page}${sortBy}${lang}`);
                     const data = await res.json();
                     return (data.results || []).map(item => ({ ...item, media_type: cType }));
                 }
@@ -359,8 +357,8 @@ export default function HomeClient({
                     const mPath = isTop ? 'movie/top_rated' : 'trending/movie/week';
                     const tPath = isTop ? 'tv/top_rated' : 'trending/tv/week';
                     const [mRes, tRes] = await Promise.all([
-                        fetch(`${BASE_URL}/${mPath}?api_key=${API_KEY}&page=${page}${lang}`),
-                        fetch(`${BASE_URL}/${tPath}?api_key=${API_KEY}&page=${page}${lang}`)
+                        fetch(`/api/tmdb?endpoint=/${mPath}&page=${page}${lang}`),
+                        fetch(`/api/tmdb?endpoint=/${tPath}&page=${page}${lang}`)
                     ]);
                     const [mData, tData] = await Promise.all([mRes.json(), tRes.json()]);
                     const mR = (mData.results || []).map(m => ({ ...m, media_type: 'movie' }));

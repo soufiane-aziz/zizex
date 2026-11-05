@@ -1,4 +1,5 @@
 import React, { cache } from 'react';
+import { safeJsonLd } from '../../../../lib/security';
 import WatchMovieClient from '../../../../components/WatchMovieClient';
 import { createSlug, extractIdFromSlug } from '../../../../lib/slug';
 import { fetchFromTMDB } from '../../../../lib/tmdb';
@@ -318,15 +319,15 @@ export default async function LocalizedMoviePage(props) {
         <>
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
             />
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(videoObjectLd) }}
+                dangerouslySetInnerHTML={{ __html: safeJsonLd(videoObjectLd) }}
             />
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+                dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbLd) }}
             />
             <noscript>
                 <iframe

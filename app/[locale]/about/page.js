@@ -1,3 +1,4 @@
+import { safeJsonLd } from '../../../lib/security';
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zizex.vercel.app';
 
 export async function generateMetadata(props) {
@@ -132,8 +133,8 @@ export default async function AboutPage(props) {
 
     return (
         <>
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(faqJsonLd) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbJsonLd) }} />
 
             <main dir={isAr ? 'rtl' : 'ltr'} className="min-h-screen bg-dark-bg text-gray-200">
 

@@ -17,9 +17,9 @@ function createSlug(title: string, id: number | string): string {
 export const revalidate = 604800;
 
 const API_KEY =
-  process.env.NEXT_PUBLIC_TMDB_API_KEY ||
   process.env.TMDB_API_KEY ||
-  'f82feeca535cc0132d1ab38948a70405';
+  process.env.NEXT_PUBLIC_TMDB_API_KEY ||
+  '';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const LOCALES = ['en', 'fr', 'ar'];
 const SITE_URL =
