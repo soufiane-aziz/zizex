@@ -37,6 +37,12 @@ export async function generateMetadata(props) {
         keywords,
         alternates: {
             canonical: `${SITE_URL}/${locale}/tv`,
+            languages: {
+                en: `${SITE_URL}/en/tv`,
+                fr: `${SITE_URL}/fr/tv`,
+                ar: `${SITE_URL}/ar/tv`,
+                'x-default': `${SITE_URL}/en/tv`,
+            },
         },
         openGraph: {
             title,

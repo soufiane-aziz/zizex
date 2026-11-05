@@ -23,7 +23,15 @@ export const metadata = {
     template: '%s | Zizex',
   },
   description: 'Watch your favorite movies and TV shows free on Zizex. Official free streaming platform.',
-  keywords: ['zizex', 'ziz ex', 'Zizex', 'ZIZEX', 'ziz-ex', 'Ziz Ex', 'ZIZ EX', 'zizex streaming', 'zizex app', 'zizex official', 'watch movies online', 'streaming platform', 'HD movies streaming', 'TV series online', 'top rated movies', 'latest cinema releases'],
+  keywords: [
+    'zizex', 'Zizex', 'ZIZEX', 'zizek', 'zizekx', 'zizeks', 'Zizek', 'Zizekx', 'Zizeks',
+    'ziz ex', 'Ziz Ex', 'ZIZ EX', 'ziz-ex',
+    'zizex streaming', 'zizek streaming', 'zizekx streaming', 'zizeks streaming',
+    'zizex movies', 'zizek movies', 'zizex tv', 'zizex cinema', 'top cinema',
+    'zizex app', 'zizex official', 'site zizex', 'watch movies online',
+    'streaming platform', 'HD movies streaming', 'TV series online',
+    'top rated movies', 'latest cinema releases', 'موقع zizex', 'موقع زيزكس', 'زيزكس'
+  ],
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -123,14 +131,28 @@ export default function RootLayout({ children }) {
                   "alternateName": [
                     "Zizex",
                     "zizex",
+                    "ZIZEX",
+                    "zizek",
+                    "zizekx",
+                    "zizeks",
+                    "Zizek",
+                    "Zizekx",
+                    "Zizeks",
                     "ziz ex",
                     "Ziz Ex",
-                    "ZIZEX",
                     "ZIZ EX",
                     "ziz-ex",
                     "Zizex Streaming",
+                    "Zizek Streaming",
+                    "Zizex Movies",
+                    "Zizek Movies",
+                    "Zizex TV",
+                    "Zizex Cinema",
                     "Zizex App",
-                    "موقع Zizex"
+                    "site zizex",
+                    "موقع Zizex",
+                    "موقع زيزكس",
+                    "زيزكس"
                   ],
                   "description": "Zizex is the official free movies and TV shows streaming platform online in HD.",
                   "inLanguage": ["en", "fr", "ar"],
@@ -213,6 +235,44 @@ export default function RootLayout({ children }) {
                       "position": 4,
                       "name": "Trending",
                       "url": `${SITE_URL}/en/trending`
+                    }
+                  ]
+                },
+                {
+                  "@type": "FAQPage",
+                  "@id": `${SITE_URL}/#faq`,
+                  "mainEntity": [
+                    {
+                      "@type": "Question",
+                      "name": "What is Zizex?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Zizex is an online media discovery and streaming platform where cinephiles can discover and watch thousands of movies and TV shows for free in HD quality."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "Is Zizex free to watch movies and TV series?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes, Zizex is 100% free with no subscription required. Users can explore trending films, top-rated TV series, and cinema releases without any registration fees."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "Does Zizex host video files on its servers?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No. Zizex does not host, upload, or store video files. In strict compliance with DMCA Safe Harbor principles, all streams are embedded via standard iframe players from independent third-party hosts."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "Can I watch Zizex on mobile and smart TV?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes, Zizex is fully responsive and supports PWA (Progressive Web App) installation on iOS, Android, macOS, Windows, and Smart TVs."
+                      }
                     }
                   ]
                 }

@@ -1,15 +1,15 @@
 import { NextResponse } from 'next/server';
 
-// 1. Known scraper / bot user-agent patterns & Copyright DMCA crawlers
-const BAD_BOT_REGEX = /python|httpx|aiohttp|scrapy|puppeteer|playwright|headlesschrome|selenium|phantomjs|curl\/|wget\/|go-http-client|java\/|node-fetch|axios|postman|libwww-perl|bytespider|petalsearch|semrush|ahrefsbot|mj12bot|dotbot|claudebot|gptbot|markscan|marketly|mediastory|opsec|redpoints|digimarc|corsearch|link-busters|toppletrack|audiolock|removeyourmedia|friendmts|group-ib|ip-echelon|markmonitor/i;
+// ─── 1. Exhaustive DMCA bots, copyright crawlers, anti-piracy tools & automated scrapers ───
+const BAD_BOT_REGEX = /markscan|markmonitor|marketly|mediastory|opsec|redpoints|red\s*points|digimarc|corsearch|link-busters|linkbusters|toppletrack|topple\s*track|audiolock|removeyourmedia|friendmts|friend-mts|group-ib|groupib|ip-echelon|ipechelon|muso|leakid|leak-id|webdrone|tracer\.ai|tracer|aiplex|brandit|netnames|attributor|entura|incopro|dtecnet|rightscorp|rivendell|sovrn|cyveillance|copyrightagent|copyright-agent|antipiracy|anti-piracy|counterfeit|python|httpx|aiohttp|scrapy|puppeteer|playwright|headlesschrome|selenium|phantomjs|curl\/|wget\/|go-http-client|java\/|node-fetch|axios|postman|libwww-perl|okhttp|httpclient|zgrab|censys|shodan|bytespider|petalsearch|petalbot|semrush|ahrefsbot|mj12bot|dotbot|claudebot|gptbot/i;
 
-// 2. Verified search engine crawlers and social media preview bots to ALLOW
-const GOOD_BOT_REGEX = /google|bing|yandex|duckduck|slurp|baidu|facebook|twitter|whatsapp|telegram|linkedin|pinterest/i;
+// ─── 2. Verified good search engines and social preview crawlers to ALWAYS allow ───────────
+const GOOD_BOT_REGEX = /google|googlebot|google-inspectiontool|storebot-google|mediapartners-google|adsbot-google|bing|bingbot|msnbot|bingpreview|yandex|yandexbot|yandeximages|duckduck|duckduckbot|slurp|baidu|baiduspider|sogou|applebot|facebook|facebookexternalhit|facebot|twitter|twitterbot|whatsapp|telegram|telegrambot|discord|discordbot|slack|slackbot|linkedin|pinterest/i;
 
-// 3. Simple Edge sliding window rate limiter (In-Memory per Edge Instance)
+// ─── 3. Edge sliding window rate limiter (In-Memory per Edge Instance) ────────────────────
 const ipRateMap = new Map();
 const RATE_LIMIT_WINDOW = 60 * 1000; // 60 seconds
-const MAX_REQUESTS_PER_WINDOW = 120;  // 120 page loads per minute (prevents automated crawler flooding while keeping human browsing flawless)
+const MAX_REQUESTS_PER_WINDOW = 120; // 120 page loads per minute
 
 function isRateLimited(ip) {
   const now = Date.now();
@@ -48,53 +48,78 @@ export function middleware(request) {
   const pathname = request.nextUrl.pathname;
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || request.headers.get('x-real-ip') || 'unknown';
 
-  // Layer 1: Block known automated scraper user-agents
-  if (BAD_BOT_REGEX.test(ua) && !GOOD_BOT_REGEX.test(ua)) {
-    return new NextResponse('Access Denied: Automated bot scraping is prohibited.', {
+  // 1. Whitelist verified search bots first
+  const isGoodBot = GOOD_BOT_REGEX.test(ua);
+
+  // 2. Layer 1: Block known DMCA crawlers, anti-piracy agencies and scrapers
+  if (!isGoodBot && BAD_BOT_REGEX.test(ua)) {
+    return new NextResponse('Access Denied: Automated bot crawling or anti-piracy scraping policy violation.', {
       status: 403,
-      headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store' },
+      headers: {
+        'Content-Type': 'text/plain',
+        'X-Robots-Tag': 'noindex, nofollow, noarchive, nosnippet',
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+      },
     });
   }
 
-  // Layer 2: Detect headless scrapers missing critical browser headers on watch pages
+  // 3. Layer 2: Detect headless scrapers missing critical browser headers on watch pages
   const isWatchPage = pathname.includes('/tv/') || pathname.includes('/movie/');
-  if (isWatchPage && !GOOD_BOT_REGEX.test(ua)) {
+  if (isWatchPage && !isGoodBot) {
     const acceptLang = request.headers.get('accept-language');
     const secFetchDest = request.headers.get('sec-fetch-dest');
-    
+
     // Real browsers ALWAYS send accept-language or sec-fetch-dest when navigating pages
     if (!ua || (!acceptLang && !secFetchDest)) {
       return new NextResponse('Access Denied: Suspicious automated client headers.', {
         status: 403,
-        headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store' },
+        headers: {
+          'Content-Type': 'text/plain',
+          'X-Robots-Tag': 'noindex, nofollow, noarchive, nosnippet',
+          'Cache-Control': 'no-store, no-cache, must-revalidate',
+        },
       });
     }
   }
 
-  // Layer 3: Edge Rate Limiting for rapid automated page crawling
-  // NOTE: Never rate-limit Next.js internal background prefetch or RSC data requests
-  const isPrefetch = 
+  // 4. Layer 3: Edge Rate Limiting for rapid automated page crawling
+  const isPrefetch =
     request.headers.get('next-router-prefetch') ||
     request.headers.get('purpose') === 'prefetch' ||
     request.headers.get('sec-purpose') === 'prefetch' ||
     request.headers.get('x-nextjs-data') ||
     request.nextUrl.searchParams.has('_rsc');
 
-  if (isWatchPage && !isPrefetch && !GOOD_BOT_REGEX.test(ua) && ip !== 'unknown') {
+  if (isWatchPage && !isPrefetch && !isGoodBot && ip !== 'unknown') {
     if (isRateLimited(ip)) {
       return new NextResponse('Too Many Requests: Rate limit exceeded. Please wait a moment.', {
         status: 429,
-        headers: { 'Content-Type': 'text/plain', 'Retry-After': '10' },
+        headers: {
+          'Content-Type': 'text/plain',
+          'Retry-After': '10',
+          'X-Robots-Tag': 'noindex, nofollow',
+        },
       });
+    }
+  }
+
+  // 5. Layer 4: Shield internal VIP streaming APIs from direct third-party hotlinking/scraping
+  if (pathname.startsWith('/api/vip-')) {
+    const referer = request.headers.get('referer') || '';
+    const origin = request.headers.get('origin') || '';
+    if (!referer && !origin && !ua.includes('Mozilla')) {
+      return new NextResponse('Forbidden', { status: 403 });
     }
   }
 
   const response = NextResponse.next();
 
-  // Layer 4: Set Edge CDN Cache-Control headers for all public web routes to relieve Origin transfer & CPU
+  // Layer 5: Set Edge CDN Cache-Control & Security headers
   if (!pathname.startsWith('/api/')) {
     response.headers.set('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800');
   }
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
   return response;
 }

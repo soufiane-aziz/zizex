@@ -50,6 +50,12 @@ export async function generateMetadata(props) {
         keywords,
         alternates: {
             canonical: `${SITE_URL}/${locale}/top-rated`,
+            languages: {
+                en: `${SITE_URL}/en/top-rated`,
+                fr: `${SITE_URL}/fr/top-rated`,
+                ar: `${SITE_URL}/ar/top-rated`,
+                'x-default': `${SITE_URL}/en/top-rated`,
+            },
         },
         openGraph: {
             title,

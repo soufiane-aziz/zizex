@@ -39,10 +39,10 @@ export async function generateMetadata(props) {
             : 'Zizex is the official free streaming platform to watch thousands of top movies and TV series free online in HD.';
 
     const keywords = isAr
-        ? ['zizex', 'ziz ex', 'Zizex', 'ZIZEX', 'ziz-ex', 'Ziz Ex', 'ZIZ EX', 'zizex.vercel.app', 'موقع zizex', 'منصة zizex', 'zizex streaming', 'مشاهدة افلام اونلاين', 'افلام ومسلسلات مجانا', 'موقع سيما', 'افلام مترجمة اونلاين', 'تحميل افلام مجانا', 'موقع مشاهدة افلام', 'افلام اكشن مترجمة', 'مسلسلات اجنبية مترجمة', 'ايجي بست البديل', 'السينما للجميع']
+        ? ['zizex', 'Zizex', 'ZIZEX', 'zizek', 'zizekx', 'zizeks', 'Zizek', 'Zizekx', 'ziz ex', 'Ziz Ex', 'ziz-ex', 'موقع zizex', 'موقع زيزكس', 'زيزكس', 'zizex.vercel.app', 'منصة zizex', 'zizex streaming', 'مشاهدة افلام اونلاين', 'افلام ومسلسلات مجانا', 'موقع سيما', 'افلام مترجمة اونلاين', 'تحميل افلام مجانا', 'موقع مشاهدة افلام', 'افلام اكشن مترجمة', 'مسلسلات اجنبية مترجمة', 'ايجي بست البديل', 'السينما للجميع']
         : isFr
-            ? ['zizex', 'ziz ex', 'Zizex', 'ZIZEX', 'ziz-ex', 'Ziz Ex', 'ZIZ EX', 'zizex.vercel.app', 'zizex streaming', 'site zizex', 'zizex official', 'zizex fr', 'regarder films gratuits', 'streaming vf', 'film streaming gratuit', 'site de streaming film', 'series tv streaming', 'cinema en ligne', 'voir film gratuit', 'top film streaming', 'streaming hd gratuit', 'films complets vf']
-            : ['zizex', 'ziz ex', 'Zizex', 'ZIZEX', 'ziz-ex', 'Ziz Ex', 'ZIZ EX', 'zizex.vercel.app', 'zizex streaming', 'zizex app', 'zizex site', 'zizex official', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site'];
+            ? ['zizex', 'Zizex', 'ZIZEX', 'zizek', 'zizekx', 'zizeks', 'Zizek', 'Zizekx', 'ziz ex', 'Ziz Ex', 'ziz-ex', 'zizex streaming', 'zizek streaming', 'zizekx streaming', 'site zizex', 'zizex official', 'zizex fr', 'regarder films gratuits', 'streaming vf', 'film streaming gratuit', 'site de streaming film', 'series tv streaming', 'cinema en ligne', 'voir film gratuit', 'top film streaming', 'streaming hd gratuit', 'films complets vf']
+            : ['zizex', 'Zizex', 'ZIZEX', 'zizek', 'zizekx', 'zizeks', 'Zizek', 'Zizekx', 'ziz ex', 'Ziz Ex', 'ziz-ex', 'zizex streaming', 'zizek streaming', 'zizekx streaming', 'zizeks streaming', 'zizex movies', 'zizek movies', 'zizex app', 'zizex site', 'zizex official', 'watch movies online', 'free streaming platform', 'HD movies streaming', 'free TV series online', 'top rated movies', 'latest cinema releases', 'watch series free', 'cinema for you', 'movie streaming site'];
 
     return {
         title,
