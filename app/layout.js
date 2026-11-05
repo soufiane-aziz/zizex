@@ -98,23 +98,12 @@ export default function RootLayout({ children }) {
           fetchPriority="high"
         />
 
-        {/* DNS / Preconnect — open TCP connections early for critical resources */}
+        {/* High-priority preconnect only for LCP critical resources (poster/backdrop CDN) */}
         <link rel="preconnect" href="https://image.tmdb.org" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://api.themoviedb.org" />
-
         <link rel="dns-prefetch" href="https://image.tmdb.org" />
         <link rel="dns-prefetch" href="https://api.themoviedb.org" />
         <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
         <link rel="dns-prefetch" href="https://bashsecret.com" />
-        <link rel="preconnect" href="https://moviesapi.to" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://moviesapi.to" />
-        <link rel="dns-prefetch" href="https://player.smashystream.com" />
-        <link rel="dns-prefetch" href="https://embedwave.cc" />
-        <link rel="preconnect" href="https://vidlink.pro" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://vidlink.pro" />
-        <link rel="preconnect" href="https://player.videasy.net" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://player.videasy.net" />
-        <link rel="dns-prefetch" href="https://vidsrc.pm" />
 
         {/* JSON-LD Schema for Brand Keyword Priority Ranking */}
         <script

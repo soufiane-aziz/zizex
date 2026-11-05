@@ -109,7 +109,7 @@ export async function GET(request) {
     const tmdbUrl = `${BASE_URL}${endpoint}?${forwardedParams.toString()}`;
     const res = await fetch(tmdbUrl, {
       headers: { 'Accept': 'application/json' },
-      cache: 'no-store',
+      next: { revalidate: 1800 }, // Cache TMDB response for 30 minutes in Next.js Data Cache
     });
 
     if (!res.ok) {

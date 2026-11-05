@@ -69,10 +69,17 @@ export default function AdBanner({ type, className = '' }) {
     }
   }, [type]);
 
+  // Reserve exact container height to achieve CLS = 0 (Cumulative Layout Shift)
+  const minHeightClass =
+    type === 'banner728' ? 'min-h-[90px]' :
+    type === 'banner300' ? 'min-h-[250px]' :
+    type === 'banner320' ? 'min-h-[50px]' :
+    type === 'native' ? 'min-h-[280px]' : 'min-h-[50px]';
+
   return (
     <div
       ref={containerRef}
-      className={`flex items-center justify-center my-4 overflow-hidden min-h-[50px] ${className}`}
+      className={`flex items-center justify-center my-4 overflow-hidden ${minHeightClass} ${className}`}
     />
   );
 }

@@ -13,6 +13,16 @@ const MAX_REQUESTS_PER_WINDOW = 120; // 120 page loads per minute
 
 function isRateLimited(ip) {
   const now = Date.now();
+
+  // Passive cleanup to avoid standing setInterval in Edge runtime (saves Fluid Active CPU)
+  if (ipRateMap.size > 1000) {
+    for (const [k, rec] of ipRateMap.entries()) {
+      if (now > rec.resetTime) {
+        ipRateMap.delete(k);
+      }
+    }
+  }
+
   const record = ipRateMap.get(ip);
 
   if (!record) {
@@ -32,16 +42,6 @@ function isRateLimited(ip) {
 
   return false;
 }
-
-// Clean up old IP entries every 2 minutes to keep memory clean
-setInterval(() => {
-  const now = Date.now();
-  for (const [ip, record] of ipRateMap.entries()) {
-    if (now > record.resetTime) {
-      ipRateMap.delete(ip);
-    }
-  }
-}, 2 * 60 * 1000);
 
 export function middleware(request) {
   const ua = request.headers.get('user-agent') || '';
