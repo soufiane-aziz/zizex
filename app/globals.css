@@ -27,7 +27,7 @@
   --color-dark-card: #141418;
   --color-dark-hover: #1f1f25;
 
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: var(--font-inter), 'Inter', sans-serif;
 }
 
 /* Force dark mode class activation rule */

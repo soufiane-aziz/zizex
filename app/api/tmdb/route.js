@@ -21,6 +21,30 @@ const cacheMap = new Map();
 const MAX_CACHE_SIZE = 500;
 const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
+// In-memory rate limiting map: IP -> { count, resetTime }
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 60; // 60 requests per minute per IP
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  // Passive cleanup if map grows too large
+  if (rateLimitMap.size > 2000) {
+    for (const [key, record] of rateLimitMap.entries()) {
+      if (now > record.resetTime) rateLimitMap.delete(key);
+    }
+  }
+
+  const record = rateLimitMap.get(ip);
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+
+  record.count += 1;
+  return record.count > MAX_REQUESTS_PER_WINDOW;
+}
+
 function getCached(key) {
   const item = cacheMap.get(key);
   if (!item) return null;
@@ -40,6 +64,22 @@ function setCached(key, data) {
 }
 
 export async function GET(request) {
+  // Rate limiting check
+  const forwardedFor = request.headers.get('x-forwarded-for');
+  const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : '127.0.0.1';
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please slow down.' },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': '60',
+          'X-Content-Type-Options': 'nosniff',
+        },
+      }
+    );
+  }
+
   const apiKey = process.env.TMDB_API_KEY || process.env.NEXT_PUBLIC_TMDB_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: 'Service configuration unavailable' }, { status: 500 });

@@ -31,7 +31,7 @@ function RevealOnScroll({ children }) {
 }
 
 // --- Category Row Component ---
-function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, locale }) {
+function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, locale, rowIndex = 0 }) {
     const rowRef = useRef(null);
     const expandedSentinelRef = useRef(null);
 
@@ -141,7 +141,7 @@ function CategoryRow({ title, movies, loadMore, isExpanded, onExpandToggle, loca
                             height={278}
                             sizes="(max-width: 640px) 115px, (max-width: 768px) 145px, 210px"
                             className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover/card:scale-105"
-                            loading={index < 6 ? "eager" : "lazy"}
+                            loading={rowIndex === 0 && index < 4 ? "eager" : "lazy"}
                         />
 
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 pointer-events-none"></div>
@@ -532,6 +532,7 @@ export default function HomeClient({
                                     loadMore={createLoadMore(category)}
                                     isExpanded={expandedCategoryId === category.id}
                                     locale={locale}
+                                    rowIndex={index}
                                     onExpandToggle={(expanded) => {
                                         if (expanded) {
                                             setExpandedCategoryId(category.id);

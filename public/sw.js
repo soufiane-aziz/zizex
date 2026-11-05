@@ -30,10 +30,28 @@ const BLOCKED_SPAM_PATTERNS = [
   'bet-at-home', 'game-ads'
 ];
 
-self.addEventListener('install', () => self.skipWaiting());
+const CACHE_NAME = 'zizex-offline-v1';
+const OFFLINE_URL = '/offline.html';
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll([OFFLINE_URL]);
+    })
+  );
+  self.skipWaiting();
+});
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) return caches.delete(key);
+        })
+      )
+    ).then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener('fetch', (event) => {
@@ -45,8 +63,23 @@ self.addEventListener('fetch', (event) => {
   const dest = new URL(request.url);
   const destStr = (dest.hostname + dest.pathname).toLowerCase();
 
-  // 1. Always allow navigation within our own site
-  if (dest.origin === SITE_ORIGIN) return;
+  // 1. Always allow navigation within our own site, but catch offline failure
+  if (dest.origin === SITE_ORIGIN) {
+    event.respondWith(
+      fetch(request).catch(async () => {
+        const cache = await caches.open(CACHE_NAME);
+        const cachedResponse = await cache.match(OFFLINE_URL);
+        return (
+          cachedResponse ||
+          new Response(
+            '<!DOCTYPE html><html><body style="background:#0a0a0c;color:#fff;font-family:sans-serif;text-align:center;padding:50px;"><h2>Offline</h2><p>You appear to be offline.</p></body></html>',
+            { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+          )
+        );
+      })
+    );
+    return;
+  }
 
   // 2. Always allow whitelisted user ads and embed servers
   const isAllowed = ALLOWED_PATTERNS.some(pattern => destStr.includes(pattern));

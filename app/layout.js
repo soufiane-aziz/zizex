@@ -1,9 +1,16 @@
 import './globals.css';
+import { Inter } from 'next/font/google';
 import { safeJsonLd } from '../lib/security';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
 import dynamic from 'next/dynamic';
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 const AdBlocker = dynamic(() => import('../components/AdBlocker'));
 
@@ -87,17 +94,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className={`dark ${inter.variable}`}>
       <head>
-        {/* Preload hero / OG image — improves LCP (Core Web Vitals) */}
-        <link
-          rel="preload"
-          href="/og-image.jpg"
-          as="image"
-          type="image/jpeg"
-          fetchPriority="high"
-        />
-
         {/* High-priority preconnect only for LCP critical resources (poster/backdrop CDN) */}
         <link rel="preconnect" href="https://image.tmdb.org" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://image.tmdb.org" />
