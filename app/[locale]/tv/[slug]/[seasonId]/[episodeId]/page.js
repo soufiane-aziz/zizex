@@ -125,6 +125,10 @@ export async function generateMetadata(props) {
         title: docTitle,
         description: docDesc,
         keywords: keywords,
+        robots: {
+            index: false,
+            follow: true,
+        },
         alternates,
         openGraph: {
             title: docTitle,

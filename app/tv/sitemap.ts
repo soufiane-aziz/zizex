@@ -169,31 +169,17 @@ export default async function sitemap(props: {
     const airDate    = safeDate(show.first_air_date);
     const numSeasons = tvSeasonMap.get(show.id) ?? 2;
 
-    // Season 1 / Episode 1 — primary canonical per locale (priority 0.40)
+    // TV Show Hub Canonical per locale (safe from individual episode DMCA scraping)
     LOCALES.forEach(locale => {
-      const path = `/tv/${slug}/season-1/episode-1`;
+      const path = `/tv/${slug}`;
       entries.push({
         url: safeUrl(`${SITE_URL}/${locale}${path}`),
         changeFrequency: 'weekly',
-        priority: 0.40,
+        priority: 0.50,
         lastModified: airDate,
         alternates: { languages: buildAlternates(path) },
       });
     });
-
-    // Seasons 2 → N — drives Googlebot crawl depth (priority 0.30)
-    for (let s = 2; s <= numSeasons; s++) {
-      LOCALES.forEach(locale => {
-        const path = `/tv/${slug}/season-${s}/episode-1`;
-        entries.push({
-          url: safeUrl(`${SITE_URL}/${locale}${path}`),
-          changeFrequency: 'monthly',
-          priority: 0.30,
-          lastModified: airDate,
-          alternates: { languages: buildAlternates(path) },
-        });
-      });
-    }
   });
 
   return entries;
