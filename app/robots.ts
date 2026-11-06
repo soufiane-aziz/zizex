@@ -72,11 +72,10 @@ export default function robots() {
         disallow: ['/'],
       },
     ],
-    // Expose all primary sitemaps and RSS feed to search engines
+    // Expose master sitemap-index and primary sitemaps to search engines
     sitemap: [
+      `${SITE_URL}/sitemap-index.xml`,
       `${SITE_URL}/sitemap.xml`,
-      `${SITE_URL}/movies/sitemap.xml`,
-      `${SITE_URL}/tv/sitemap.xml`,
       `${SITE_URL}/feed.xml`,
     ],
   };
