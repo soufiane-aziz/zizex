@@ -7,7 +7,11 @@ export default function robots() {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/'],
+        disallow: [
+          '/api/',
+          '/*/tv/*/*/episode-*', // Keep episode watch links out of crawler indexing
+          '/tv/*/*/episode-*',
+        ],
       },
       {
         userAgent: [
